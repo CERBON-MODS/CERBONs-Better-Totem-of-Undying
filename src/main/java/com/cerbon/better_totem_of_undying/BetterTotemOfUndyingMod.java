@@ -10,10 +10,10 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-@Mod(BetterTotemOfUndyingMod.MODID)
+@Mod(BetterTotemOfUndyingMod.MOD_ID)
 public class BetterTotemOfUndyingMod
 {
-    public static final String MODID = "better_totem_of_undying";
+    public static final String MOD_ID = "better_totem_of_undying";
 
     public BetterTotemOfUndyingMod()
     {
@@ -28,7 +28,7 @@ public class BetterTotemOfUndyingMod
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {}
 
-    @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents
     {
         @SubscribeEvent
