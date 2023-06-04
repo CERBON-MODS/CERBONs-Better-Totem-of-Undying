@@ -16,6 +16,8 @@ public class BTUCommonConfigs {
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ABSORPTION;
     public static final ForgeConfigSpec.ConfigValue<Integer> ABSORPTION_DURATION;
     public static final ForgeConfigSpec.ConfigValue<Integer> ABSORPTION_AMPLIFIER;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_WATER_BREATHING;
+    public static final ForgeConfigSpec.ConfigValue<Integer> WATER_BREATHING_DURATION;
     public static final ForgeConfigSpec.ConfigValue<Float> SET_HEALTH;
     public static final ForgeConfigSpec.ConfigValue<Boolean> REMOVE_ALL_EFFECTS;
 
@@ -70,6 +72,14 @@ public class BTUCommonConfigs {
         ABSORPTION_AMPLIFIER = BUILDER
                 .comment("Sets the amplifier of the absorption effect. DEFAULT: 1")
                 .define("Absorption Amplifier", 1);
+
+        ENABLE_WATER_BREATHING = BUILDER
+                .comment("If false Totem of Undying will not give you water breathing effect. DEFAULT: TRUE")
+                .define("Enable Water Breathing", true);
+
+        WATER_BREATHING_DURATION= BUILDER
+                .comment("Sets the duration of the water breathing effect in ticks. DEFAULT: 800")
+                .define("Water Breathing Duration", 800);
         BUILDER.pop();
 
 

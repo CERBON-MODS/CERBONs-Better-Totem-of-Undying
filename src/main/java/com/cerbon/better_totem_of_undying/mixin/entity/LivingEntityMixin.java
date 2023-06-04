@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
+
     public LivingEntityMixin(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
@@ -36,11 +37,13 @@ public abstract class LivingEntityMixin extends Entity {
             boolean isFireResistanceEffectEnabled = BTUCommonConfigs.ENABLE_FIRE_RESISTANCE.get();
             boolean isRegenerationEffectEnabled = BTUCommonConfigs.ENABLE_REGENERATION.get();
             boolean isAbsorptionEffectEnabled = BTUCommonConfigs.ENABLE_ABSORPTION.get();
+            boolean isWaterBreathingEffectEnabled = BTUCommonConfigs.ENABLE_WATER_BREATHING.get();
             int fireResistanceEffectDuration = BTUCommonConfigs.FIRE_RESISTANCE_DURATION.get();
             int regenerationEffectDuration = BTUCommonConfigs.REGENERATION_DURATION.get();
             int regenerationEffectAmplifier = BTUCommonConfigs.REGENERATION_AMPLIFIER.get();
             int absorptionEffectDuration = BTUCommonConfigs.ABSORPTION_DURATION.get();
             int absorptionEffectAmplifier = BTUCommonConfigs.ABSORPTION_AMPLIFIER.get();
+            int waterBreathingEffectDuration = BTUCommonConfigs.WATER_BREATHING_DURATION.get();
 
             this.setHealth(BTUCommonConfigs.SET_HEALTH.get());
             if (BTUCommonConfigs.REMOVE_ALL_EFFECTS.get()){
@@ -54,9 +57,11 @@ public abstract class LivingEntityMixin extends Entity {
                 if (isAbsorptionEffectEnabled){
                     this.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, absorptionEffectDuration, absorptionEffectAmplifier));
                 }
-
                 if (this.isOnFire() && isFireResistanceEffectEnabled){
                     this.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, fireResistanceEffectDuration, 0));
+                }
+                if (this.isInWaterOrBubble() && isWaterBreathingEffectEnabled){
+                    this.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, waterBreathingEffectDuration, 0));
                 }
 
                 this.level.broadcastEntityEvent(this, (byte)35);
