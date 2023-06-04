@@ -19,6 +19,9 @@ public class BTUCommonConfigs {
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_WATER_BREATHING;
     public static final ForgeConfigSpec.ConfigValue<Integer> WATER_BREATHING_DURATION;
     public static final ForgeConfigSpec.ConfigValue<Float> SET_HEALTH;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_INCREASE_FOOD_LEVEL;
+    public static final ForgeConfigSpec.ConfigValue<Integer> MINIMUM_FOOD_LEVEL;
+    public static final ForgeConfigSpec.ConfigValue<Integer> SET_FOOD_LEVEL;
     public static final ForgeConfigSpec.ConfigValue<Boolean> REMOVE_ALL_EFFECTS;
 
     static {
@@ -30,6 +33,18 @@ public class BTUCommonConfigs {
         SET_HEALTH = BUILDER
                 .comment("This value sets the health Totem of Undying will give to the entity upon use. DEFAULT: 1.0")
                 .define("Set Health", 1.0F);
+
+        ENABLE_INCREASE_FOOD_LEVEL = BUILDER
+                .comment("If false Totem Of Undying will not increase your food level. DEFAULT: TRUE")
+                .define("Increase Food Level", true);
+
+        MINIMUM_FOOD_LEVEL = BUILDER
+                .comment("Sets the minimum food level needed to Totem Of Undying increase food level. DEFAULT: <= 6")
+                .define("Minimum Food Level", 6);
+
+        SET_FOOD_LEVEL = BUILDER
+                .comment("Sets the food level that Totem Of Undying will give upon use. DEFAULT: 10 = Half bar")
+                .define("Set Food Level", 10);
 
         REMOVE_ALL_EFFECTS = BUILDER
                 .comment("When Totem of Undying is used it removes all previous effects you had. If set to false, it will keep all the effects you had before using the totem. DEFAULT: TRUE")

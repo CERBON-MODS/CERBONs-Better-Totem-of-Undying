@@ -4,9 +4,11 @@ import com.cerbon.better_totem_of_undying.config.BTUCommonConfigs;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Attackable;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -15,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin extends Entity {
+public abstract class LivingEntityMixin extends Entity implements Attackable, net.minecraftforge.common.extensions.IForgeLivingEntity  {
 
     public LivingEntityMixin(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -26,6 +28,8 @@ public abstract class LivingEntityMixin extends Entity {
     @Shadow public abstract void setHealth(float pHealth);
 
     @Shadow public abstract boolean removeAllEffects();
+
+    @Shadow public abstract boolean isInWall();
 
     @Inject(method = "checkTotemDeathProtection", at = @At(
             value = "INVOKE",
@@ -48,6 +52,10 @@ public abstract class LivingEntityMixin extends Entity {
             boolean isWaterBreathingEffectEnabled = BTUCommonConfigs.ENABLE_WATER_BREATHING.get();
             int waterBreathingEffectDuration = BTUCommonConfigs.WATER_BREATHING_DURATION.get();
 
+            boolean isIncreaseFoodLevelEnabled = BTUCommonConfigs.ENABLE_INCREASE_FOOD_LEVEL.get();
+            int minimumFoodLevel = BTUCommonConfigs.MINIMUM_FOOD_LEVEL.get();
+            int setFoodLevel = BTUCommonConfigs.SET_FOOD_LEVEL.get();
+
             this.setHealth(BTUCommonConfigs.SET_HEALTH.get());
 
             if (BTUCommonConfigs.REMOVE_ALL_EFFECTS.get()){
@@ -66,6 +74,13 @@ public abstract class LivingEntityMixin extends Entity {
                 }
                 if (this.isInWaterOrBubble() && isWaterBreathingEffectEnabled){
                     this.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, waterBreathingEffectDuration, 0));
+                }
+                if (this.getType() == EntityType.PLAYER && isIncreaseFoodLevelEnabled){
+                    Player player = (Player)(Object) this;
+                    int foodLevel = player.getFoodData().getFoodLevel();
+                    if (foodLevel <= minimumFoodLevel){
+                        player.getFoodData().setFoodLevel(setFoodLevel);
+                    }
                 }
 
                 this.level.broadcastEntityEvent(this, (byte)35);
