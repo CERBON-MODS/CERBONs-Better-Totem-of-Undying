@@ -33,10 +33,9 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
 
     @Inject(method = "checkTotemDeathProtection", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/LivingEntity;setHealth(F)V",
-            ordinal = 0),
+            target = "Lnet/minecraft/world/entity/LivingEntity;setHealth(F)V"),
             cancellable = true)
-    public void improveTotemOdUndying(DamageSource pDamageSource, CallbackInfoReturnable<Boolean> cir){
+    public void improveTotemOfUndying(DamageSource pDamageSource, CallbackInfoReturnable<Boolean> cir){
         if (BTUCommonConfigs.IS_MOD_ENABLED.get()){
             boolean isFireResistanceEffectEnabled = BTUCommonConfigs.ENABLE_FIRE_RESISTANCE.get();
             int fireResistanceEffectDuration = BTUCommonConfigs.FIRE_RESISTANCE_DURATION.get();
@@ -63,28 +62,35 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
             }
 
             if (BTUCommonConfigs.APPLY_EFFECTS_ONLY_WHEN_NEEDED.get()){
-                if (isRegenerationEffectEnabled){
-                    this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, regenerationEffectDuration, regenerationEffectAmplifier));
-                }
-                if (isAbsorptionEffectEnabled){
-                    this.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, absorptionEffectDuration, absorptionEffectAmplifier));
-                }
                 if (this.isOnFire() && isFireResistanceEffectEnabled){
                     this.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, fireResistanceEffectDuration, 0));
                 }
                 if (this.isInWaterOrBubble() && isWaterBreathingEffectEnabled){
                     this.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, waterBreathingEffectDuration, 0));
                 }
-                if (this.getType() == EntityType.PLAYER && isIncreaseFoodLevelEnabled){
-                    Player player = (Player)(Object) this;
-                    int foodLevel = player.getFoodData().getFoodLevel();
-                    if (foodLevel <= minimumFoodLevel){
-                        player.getFoodData().setFoodLevel(setFoodLevel);
-                    }
+            }else {
+                if (isFireResistanceEffectEnabled){
+                    this.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, fireResistanceEffectDuration, 0));
                 }
-
-                this.level.broadcastEntityEvent(this, (byte)35);
+                if (isWaterBreathingEffectEnabled){
+                    this.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, waterBreathingEffectDuration, 0));
+                }
             }
+
+            if (isRegenerationEffectEnabled){
+                this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, regenerationEffectDuration, regenerationEffectAmplifier));
+            }
+            if (isAbsorptionEffectEnabled){
+                this.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, absorptionEffectDuration, absorptionEffectAmplifier));
+            }
+            if (this.getType() == EntityType.PLAYER && isIncreaseFoodLevelEnabled){
+                Player player = (Player)(Object) this;
+                int foodLevel = player.getFoodData().getFoodLevel();
+                if (foodLevel <= minimumFoodLevel){
+                    player.getFoodData().setFoodLevel(setFoodLevel);
+                }
+            }
+            this.level.broadcastEntityEvent(this, (byte)35);
             cir.setReturnValue(true);
         }
     }
