@@ -35,17 +35,21 @@ public abstract class LivingEntityMixin extends Entity {
     public void improveTotemOdUndying(DamageSource pDamageSource, CallbackInfoReturnable<Boolean> cir){
         if (BTUCommonConfigs.IS_MOD_ENABLED.get()){
             boolean isFireResistanceEffectEnabled = BTUCommonConfigs.ENABLE_FIRE_RESISTANCE.get();
-            boolean isRegenerationEffectEnabled = BTUCommonConfigs.ENABLE_REGENERATION.get();
-            boolean isAbsorptionEffectEnabled = BTUCommonConfigs.ENABLE_ABSORPTION.get();
-            boolean isWaterBreathingEffectEnabled = BTUCommonConfigs.ENABLE_WATER_BREATHING.get();
             int fireResistanceEffectDuration = BTUCommonConfigs.FIRE_RESISTANCE_DURATION.get();
+
+            boolean isRegenerationEffectEnabled = BTUCommonConfigs.ENABLE_REGENERATION.get();
             int regenerationEffectDuration = BTUCommonConfigs.REGENERATION_DURATION.get();
             int regenerationEffectAmplifier = BTUCommonConfigs.REGENERATION_AMPLIFIER.get();
+
+            boolean isAbsorptionEffectEnabled = BTUCommonConfigs.ENABLE_ABSORPTION.get();
             int absorptionEffectDuration = BTUCommonConfigs.ABSORPTION_DURATION.get();
             int absorptionEffectAmplifier = BTUCommonConfigs.ABSORPTION_AMPLIFIER.get();
+
+            boolean isWaterBreathingEffectEnabled = BTUCommonConfigs.ENABLE_WATER_BREATHING.get();
             int waterBreathingEffectDuration = BTUCommonConfigs.WATER_BREATHING_DURATION.get();
 
             this.setHealth(BTUCommonConfigs.SET_HEALTH.get());
+
             if (BTUCommonConfigs.REMOVE_ALL_EFFECTS.get()){
                 this.removeAllEffects();
             }
