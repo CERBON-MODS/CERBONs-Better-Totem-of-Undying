@@ -20,6 +20,7 @@ public class BTUCommonConfigs {
     public static final ForgeConfigSpec.ConfigValue<Integer> WATER_BREATHING_DURATION;
     public static final ForgeConfigSpec.ConfigValue<Float> SET_HEALTH;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_INCREASE_FOOD_LEVEL;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> DESTROY_BLOCKS_WHEN_SUFFOCATING;
     public static final ForgeConfigSpec.ConfigValue<Integer> MINIMUM_FOOD_LEVEL;
     public static final ForgeConfigSpec.ConfigValue<Integer> SET_FOOD_LEVEL;
     public static final ForgeConfigSpec.ConfigValue<Boolean> REMOVE_ALL_EFFECTS;
@@ -45,6 +46,10 @@ public class BTUCommonConfigs {
         SET_FOOD_LEVEL = BUILDER
                 .comment("Sets the food level that Totem Of Undying will give upon use. DEFAULT: 10 = Half bar")
                 .define("Set Food Level", 10);
+
+        DESTROY_BLOCKS_WHEN_SUFFOCATING = BUILDER
+                .comment("If false Totem Of Undying will not break blocks when you are suffocating. DEFAULT: TRUE")
+                .define("Destroy Blocks When Suffocating", true);
 
         REMOVE_ALL_EFFECTS = BUILDER
                 .comment("When Totem of Undying is used it removes all previous effects you had. If set to false, it will keep all the effects you had before using the totem. DEFAULT: TRUE")
