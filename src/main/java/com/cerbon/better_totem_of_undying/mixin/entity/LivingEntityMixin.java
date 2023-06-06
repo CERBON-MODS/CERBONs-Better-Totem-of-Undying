@@ -60,6 +60,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
             int setFoodLevel = BTUCommonConfigs.SET_FOOD_LEVEL.get();
 
             boolean isDestroyBlocksWhenSuffocatingEnabled = BTUCommonConfigs.DESTROY_BLOCKS_WHEN_SUFFOCATING.get();
+            boolean isDestroyPowderSnowWhenFullyFrozenEnabled = BTUCommonConfigs.DESTROY_POWDER_SNOW_WHEN_FULLY_FROZEN.get();
 
             this.setHealth(BTUCommonConfigs.SET_HEALTH.get());
 
@@ -96,7 +97,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
                     player.getFoodData().setFoodLevel(setFoodLevel);
                 }
             }
-            if (this.isInWall() && isDestroyBlocksWhenSuffocatingEnabled) {
+            if ((this.isInWall() && isDestroyBlocksWhenSuffocatingEnabled) || (this.isFullyFrozen() && isDestroyPowderSnowWhenFullyFrozenEnabled)) {
                 Level level = this.level;
                 BlockPos entityPosition = this.blockPosition();
                 BlockState blockAtEntityPosition = level.getBlockState(entityPosition);
