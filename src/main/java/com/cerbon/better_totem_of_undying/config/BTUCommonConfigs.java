@@ -9,7 +9,6 @@ public class BTUCommonConfigs {
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
     public static final ForgeConfigSpec SPEC;
 
-    public static final ForgeConfigSpec.ConfigValue<Boolean> IS_MOD_ENABLED;
     public static final ForgeConfigSpec.ConfigValue<Boolean> USE_TOTEM_FROM_INVENTORY;
     public static final ForgeConfigSpec.ConfigValue<Boolean> APPLY_EFFECTS_ONLY_WHEN_NEEDED;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_FIRE_RESISTANCE;
@@ -76,10 +75,6 @@ public class BTUCommonConfigs {
         ABSORPTION_AMPLIFIER = BUILDER
                 .comment("Sets the amplifier of the absorption effect. DEFAULT: 1")
                 .define("Absorption Amplifier", 1);
-
-        IS_MOD_ENABLED = BUILDER
-                .comment("If false the mod will not change Minecraft Totem of Undying. DEFAULT: TRUE")
-                .define("Is Mod Enabled", true);
         BUILDER.pop(2);
 
 
