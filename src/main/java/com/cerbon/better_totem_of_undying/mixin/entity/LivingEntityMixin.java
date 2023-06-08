@@ -55,7 +55,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
             this.applyTotemEffects();
             this.increaseFoodLevel();
             this.destroyBlocksWhenSuffocatingOrFullyFrozen();
-            this.knockbackMobsAway();
+            this.knockBackMobsAway();
 
             this.level.broadcastEntityEvent(this, (byte) 35);
             cir.setReturnValue(true);
@@ -145,12 +145,12 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
         }
     }
 
-    private void knockbackMobsAway(){
-        boolean isKnockbackMobsAwayEnabled = BTUCommonConfigs.KNOCKBACK_MOBS_AWAY.get();
-        double radius = BTUCommonConfigs.KNOCKBACK_RADIUS.get();
-        double strength = BTUCommonConfigs.KNOCKBACK_STRENGTH.get();
+    private void knockBackMobsAway(){
+        boolean isKnockBackMobsAwayEnabled = BTUCommonConfigs.KNOCK_BACK_MOBS_AWAY.get();
+        double radius = BTUCommonConfigs.KNOCK_BACK_RADIUS.get();
+        double strength = BTUCommonConfigs.KNOCK_BACK_STRENGTH.get();
 
-        if (isKnockbackMobsAwayEnabled){
+        if (isKnockBackMobsAwayEnabled){
             AABB aabb = this.getBoundingBox().inflate(radius);
             List<LivingEntity> nearByEntities = this.level.getEntitiesOfClass(LivingEntity.class, aabb);
 
