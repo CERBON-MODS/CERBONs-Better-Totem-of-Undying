@@ -14,11 +14,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.List;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements Attackable, net.minecraftforge.common.extensions.IForgeLivingEntity  {
@@ -52,6 +55,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
             this.applyTotemEffects();
             this.increaseFoodLevel();
             this.destroyBlocksWhenSuffocatingOrFullyFrozen();
+            this.knockbackMobsAway();
 
             this.level.broadcastEntityEvent(this, (byte) 35);
             cir.setReturnValue(true);
@@ -137,6 +141,23 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
                 }
                 level.destroyBlock(entityPosition, true);
                 level.destroyBlock(entityPosition.above(), true);
+            }
+        }
+    }
+
+    private void knockbackMobsAway(){
+        boolean isKnockbackMobsAwayEnabled = BTUCommonConfigs.KNOCKBACK_MOBS_AWAY.get();
+        double radius = BTUCommonConfigs.KNOCKBACK_RADIUS.get();
+        double strength = BTUCommonConfigs.KNOCKBACK_STRENGTH.get();
+
+        if (isKnockbackMobsAwayEnabled){
+            AABB aabb = this.getBoundingBox().inflate(radius);
+            List<LivingEntity> nearByEntities = this.level.getEntitiesOfClass(LivingEntity.class, aabb);
+
+            for (LivingEntity entity : nearByEntities){
+                if (!(entity instanceof Player)){
+                    entity.knockback(strength, entity.getX() - this.getX(), entity.getZ() - this.getZ());
+                }
             }
         }
     }

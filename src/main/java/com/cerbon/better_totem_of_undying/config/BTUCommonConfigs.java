@@ -22,6 +22,9 @@ public class BTUCommonConfigs {
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_INCREASE_FOOD_LEVEL;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DESTROY_BLOCKS_WHEN_SUFFOCATING;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DESTROY_POWDER_SNOW_WHEN_FULLY_FROZEN;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> KNOCKBACK_MOBS_AWAY;
+    public static final ForgeConfigSpec.ConfigValue<Double> KNOCKBACK_RADIUS;
+    public static final ForgeConfigSpec.ConfigValue<Double> KNOCKBACK_STRENGTH;
     public static final ForgeConfigSpec.ConfigValue<Integer> MINIMUM_FOOD_LEVEL;
     public static final ForgeConfigSpec.ConfigValue<Integer> SET_FOOD_LEVEL;
     public static final ForgeConfigSpec.ConfigValue<Boolean> REMOVE_ALL_EFFECTS;
@@ -55,6 +58,18 @@ public class BTUCommonConfigs {
         DESTROY_POWDER_SNOW_WHEN_FULLY_FROZEN = BUILDER
                 .comment("If false Totem of Undying will not break the powder snow when you die fully frozen. DEFAULT: TRUE")
                 .define("Destroy Powder Snow When Fully Frozen", true);
+
+        KNOCKBACK_MOBS_AWAY = BUILDER
+                .comment("If false Totem of Undying will not knockback mobs away. DEFAULT: TRUE")
+                .define("Knockback Mobs Away", true);
+
+        KNOCKBACK_RADIUS = BUILDER
+                .comment("Sets the radius where entities needs to be for the totem knockback them. DEFAULT: 3")
+                .define("Knockback Radius", 3.0D);
+
+        KNOCKBACK_STRENGTH = BUILDER
+                .comment("Sets the strength of the knockback. DEFAULT: 2.5")
+                .define("Knockback Strength", 2.5D);
 
         REMOVE_ALL_EFFECTS = BUILDER
                 .comment("When Totem of Undying is used it removes all previous effects you had. If set to false, it will keep all the effects you had before using the totem. DEFAULT: TRUE")
