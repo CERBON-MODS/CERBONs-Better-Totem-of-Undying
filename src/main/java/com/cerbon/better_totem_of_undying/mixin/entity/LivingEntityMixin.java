@@ -4,6 +4,7 @@ import com.cerbon.better_totem_of_undying.config.BTUCommonConfigs;
 import com.cerbon.better_totem_of_undying.utils.BTUUtils;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -30,8 +31,6 @@ import java.util.List;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements Attackable, net.minecraftforge.common.extensions.IForgeLivingEntity  {
 
-    @Shadow public abstract ItemStack getItemInHand(InteractionHand pHand);
-
     public LivingEntityMixin(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
@@ -44,11 +43,13 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
 
     @Shadow public abstract boolean isInWall();
 
+    @Shadow public abstract ItemStack getItemInHand(InteractionHand pHand);
+
     private boolean checkTotemDeathProtection(DamageSource pDamageSource) {
         LivingEntity livingEntity = (LivingEntity) (Object) this;
         Level level = this.level;
 
-        if (BTUUtils.isDimensionBlacklisted(level)) {
+        if (BTUUtils.isDimensionBlacklisted(level) || BTUUtils.isStructureBlacklisted(livingEntity, (ServerLevel) level)) {
             return false;
         } else {
             boolean isUseTotemFromInventoryEnabled = BTUCommonConfigs.USE_TOTEM_FROM_INVENTORY.get();

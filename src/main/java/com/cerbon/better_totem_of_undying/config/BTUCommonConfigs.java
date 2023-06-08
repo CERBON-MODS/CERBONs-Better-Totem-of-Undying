@@ -32,6 +32,7 @@ public class BTUCommonConfigs {
     public static final ForgeConfigSpec.ConfigValue<Integer> SET_FOOD_LEVEL;
     public static final ForgeConfigSpec.ConfigValue<Boolean> REMOVE_ALL_EFFECTS;
     public static final ForgeConfigSpec.ConfigValue<ArrayList<String>> BLACKLISTED_DIMENSIONS;
+    public static final ForgeConfigSpec.ConfigValue<ArrayList<String>> BLACKLISTED_STRUCTURES;
 
     static {
         BUILDER.push("Default Totem Abilities from Minecraft");
@@ -140,6 +141,10 @@ public class BTUCommonConfigs {
         BLACKLISTED_DIMENSIONS = BUILDER
                 .comment("You can put here dimensions where you don't want the Totem of Undying to work. Example: \"minecraft:overworld\", \"mod_id:dimension_id\" DEFAULT: Nothing")
                 .define("Blacklisted Dimensions", new ArrayList<>());
+
+        BLACKLISTED_STRUCTURES = BUILDER
+                .comment("You can put here structures where you don't want the Totem of Undying to work. Example: \"minecraft:desert_pyramid\", \"mod_id:structure_id\" DEFAULT: Nothing")
+                .define("Blacklisted Structures", new ArrayList<>());
 
         SPEC = BUILDER.build();
     }
