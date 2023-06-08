@@ -2,6 +2,9 @@ package com.cerbon.better_totem_of_undying.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BTUCommonConfigs {
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
     public static final ForgeConfigSpec SPEC;
@@ -28,6 +31,7 @@ public class BTUCommonConfigs {
     public static final ForgeConfigSpec.ConfigValue<Integer> MINIMUM_FOOD_LEVEL;
     public static final ForgeConfigSpec.ConfigValue<Integer> SET_FOOD_LEVEL;
     public static final ForgeConfigSpec.ConfigValue<Boolean> REMOVE_ALL_EFFECTS;
+    public static final ForgeConfigSpec.ConfigValue<ArrayList<String>> BLACKLISTED_DIMENSIONS;
 
     static {
         BUILDER.push("Default Totem Abilities from Minecraft");
@@ -131,6 +135,11 @@ public class BTUCommonConfigs {
                 .comment("Sets the strength of the knock back. DEFAULT: 2.5")
                 .define("Knock Back Strength", 2.5D);
         BUILDER.pop();
+
+        BUILDER.push("Blacklists");
+        BLACKLISTED_DIMENSIONS = BUILDER
+                .comment("You can put here dimensions where you don't want the Totem of Undying to work. Example: \"minecraft:overworld\", \"mod_id:dimension_id\" DEFAULT: Nothing")
+                .define("Blacklisted Dimensions", new ArrayList<>());
 
         SPEC = BUILDER.build();
     }

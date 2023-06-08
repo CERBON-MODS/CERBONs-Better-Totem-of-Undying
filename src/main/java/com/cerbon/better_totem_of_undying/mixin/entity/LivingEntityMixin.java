@@ -1,7 +1,12 @@
 package com.cerbon.better_totem_of_undying.mixin.entity;
 
 import com.cerbon.better_totem_of_undying.config.BTUCommonConfigs;
+import com.cerbon.better_totem_of_undying.utils.BTUUtils;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -10,6 +15,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FallingBlock;
@@ -17,14 +24,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements Attackable, net.minecraftforge.common.extensions.IForgeLivingEntity  {
+
+    @Shadow public abstract ItemStack getItemInHand(InteractionHand pHand);
 
     public LivingEntityMixin(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -38,27 +44,47 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
 
     @Shadow public abstract boolean isInWall();
 
-    @Inject(method = "checkTotemDeathProtection", at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/LivingEntity;setHealth(F)V"),
-            cancellable = true)
-    public void improveTotemOfUndying(DamageSource pDamageSource, CallbackInfoReturnable<Boolean> cir) {
-        if (BTUCommonConfigs.IS_MOD_ENABLED.get()) {
-            boolean isRemoveAllEffectsEnabled = BTUCommonConfigs.REMOVE_ALL_EFFECTS.get();
-            float health = BTUCommonConfigs.SET_HEALTH.get();
+    private boolean checkTotemDeathProtection(DamageSource pDamageSource) {
+        LivingEntity livingEntity = (LivingEntity) (Object) this;
+        Level level = this.level;
 
-            if (isRemoveAllEffectsEnabled) {
-                this.removeAllEffects();
+        if (BTUUtils.isDimensionBlacklisted(level)) {
+            return false;
+        } else {
+            ItemStack itemstack = null;
+
+            for(InteractionHand interactionhand : InteractionHand.values()) {
+                ItemStack itemstack1 = this.getItemInHand(interactionhand);
+                if (itemstack1.is(Items.TOTEM_OF_UNDYING) && net.minecraftforge.common.ForgeHooks.onLivingUseTotem(livingEntity, pDamageSource, itemstack1, interactionhand)) {
+                    itemstack = itemstack1.copy();
+                    itemstack1.shrink(1);
+                    break;
+                }
             }
 
-            this.setHealth(health);
-            this.applyTotemEffects();
-            this.increaseFoodLevel();
-            this.destroyBlocksWhenSuffocatingOrFullyFrozen();
-            this.knockBackMobsAway();
+            if (itemstack != null) {
+                if (this.getType() == EntityType.PLAYER) {
+                    ServerPlayer serverplayer = (ServerPlayer) (Object) this;
+                    serverplayer.awardStat(Stats.ITEM_USED.get(Items.TOTEM_OF_UNDYING), 1);
+                    CriteriaTriggers.USED_TOTEM.trigger(serverplayer, itemstack);
+                }
 
-            this.level.broadcastEntityEvent(this, (byte) 35);
-            cir.setReturnValue(true);
+                boolean isRemoveAllEffectsEnabled = BTUCommonConfigs.REMOVE_ALL_EFFECTS.get();
+                float health = BTUCommonConfigs.SET_HEALTH.get();
+
+                if (isRemoveAllEffectsEnabled) {
+                    this.removeAllEffects();
+                }
+
+                this.setHealth(health);
+                this.applyTotemEffects();
+                this.increaseFoodLevel();
+                this.destroyBlocksWhenSuffocatingOrFullyFrozen();
+                this.knockBackMobsAway();
+                this.level.broadcastEntityEvent(this, (byte) 35);
+            }
+
+            return itemstack != null;
         }
     }
 
