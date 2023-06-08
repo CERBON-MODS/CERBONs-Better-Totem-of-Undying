@@ -10,6 +10,7 @@ public class BTUCommonConfigs {
     public static final ForgeConfigSpec SPEC;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> IS_MOD_ENABLED;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> USE_TOTEM_FROM_INVENTORY;
     public static final ForgeConfigSpec.ConfigValue<Boolean> APPLY_EFFECTS_ONLY_WHEN_NEEDED;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_FIRE_RESISTANCE;
     public static final ForgeConfigSpec.ConfigValue<Integer> FIRE_RESISTANCE_DURATION;
@@ -83,6 +84,10 @@ public class BTUCommonConfigs {
 
 
         BUILDER.push("New Totem Abilities");
+
+        USE_TOTEM_FROM_INVENTORY = BUILDER
+                .comment("If true you will be able to use the Totem of Undying from your inventory. DEFAULT: FALSE")
+                .define("Use Totem From Inventory", false);
 
         BUILDER.push("Effects");
         APPLY_EFFECTS_ONLY_WHEN_NEEDED = BUILDER

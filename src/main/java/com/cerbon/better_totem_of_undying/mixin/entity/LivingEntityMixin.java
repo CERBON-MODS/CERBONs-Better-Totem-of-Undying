@@ -51,14 +51,30 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
         if (BTUUtils.isDimensionBlacklisted(level)) {
             return false;
         } else {
+            boolean isUseTotemFromInventoryEnabled = BTUCommonConfigs.USE_TOTEM_FROM_INVENTORY.get();
+            boolean isRemoveAllEffectsEnabled = BTUCommonConfigs.REMOVE_ALL_EFFECTS.get();
+            float health = BTUCommonConfigs.SET_HEALTH.get();
             ItemStack itemstack = null;
 
-            for(InteractionHand interactionhand : InteractionHand.values()) {
-                ItemStack itemstack1 = this.getItemInHand(interactionhand);
-                if (itemstack1.is(Items.TOTEM_OF_UNDYING) && net.minecraftforge.common.ForgeHooks.onLivingUseTotem(livingEntity, pDamageSource, itemstack1, interactionhand)) {
-                    itemstack = itemstack1.copy();
-                    itemstack1.shrink(1);
-                    break;
+            if (isUseTotemFromInventoryEnabled){
+                if (this.getType() == EntityType.PLAYER){
+                    ServerPlayer player = (ServerPlayer) (Object) this;
+                    for (ItemStack itemStack1 : player.getInventory().items){
+                        if (itemStack1.is(Items.TOTEM_OF_UNDYING) && net.minecraftforge.common.ForgeHooks.onLivingUseTotem(livingEntity, pDamageSource, itemStack1, null)){
+                            itemstack = itemStack1.copy();
+                            itemStack1.shrink(1);
+                            break;
+                        }
+                    }
+                }
+            }else {
+                for(InteractionHand interactionhand : InteractionHand.values()) {
+                    ItemStack itemstack1 = this.getItemInHand(interactionhand);
+                    if (itemstack1.is(Items.TOTEM_OF_UNDYING) && net.minecraftforge.common.ForgeHooks.onLivingUseTotem(livingEntity, pDamageSource, itemstack1, interactionhand)) {
+                        itemstack = itemstack1.copy();
+                        itemstack1.shrink(1);
+                        break;
+                    }
                 }
             }
 
@@ -68,9 +84,6 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
                     serverplayer.awardStat(Stats.ITEM_USED.get(Items.TOTEM_OF_UNDYING), 1);
                     CriteriaTriggers.USED_TOTEM.trigger(serverplayer, itemstack);
                 }
-
-                boolean isRemoveAllEffectsEnabled = BTUCommonConfigs.REMOVE_ALL_EFFECTS.get();
-                float health = BTUCommonConfigs.SET_HEALTH.get();
 
                 if (isRemoveAllEffectsEnabled) {
                     this.removeAllEffects();
