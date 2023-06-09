@@ -27,7 +27,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.List;
-import java.util.Optional;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements Attackable, net.minecraftforge.common.extensions.IForgeLivingEntity  {
@@ -195,7 +194,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
 
             for (LivingEntity entity : nearByEntities){
                 if (!(entity instanceof Player)){
-                    entity.knockback(strength, entity.getX() - this.getX(), entity.getZ() - this.getZ());
+                    entity.knockback(strength, this.getX() - entity.getX(), this.getZ() - entity.getZ());
                 }
             }
         }
