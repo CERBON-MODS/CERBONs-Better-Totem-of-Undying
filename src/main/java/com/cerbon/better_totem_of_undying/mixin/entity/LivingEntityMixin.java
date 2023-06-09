@@ -145,13 +145,14 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
     private void increaseFoodLevel(){
         boolean isIncreaseFoodLevelEnabled = BTUCommonConfigs.ENABLE_INCREASE_FOOD_LEVEL.get();
         int minimumFoodLevel = BTUCommonConfigs.MINIMUM_FOOD_LEVEL.get();
-        int setFoodLevel = BTUCommonConfigs.SET_FOOD_LEVEL.get();
+        int foodLevel = BTUCommonConfigs.SET_FOOD_LEVEL.get();
 
         if (this.getType() == EntityType.PLAYER && isIncreaseFoodLevelEnabled) {
-            Player player = (Player) (Object) this;
-            int foodLevel = player.getFoodData().getFoodLevel();
-            if (foodLevel <= minimumFoodLevel) {
-                player.getFoodData().setFoodLevel(setFoodLevel);
+            ServerPlayer player = (ServerPlayer) (Object) this;
+            int currentFoodLevel = player.getFoodData().getFoodLevel();
+
+            if (currentFoodLevel <= minimumFoodLevel) {
+                player.getFoodData().setFoodLevel(foodLevel);
             }
         }
     }
