@@ -192,9 +192,9 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
 
         if (isKnockBackMobsAwayEnabled){
             AABB aabb = this.getBoundingBox().inflate(radius);
-            List<LivingEntity> nearByEntities = this.level.getEntitiesOfClass(LivingEntity.class, aabb);
+            List<LivingEntity> nearbyEntities = this.level.getEntitiesOfClass(LivingEntity.class, aabb);
 
-            for (LivingEntity entity : nearByEntities){
+            for (LivingEntity entity : nearbyEntities){
                 if (!(entity instanceof Player)){
                     entity.knockback(strength, this.getX() - entity.getX(), this.getZ() - entity.getZ());
                 }
