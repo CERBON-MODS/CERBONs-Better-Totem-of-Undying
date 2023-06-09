@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -49,7 +50,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
         LivingEntity livingEntity = (LivingEntity) (Object) this;
         Level level = this.level;
 
-        if (BTUUtils.isDimensionBlacklisted(level) || BTUUtils.isStructureBlacklisted(livingEntity, (ServerLevel) level)) {
+        if (BTUUtils.isDimensionBlacklisted(level) || BTUUtils.isStructureBlacklisted(livingEntity, (ServerLevel) level) || (pDamageSource.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !(this.getY() < level.getMinBuildHeight()))) {
             return false;
         } else {
             boolean isUseTotemFromInventoryEnabled = BTUCommonConfigs.USE_TOTEM_FROM_INVENTORY.get();
