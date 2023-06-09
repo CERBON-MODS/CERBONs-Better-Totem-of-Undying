@@ -27,6 +27,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements Attackable, net.minecraftforge.common.extensions.IForgeLivingEntity  {
@@ -57,15 +58,13 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
             float health = BTUCommonConfigs.SET_HEALTH.get();
             ItemStack itemstack = null;
 
-            if (isUseTotemFromInventoryEnabled){
-                if (this.getType() == EntityType.PLAYER){
-                    ServerPlayer player = (ServerPlayer) (Object) this;
-                    for (ItemStack itemStack1 : player.getInventory().items){
-                        if (itemStack1.is(Items.TOTEM_OF_UNDYING) && net.minecraftforge.common.ForgeHooks.onLivingUseTotem(livingEntity, pDamageSource, itemStack1, null)){
-                            itemstack = itemStack1.copy();
-                            itemStack1.shrink(1);
-                            break;
-                        }
+            if (isUseTotemFromInventoryEnabled && this.getType() == EntityType.PLAYER){
+                ServerPlayer player = (ServerPlayer) (Object) this;
+                for (ItemStack itemStack1 : player.getInventory().items){
+                    if (itemStack1.is(Items.TOTEM_OF_UNDYING) && net.minecraftforge.common.ForgeHooks.onLivingUseTotem(livingEntity, pDamageSource, itemStack1, null)){
+                        itemstack = itemStack1.copy();
+                        itemStack1.shrink(1);
+                        break;
                     }
                 }
             }else {
