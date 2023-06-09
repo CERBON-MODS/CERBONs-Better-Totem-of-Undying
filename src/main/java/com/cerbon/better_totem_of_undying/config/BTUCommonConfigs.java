@@ -135,7 +135,7 @@ public class BTUCommonConfigs {
         KNOCK_BACK_STRENGTH = BUILDER
                 .comment("Sets the strength of the knock back. DEFAULT: 2.5")
                 .define("Knock Back Strength", 2.5D);
-        BUILDER.pop();
+        BUILDER.pop(2);
 
         BUILDER.push("Blacklists");
         BLACKLISTED_DIMENSIONS = BUILDER
