@@ -7,7 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -47,21 +46,21 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
     @Shadow public abstract ItemStack getItemInHand(InteractionHand pHand);
 
     private boolean checkTotemDeathProtection(DamageSource pDamageSource) {
-        LivingEntity livingEntity = (LivingEntity) (Object) this;
+        LivingEntity thisEntity = (LivingEntity) (Object) this;
+        BlockPos entityPos = this.blockPosition();
         Level level = this.level;
 
-        if (BTUUtils.isDimensionBlacklisted(level) || BTUUtils.isStructureBlacklisted(livingEntity, (ServerLevel) level) || (pDamageSource.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !(this.getY() < level.getMinBuildHeight()))) {
+        if (BTUUtils.isDimensionBlacklisted(level) || BTUUtils.isStructureBlacklisted(entityPos, (ServerLevel) level) || BTUUtils.damageBypassInvulnerability(pDamageSource, thisEntity)) {
             return false;
         } else {
             boolean isUseTotemFromInventoryEnabled = BTUCommonConfigs.USE_TOTEM_FROM_INVENTORY.get();
             boolean isRemoveAllEffectsEnabled = BTUCommonConfigs.REMOVE_ALL_EFFECTS.get();
             float health = BTUCommonConfigs.SET_HEALTH.get();
-            ItemStack itemstack = null;
 
-            if (isUseTotemFromInventoryEnabled && this.getType() == EntityType.PLAYER){
-                ServerPlayer player = (ServerPlayer) (Object) this;
-                for (ItemStack itemStack1 : player.getInventory().items){
-                    if (itemStack1.is(Items.TOTEM_OF_UNDYING) && net.minecraftforge.common.ForgeHooks.onLivingUseTotem(livingEntity, pDamageSource, itemStack1, null)){
+            ItemStack itemstack = null;
+            if (thisEntity instanceof ServerPlayer serverPlayer && isUseTotemFromInventoryEnabled){
+                for (ItemStack itemStack1 : serverPlayer.getInventory().items){
+                    if (itemStack1.is(Items.TOTEM_OF_UNDYING) && net.minecraftforge.common.ForgeHooks.onLivingUseTotem(thisEntity, pDamageSource, itemStack1, null)){
                         itemstack = itemStack1.copy();
                         itemStack1.shrink(1);
                         break;
@@ -70,7 +69,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
             }else {
                 for(InteractionHand interactionhand : InteractionHand.values()) {
                     ItemStack itemstack1 = this.getItemInHand(interactionhand);
-                    if (itemstack1.is(Items.TOTEM_OF_UNDYING) && net.minecraftforge.common.ForgeHooks.onLivingUseTotem(livingEntity, pDamageSource, itemstack1, interactionhand)) {
+                    if (itemstack1.is(Items.TOTEM_OF_UNDYING) && net.minecraftforge.common.ForgeHooks.onLivingUseTotem(thisEntity, pDamageSource, itemstack1, interactionhand)) {
                         itemstack = itemstack1.copy();
                         itemstack1.shrink(1);
                         break;
@@ -79,10 +78,9 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
             }
 
             if (itemstack != null) {
-                if (this.getType() == EntityType.PLAYER) {
-                    ServerPlayer serverplayer = (ServerPlayer) (Object) this;
-                    serverplayer.awardStat(Stats.ITEM_USED.get(Items.TOTEM_OF_UNDYING), 1);
-                    CriteriaTriggers.USED_TOTEM.trigger(serverplayer, itemstack);
+                if (thisEntity instanceof ServerPlayer serverPlayer) {
+                    serverPlayer.awardStat(Stats.ITEM_USED.get(Items.TOTEM_OF_UNDYING), 1);
+                    CriteriaTriggers.USED_TOTEM.trigger(serverPlayer, itemstack);
                 }
 
                 if (isRemoveAllEffectsEnabled) {
@@ -143,16 +141,16 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
     }
 
     private void increaseFoodLevel(){
+        LivingEntity thisEntity = (LivingEntity) (Object) this;
         boolean isIncreaseFoodLevelEnabled = BTUCommonConfigs.ENABLE_INCREASE_FOOD_LEVEL.get();
-        int minimumFoodLevel = BTUCommonConfigs.MINIMUM_FOOD_LEVEL.get();
-        int foodLevel = BTUCommonConfigs.SET_FOOD_LEVEL.get();
 
-        if (this.getType() == EntityType.PLAYER && isIncreaseFoodLevelEnabled) {
-            ServerPlayer player = (ServerPlayer) (Object) this;
-            int currentFoodLevel = player.getFoodData().getFoodLevel();
+        if (thisEntity instanceof ServerPlayer serverPlayer && isIncreaseFoodLevelEnabled) {
+            int currentFoodLevel = serverPlayer.getFoodData().getFoodLevel();
+            int minimumFoodLevel = BTUCommonConfigs.MINIMUM_FOOD_LEVEL.get();
+            int foodLevel = BTUCommonConfigs.SET_FOOD_LEVEL.get();
 
             if (currentFoodLevel <= minimumFoodLevel) {
-                player.getFoodData().setFoodLevel(foodLevel);
+                serverPlayer.getFoodData().setFoodLevel(foodLevel);
             }
         }
     }
@@ -163,34 +161,32 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
 
         if ((this.isInWall() && isDestroyBlocksWhenSuffocatingEnabled) || (this.isFullyFrozen() && isDestroyPowderSnowWhenFullyFrozenEnabled)) {
             Level level = this.level;
-            BlockPos entityPosition = this.blockPosition();
-            BlockState blockAtEntityPosition = level.getBlockState(entityPosition);
-            BlockState blockAboveEntityPosition = level.getBlockState(entityPosition.above());
+            BlockPos entityPos = this.blockPosition();
+            BlockState blockAtEntityPos = level.getBlockState(entityPos);
+            BlockState blockAboveEntityPos = level.getBlockState(entityPos.above());
 
-            if (blockAtEntityPosition.getBlock() != Blocks.BEDROCK && blockAboveEntityPosition.getBlock() != Blocks.BEDROCK) {
-                if (level.getBlockState(entityPosition.above(2)).getBlock() instanceof FallingBlock) {
-                    int i = 2;
-                    while (true){
-                        if (level.getBlockState(entityPosition.above(i)).getBlock() instanceof FallingBlock){
-                            level.destroyBlock(entityPosition.above(i), true);
-                            i++;
-                        }else{
-                            break;
-                        }
+            if (blockAtEntityPos.getBlock() != Blocks.BEDROCK && blockAboveEntityPos.getBlock() != Blocks.BEDROCK) {
+                int i = 2;
+                while (true){
+                    if (level.getBlockState(entityPos.above(i)).getBlock() instanceof FallingBlock){
+                        level.destroyBlock(entityPos.above(i), true);
+                        i++;
+                    }else{
+                        break;
                     }
                 }
-                level.destroyBlock(entityPosition, true);
-                level.destroyBlock(entityPosition.above(), true);
+                level.destroyBlock(entityPos, true);
+                level.destroyBlock(entityPos.above(), true);
             }
         }
     }
 
     private void knockBackMobsAway(){
         boolean isKnockBackMobsAwayEnabled = BTUCommonConfigs.KNOCK_BACK_MOBS_AWAY.get();
-        double radius = BTUCommonConfigs.KNOCK_BACK_RADIUS.get();
-        double strength = BTUCommonConfigs.KNOCK_BACK_STRENGTH.get();
 
         if (isKnockBackMobsAwayEnabled){
+            double radius = BTUCommonConfigs.KNOCK_BACK_RADIUS.get();
+            double strength = BTUCommonConfigs.KNOCK_BACK_STRENGTH.get();
             AABB aabb = this.getBoundingBox().inflate(radius);
             List<LivingEntity> nearbyEntities = this.level.getEntitiesOfClass(LivingEntity.class, aabb);
 
