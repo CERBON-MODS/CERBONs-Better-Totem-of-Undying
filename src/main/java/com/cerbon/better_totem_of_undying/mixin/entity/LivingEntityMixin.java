@@ -191,7 +191,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
             List<LivingEntity> nearbyEntities = this.level.getEntitiesOfClass(LivingEntity.class, aabb);
 
             for (LivingEntity entity : nearbyEntities){
-                if (!(entity instanceof Player)){
+                if (!entity.is(this)){
                     entity.knockback(strength, this.getX() - entity.getX(), this.getZ() - entity.getZ());
                 }
             }
