@@ -8,9 +8,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 
 @Mod(BTUConstants.MOD_ID)
-public class BetterTotemOfUndyingMod {
+public class BetterTotemOfUndying {
 
-    public BetterTotemOfUndyingMod() {
+    public BetterTotemOfUndying() {
         MinecraftForge.EVENT_BUS.register(this);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BTUCommonConfigs.SPEC, BTUConstants.CONFIG_NAME);
     }
