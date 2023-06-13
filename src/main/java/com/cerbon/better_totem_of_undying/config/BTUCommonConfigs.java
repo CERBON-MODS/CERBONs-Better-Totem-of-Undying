@@ -3,7 +3,6 @@ package com.cerbon.better_totem_of_undying.config;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class BTUCommonConfigs {
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
@@ -106,11 +105,11 @@ public class BTUCommonConfigs {
 
         MINIMUM_FOOD_LEVEL = BUILDER
                 .comment("Sets the minimum food level needed to Totem of Undying increase food level. DEFAULT: <= 6")
-                .define("Minimum Food Level", 6);
+                .defineInRange("Minimum Food Level", 6, 0 , 20);
 
         SET_FOOD_LEVEL = BUILDER
                 .comment("Sets the food level that Totem of Undying will give upon use. DEFAULT: 8")
-                .define("Set Food Level", 8);
+                .defineInRange("Set Food Level", 8, 0, 20);
         BUILDER.pop();
 
         BUILDER.push("Destroy Blocks When Suffocating or Fully Frozen");
