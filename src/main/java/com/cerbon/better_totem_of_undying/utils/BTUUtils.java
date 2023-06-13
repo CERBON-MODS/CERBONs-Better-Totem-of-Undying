@@ -6,13 +6,21 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FallingBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.phys.AABB;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BTUUtils {
 
@@ -40,5 +48,102 @@ public class BTUUtils {
             }
         }
         return flag;
+    }
+
+    public static void applyTotemEffects(LivingEntity livingEntity){
+        boolean isApplyEffectsOnlyWhenNeededEnabled = BTUCommonConfigs.APPLY_EFFECTS_ONLY_WHEN_NEEDED.get();
+
+        boolean isFireResistanceEffectEnabled = BTUCommonConfigs.ENABLE_FIRE_RESISTANCE.get();
+        int fireResistanceEffectDuration = BTUCommonConfigs.FIRE_RESISTANCE_DURATION.get();
+
+        boolean isRegenerationEffectEnabled = BTUCommonConfigs.ENABLE_REGENERATION.get();
+        int regenerationEffectDuration = BTUCommonConfigs.REGENERATION_DURATION.get();
+        int regenerationEffectAmplifier = BTUCommonConfigs.REGENERATION_AMPLIFIER.get();
+
+        boolean isAbsorptionEffectEnabled = BTUCommonConfigs.ENABLE_ABSORPTION.get();
+        int absorptionEffectDuration = BTUCommonConfigs.ABSORPTION_DURATION.get();
+        int absorptionEffectAmplifier = BTUCommonConfigs.ABSORPTION_AMPLIFIER.get();
+
+        boolean isWaterBreathingEffectEnabled = BTUCommonConfigs.ENABLE_WATER_BREATHING.get();
+        int waterBreathingEffectDuration = BTUCommonConfigs.WATER_BREATHING_DURATION.get();
+
+        if (isApplyEffectsOnlyWhenNeededEnabled) {
+            if (livingEntity.isOnFire() && isFireResistanceEffectEnabled) {
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, fireResistanceEffectDuration, 0));
+            }
+            if (livingEntity.isInWaterOrBubble() && isWaterBreathingEffectEnabled) {
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, waterBreathingEffectDuration, 0));
+            }
+        } else {
+            if (isFireResistanceEffectEnabled) {
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, fireResistanceEffectDuration, 0));
+            }
+            if (isWaterBreathingEffectEnabled) {
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, waterBreathingEffectDuration, 0));
+            }
+        }
+
+        if (isRegenerationEffectEnabled) {
+            livingEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, regenerationEffectDuration, regenerationEffectAmplifier));
+        }
+        if (isAbsorptionEffectEnabled) {
+            livingEntity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, absorptionEffectDuration, absorptionEffectAmplifier));
+        }
+    }
+
+    public static void increaseFoodLevel(LivingEntity livingEntity){
+        boolean isIncreaseFoodLevelEnabled = BTUCommonConfigs.ENABLE_INCREASE_FOOD_LEVEL.get();
+
+        if (livingEntity instanceof ServerPlayer serverPlayer && isIncreaseFoodLevelEnabled) {
+            int currentFoodLevel = serverPlayer.getFoodData().getFoodLevel();
+            int minimumFoodLevel = BTUCommonConfigs.MINIMUM_FOOD_LEVEL.get();
+            int foodLevel = BTUCommonConfigs.SET_FOOD_LEVEL.get();
+
+            if (currentFoodLevel <= minimumFoodLevel) {
+                serverPlayer.getFoodData().setFoodLevel(foodLevel);
+            }
+        }
+    }
+
+    public static void destroyBlocksWhenSuffocatingOrFullyFrozen(LivingEntity livingEntity, Level level){
+        boolean isDestroyBlocksWhenSuffocatingEnabled = BTUCommonConfigs.DESTROY_BLOCKS_WHEN_SUFFOCATING.get();
+        boolean isDestroyPowderSnowWhenFullyFrozenEnabled = BTUCommonConfigs.DESTROY_POWDER_SNOW_WHEN_FULLY_FROZEN.get();
+
+        if ((livingEntity.isInWall() && isDestroyBlocksWhenSuffocatingEnabled) || (livingEntity.isFullyFrozen() && isDestroyPowderSnowWhenFullyFrozenEnabled)) {
+            BlockPos entityPos = livingEntity.blockPosition();
+            BlockState blockAtEntityPos = level.getBlockState(entityPos);
+            BlockState blockAboveEntityPos = level.getBlockState(entityPos.above());
+
+            if (blockAtEntityPos.getBlock() != Blocks.BEDROCK && blockAboveEntityPos.getBlock() != Blocks.BEDROCK) {
+                int i = 2;
+                while (true){
+                    if (level.getBlockState(entityPos.above(i)).getBlock() instanceof FallingBlock){
+                        level.destroyBlock(entityPos.above(i), true);
+                        i++;
+                    }else{
+                        break;
+                    }
+                }
+                level.destroyBlock(entityPos, true);
+                level.destroyBlock(entityPos.above(), true);
+            }
+        }
+    }
+
+    public static void knockBackMobsAway(LivingEntity livingEntity){
+        boolean isKnockBackMobsAwayEnabled = BTUCommonConfigs.KNOCK_BACK_MOBS_AWAY.get();
+
+        if (isKnockBackMobsAwayEnabled){
+            double radius = BTUCommonConfigs.KNOCK_BACK_RADIUS.get();
+            double strength = BTUCommonConfigs.KNOCK_BACK_STRENGTH.get();
+            AABB aabb = livingEntity.getBoundingBox().inflate(radius);
+            List<LivingEntity> nearbyEntities = livingEntity.level.getEntitiesOfClass(LivingEntity.class, aabb);
+
+            for (LivingEntity entity : nearbyEntities){
+                if (!entity.is(livingEntity)){
+                    entity.knockback(strength, livingEntity.getX() - entity.getX(), livingEntity.getZ() - entity.getZ());
+                }
+            }
+        }
     }
 }
