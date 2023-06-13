@@ -81,7 +81,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
                 BTUUtils.increaseFoodLevel(thisEntity);
                 BTUUtils.destroyBlocksWhenSuffocatingOrFullyFrozen(thisEntity, level);
                 BTUUtils.knockBackMobsAway(thisEntity, level);
-                this.level.broadcastEntityEvent(this, (byte) 35);
+                level.broadcastEntityEvent(this, (byte) 35);
             }
 
             return itemstack != null;
