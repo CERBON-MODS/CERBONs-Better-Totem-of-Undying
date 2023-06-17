@@ -124,14 +124,14 @@ public class BTUUtils {
         }
     }
 
-    public static void teleportOutOfVoid(LivingEntity livingEntity, Level level, DamageSource damageSource, int posX, int posY, int posZ){
+    public static void teleportOutOfVoid(LivingEntity livingEntity, Level level, DamageSource damageSource, BlockPos lastBlockPos){
         if (isOutOfWorld(livingEntity, damageSource)){
             boolean isSlowFallingEnabled = BTUCommonConfigs.ENABLE_SLOW_FALLING.get();
             int slowFallingDuration = BTUCommonConfigs.SLOW_FALLING_DURATION.get();
 
-            BlockPos positionNearby = randomTeleportNearby(livingEntity, level, posX, posY, posZ);
+            BlockPos positionNearby = randomTeleportNearby(livingEntity, level, lastBlockPos);
             if (positionNearby == null){
-                livingEntity.teleportTo(posX, level.getMaxBuildHeight() + BTUCommonConfigs.TELEPORT_HEIGHT_OFFSET.get(), posZ);
+                livingEntity.teleportTo(lastBlockPos.getX(), level.getMaxBuildHeight() + BTUCommonConfigs.TELEPORT_HEIGHT_OFFSET.get(), lastBlockPos.getZ());
 
                 if (isSlowFallingEnabled){
                     livingEntity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, slowFallingDuration, 0));
@@ -140,13 +140,13 @@ public class BTUUtils {
         }
     }
 
-    public static BlockPos randomTeleportNearby(LivingEntity livingEntity, Level level, int posX, int posY, int posZ){
+    public static BlockPos randomTeleportNearby(LivingEntity livingEntity, Level level, BlockPos blockPos){
         BlockPos teleportPos = null;
 
         for (int i = 0; i < 16; i++) {
-            double x = posX + (livingEntity.getRandom().nextDouble() - 0.5D) * 16.0D;
-            double y = Mth.clamp(posY + (double) (livingEntity.getRandom().nextInt(16) - 8), level.getMinBuildHeight(), level.getMaxBuildHeight() - 1);
-            double z = posZ + (livingEntity.getRandom().nextDouble() - 0.5D) * 16.0D;
+            double x = blockPos.getX() + (livingEntity.getRandom().nextDouble() - 0.5D) * 16.0D;
+            double y = Mth.clamp(blockPos.getY() + (double) (livingEntity.getRandom().nextInt(16) - 8), level.getMinBuildHeight(), level.getMaxBuildHeight() - 1);
+            double z = blockPos.getZ() + (livingEntity.getRandom().nextDouble() - 0.5D) * 16.0D;
 
             BlockPos pos = new BlockPos((int) x, (int) y, (int) z);
             if (livingEntity.randomTeleport(x, y, z, true)) {
