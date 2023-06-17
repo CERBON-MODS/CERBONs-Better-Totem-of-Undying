@@ -20,6 +20,8 @@ public class BTUCommonConfigs {
     public static final ForgeConfigSpec.ConfigValue<Integer> ABSORPTION_AMPLIFIER;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_WATER_BREATHING;
     public static final ForgeConfigSpec.ConfigValue<Integer> WATER_BREATHING_DURATION;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_SLOW_FALLING;
+    public static final ForgeConfigSpec.ConfigValue<Integer> SLOW_FALLING_DURATION;
     public static final ForgeConfigSpec.ConfigValue<Float> SET_HEALTH;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_INCREASE_FOOD_LEVEL;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DESTROY_BLOCKS_WHEN_SUFFOCATING;
@@ -30,6 +32,8 @@ public class BTUCommonConfigs {
     public static final ForgeConfigSpec.ConfigValue<Integer> MINIMUM_FOOD_LEVEL;
     public static final ForgeConfigSpec.ConfigValue<Integer> SET_FOOD_LEVEL;
     public static final ForgeConfigSpec.ConfigValue<Boolean> REMOVE_ALL_EFFECTS;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> TELEPORT_OUT_OF_VOID;
+    public static final ForgeConfigSpec.ConfigValue<Integer> TELEPORT_HEIGHT_OFFSET;
     public static final ForgeConfigSpec.ConfigValue<ArrayList<String>> BLACKLISTED_DIMENSIONS;
     public static final ForgeConfigSpec.ConfigValue<ArrayList<String>> BLACKLISTED_STRUCTURES;
 
@@ -96,6 +100,14 @@ public class BTUCommonConfigs {
         WATER_BREATHING_DURATION= BUILDER
                 .comment("Sets the duration of the water breathing effect in ticks. DEFAULT: 800")
                 .define("Water Breathing Duration", 800);
+
+        ENABLE_SLOW_FALLING = BUILDER
+                .comment("If false Totem of Undying will not give you slow falling effect. DEFAULT: TRUE")
+                .define("Enable Slow Falling", true);
+
+        SLOW_FALLING_DURATION = BUILDER
+                .comment("Sets the duration of the slow falling effect in ticks. DEFAULT: 600")
+                .define("Slow Falling Duration", 600);
         BUILDER.pop();
 
         BUILDER.push("Increase food level");
@@ -134,6 +146,17 @@ public class BTUCommonConfigs {
         KNOCK_BACK_STRENGTH = BUILDER
                 .comment("Sets the strength of the knock back. DEFAULT: 2.5")
                 .define("Knock Back Strength", 2.5D);
+        BUILDER.pop();
+
+        BUILDER.push("Teleport Out of Void");
+        TELEPORT_OUT_OF_VOID = BUILDER
+                .comment("If false Totem of Undying will not save you from dying in the void. DEFAULT: TRUE")
+                .define("Teleport Out of Void", true);
+
+        TELEPORT_HEIGHT_OFFSET = BUILDER
+                .comment("If totem can't find a available position to teleport you back it will teleport you to the world's max build height plus this offset. DEFAULT:64")
+                .defineInRange("Teleport Height Offset", 64, 0, 1024);
+
         BUILDER.pop(2);
 
         BUILDER.push("Blacklists");

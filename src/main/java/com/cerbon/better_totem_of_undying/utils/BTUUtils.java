@@ -8,7 +8,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,6 +25,42 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BTUUtils {
+
+    public static void teleportOutOfVoid(LivingEntity livingEntity, Level level, int posX, int posY, int posZ){
+        boolean isSlowFallingEnabled = BTUCommonConfigs.ENABLE_SLOW_FALLING.get();
+        int slowFallingDuration = BTUCommonConfigs.SLOW_FALLING_DURATION.get();
+
+        BlockPos positionNearby = randomTeleportNearby(livingEntity, level, posX, posY, posZ);
+
+        if (positionNearby == null){
+            livingEntity.teleportTo(posX, level.getMaxBuildHeight() + BTUCommonConfigs.TELEPORT_HEIGHT_OFFSET.get(), posZ);
+            if (isSlowFallingEnabled){
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, slowFallingDuration, 0));
+            }
+        }
+    }
+
+    public static BlockPos randomTeleportNearby(LivingEntity livingEntity, Level level, int posX, int posY, int posZ){
+        BlockPos teleportPos = null;
+
+        for (int i = 0; i < 16; i++) {
+            double x = posX + (livingEntity.getRandom().nextDouble() - 0.5D) * 16.0D;
+            double y = Mth.clamp(posY + (double) (livingEntity.getRandom().nextInt(16) - 8), level.getMinBuildHeight(), level.getMaxBuildHeight() - 1);
+            double z = posZ + (livingEntity.getRandom().nextDouble() - 0.5D) * 16.0D;
+
+            BlockPos pos = new BlockPos((int) x, (int) y, (int) z);
+            if (livingEntity.randomTeleport(x, y, z, true)) {
+                teleportPos = pos;
+                livingEntity.resetFallDistance();
+                break;
+            }
+        }
+        return teleportPos;
+    }
+
+    public static boolean isOutOfWorld(LivingEntity livingEntity, DamageSource damageSource){
+        return damageSource.is(DamageTypes.OUT_OF_WORLD) && livingEntity.getY() < livingEntity.level.getMinBuildHeight();
+    }
 
     //The method also checks the entity height to be sure it's not in the void. That way it doesn't conflict with the ability that saves the entity from dying in the void.
     public static boolean damageBypassInvulnerability(DamageSource damageSource, LivingEntity livingEntity){

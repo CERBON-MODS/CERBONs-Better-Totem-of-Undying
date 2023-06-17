@@ -16,11 +16,18 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.Objects;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements Attackable, net.minecraftforge.common.extensions.IForgeLivingEntity  {
+    public BlockPos lastBlockPos;
 
     public LivingEntityMixin(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -35,11 +42,12 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
     @Shadow public abstract ItemStack getItemInHand(InteractionHand pHand);
 
     private boolean checkTotemDeathProtection(DamageSource pDamageSource) {
+        boolean isTeleportOutOfVoidEnabled = BTUCommonConfigs.TELEPORT_OUT_OF_VOID.get();
         LivingEntity thisEntity = (LivingEntity) (Object) this;
         BlockPos entityPos = this.blockPosition();
         Level level = this.level;
 
-        if (BTUUtils.isDimensionBlacklisted(level) || BTUUtils.isStructureBlacklisted(entityPos, (ServerLevel) level) || BTUUtils.damageBypassInvulnerability(pDamageSource, thisEntity)) {
+        if (BTUUtils.isDimensionBlacklisted(level) || BTUUtils.isStructureBlacklisted(entityPos, (ServerLevel) level) || BTUUtils.damageBypassInvulnerability(pDamageSource, thisEntity) || (!isTeleportOutOfVoidEnabled && BTUUtils.isOutOfWorld(thisEntity, pDamageSource))) {
             return false;
         } else {
             boolean isUseTotemFromInventoryEnabled = BTUCommonConfigs.USE_TOTEM_FROM_INVENTORY.get();
@@ -81,10 +89,25 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
                 BTUUtils.increaseFoodLevel(thisEntity);
                 BTUUtils.destroyBlocksWhenSuffocatingOrFullyFrozen(thisEntity, level);
                 BTUUtils.knockBackMobsAway(thisEntity, level);
+                if (BTUUtils.isOutOfWorld(thisEntity, pDamageSource)){BTUUtils.teleportOutOfVoid(thisEntity, level, this.lastBlockPos.getX(), this.lastBlockPos.getY(), this.lastBlockPos.getZ());}
+
                 level.broadcastEntityEvent(this, (byte) 35);
             }
 
             return itemstack != null;
+        }
+    }
+    @Inject(method = "baseTick", at = @At("TAIL"))
+    public void saveEntityLastBlockPos(CallbackInfo ci) {
+        if (!this.level.isClientSide) {
+            Level level = this.level;
+            BlockPos currentPos = this.blockPosition();
+            BlockState blockBelowEntityPos = level.getBlockState(currentPos.below());
+            boolean isValidBlock = blockBelowEntityPos.isRedstoneConductor(level, currentPos.below());
+
+            if (!Objects.equals(this.lastBlockPos, currentPos) && isValidBlock) {
+                this.lastBlockPos = currentPos;
+            }
         }
     }
 }
