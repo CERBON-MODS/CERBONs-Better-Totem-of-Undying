@@ -20,73 +20,12 @@ import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BTUUtils {
-
-    public static void teleportOutOfVoid(LivingEntity livingEntity, Level level, int posX, int posY, int posZ){
-        boolean isSlowFallingEnabled = BTUCommonConfigs.ENABLE_SLOW_FALLING.get();
-        int slowFallingDuration = BTUCommonConfigs.SLOW_FALLING_DURATION.get();
-
-        BlockPos positionNearby = randomTeleportNearby(livingEntity, level, posX, posY, posZ);
-
-        if (positionNearby == null){
-            livingEntity.teleportTo(posX, level.getMaxBuildHeight() + BTUCommonConfigs.TELEPORT_HEIGHT_OFFSET.get(), posZ);
-            if (isSlowFallingEnabled){
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, slowFallingDuration, 0));
-            }
-        }
-    }
-
-    public static BlockPos randomTeleportNearby(LivingEntity livingEntity, Level level, int posX, int posY, int posZ){
-        BlockPos teleportPos = null;
-
-        for (int i = 0; i < 16; i++) {
-            double x = posX + (livingEntity.getRandom().nextDouble() - 0.5D) * 16.0D;
-            double y = Mth.clamp(posY + (double) (livingEntity.getRandom().nextInt(16) - 8), level.getMinBuildHeight(), level.getMaxBuildHeight() - 1);
-            double z = posZ + (livingEntity.getRandom().nextDouble() - 0.5D) * 16.0D;
-
-            BlockPos pos = new BlockPos((int) x, (int) y, (int) z);
-            if (livingEntity.randomTeleport(x, y, z, true)) {
-                teleportPos = pos;
-                livingEntity.resetFallDistance();
-                break;
-            }
-        }
-        return teleportPos;
-    }
-
-    public static boolean isOutOfWorld(LivingEntity livingEntity, DamageSource damageSource){
-        return damageSource.is(DamageTypes.OUT_OF_WORLD) && livingEntity.getY() < livingEntity.level.getMinBuildHeight();
-    }
-
-    //The method also checks the entity height to be sure it's not in the void. That way it doesn't conflict with the ability that saves the entity from dying in the void.
-    public static boolean damageBypassInvulnerability(DamageSource damageSource, LivingEntity livingEntity){
-        return damageSource.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !(livingEntity.getY() < livingEntity.level.getMinBuildHeight());
-    }
-
-    public static boolean isDimensionBlacklisted(Level level){
-        return BTUCommonConfigs.BLACKLISTED_DIMENSIONS.get().contains(level.dimension().location().toString());
-    }
-
-    public static boolean isStructureBlacklisted(BlockPos pos, ServerLevel level){
-        ArrayList<String> blackListedStructures = BTUCommonConfigs.BLACKLISTED_STRUCTURES.get();
-        Registry<Structure> structureRegistry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
-
-        boolean flag = false;
-        for (String structureName : blackListedStructures){
-            Structure structure = structureRegistry.get(new ResourceLocation(structureName));
-
-            if (structure != null){
-                 if (level.structureManager().getStructureAt(pos, structure).isValid()){
-                     flag = true;
-                 }
-            }
-        }
-        return flag;
-    }
 
     public static void applyTotemEffects(LivingEntity livingEntity){
         boolean isApplyEffectsOnlyWhenNeededEnabled = BTUCommonConfigs.APPLY_EFFECTS_ONLY_WHEN_NEEDED.get();
@@ -143,7 +82,7 @@ public class BTUUtils {
         }
     }
 
-    public static void destroyBlocksWhenSuffocatingOrFullyFrozen(LivingEntity livingEntity, Level level){
+    public static void destroyBlocksWhenSuffocatingOrFullyFrozen(@NotNull LivingEntity livingEntity, Level level){
         boolean isDestroyBlocksWhenSuffocatingEnabled = BTUCommonConfigs.DESTROY_BLOCKS_WHEN_SUFFOCATING.get();
         boolean isDestroyPowderSnowWhenFullyFrozenEnabled = BTUCommonConfigs.DESTROY_POWDER_SNOW_WHEN_FULLY_FROZEN.get();
 
@@ -184,4 +123,70 @@ public class BTUUtils {
             }
         }
     }
+
+    public static void teleportOutOfVoid(LivingEntity livingEntity, Level level, DamageSource damageSource, int posX, int posY, int posZ){
+        if (isOutOfWorld(livingEntity, damageSource)){
+            boolean isSlowFallingEnabled = BTUCommonConfigs.ENABLE_SLOW_FALLING.get();
+            int slowFallingDuration = BTUCommonConfigs.SLOW_FALLING_DURATION.get();
+
+            BlockPos positionNearby = randomTeleportNearby(livingEntity, level, posX, posY, posZ);
+            if (positionNearby == null){
+                livingEntity.teleportTo(posX, level.getMaxBuildHeight() + BTUCommonConfigs.TELEPORT_HEIGHT_OFFSET.get(), posZ);
+
+                if (isSlowFallingEnabled){
+                    livingEntity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, slowFallingDuration, 0));
+                }
+            }
+        }
+    }
+
+    public static BlockPos randomTeleportNearby(LivingEntity livingEntity, Level level, int posX, int posY, int posZ){
+        BlockPos teleportPos = null;
+
+        for (int i = 0; i < 16; i++) {
+            double x = posX + (livingEntity.getRandom().nextDouble() - 0.5D) * 16.0D;
+            double y = Mth.clamp(posY + (double) (livingEntity.getRandom().nextInt(16) - 8), level.getMinBuildHeight(), level.getMaxBuildHeight() - 1);
+            double z = posZ + (livingEntity.getRandom().nextDouble() - 0.5D) * 16.0D;
+
+            BlockPos pos = new BlockPos((int) x, (int) y, (int) z);
+            if (livingEntity.randomTeleport(x, y, z, true)) {
+                teleportPos = pos;
+                livingEntity.resetFallDistance();
+                break;
+            }
+        }
+        return teleportPos;
+    }
+
+    public static boolean isOutOfWorld(LivingEntity livingEntity, @NotNull DamageSource damageSource){
+        return damageSource.is(DamageTypes.OUT_OF_WORLD) && livingEntity.getY() < livingEntity.level.getMinBuildHeight();
+    }
+
+    //The method also checks the entity height to be sure it's not in the void. That way it doesn't conflict with the ability that saves the entity from dying in the void.
+    public static boolean damageBypassInvulnerability(@NotNull DamageSource damageSource, LivingEntity livingEntity){
+        return damageSource.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !(livingEntity.getY() < livingEntity.level.getMinBuildHeight());
+    }
+
+    public static boolean isDimensionBlacklisted(@NotNull Level level){
+        return BTUCommonConfigs.BLACKLISTED_DIMENSIONS.get().contains(level.dimension().location().toString());
+    }
+
+    public static boolean isStructureBlacklisted(BlockPos pos, @NotNull ServerLevel level){
+        ArrayList<String> blackListedStructures = BTUCommonConfigs.BLACKLISTED_STRUCTURES.get();
+        Registry<Structure> structureRegistry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
+
+        boolean flag = false;
+        for (String structureName : blackListedStructures){
+            Structure structure = structureRegistry.get(new ResourceLocation(structureName));
+
+            if (structure != null){
+                 if (level.structureManager().getStructureAt(pos, structure).isValid()){
+                     flag = true;
+                 }
+            }
+        }
+        return flag;
+    }
+
+
 }
