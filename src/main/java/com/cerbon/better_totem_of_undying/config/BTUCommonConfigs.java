@@ -66,7 +66,7 @@ public class BTUCommonConfigs {
 
         REGENERATION_AMPLIFIER = BUILDER
                 .comment("Sets the amplifier of the regeneration effect. DEFAULT: 1")
-                .define("Regeneration Amplifier", 1);
+                .defineInRange("Regeneration Amplifier", 1, 0, 255);
 
         ENABLE_ABSORPTION = BUILDER
                 .comment("If false Totem of Undying will not give you absorption effect. DEFAULT: TRUE")
@@ -78,7 +78,7 @@ public class BTUCommonConfigs {
 
         ABSORPTION_AMPLIFIER = BUILDER
                 .comment("Sets the amplifier of the absorption effect. DEFAULT: 1")
-                .define("Absorption Amplifier", 1);
+                .defineInRange("Absorption Amplifier", 1, 0, 255);
         BUILDER.pop(2);
 
 
