@@ -4,6 +4,7 @@ import com.cerbon.better_totem_of_undying.config.BTUCommonConfigs;
 import com.cerbon.better_totem_of_undying.utils.BTUUtils;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
@@ -27,7 +28,7 @@ import java.util.Objects;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements Attackable, net.minecraftforge.common.extensions.IForgeLivingEntity  {
-    public BlockPos lastBlockPos;
+    public long lastBlockPos;
 
     public LivingEntityMixin(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -94,7 +95,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
                 BTUUtils.increaseFoodLevel(thisEntity);
                 BTUUtils.destroyBlocksWhenSuffocatingOrFullyFrozen(thisEntity, level);
                 BTUUtils.knockBackMobsAway(thisEntity, level);
-                BTUUtils.teleportOutOfVoid(thisEntity, level, pDamageSource, this.lastBlockPos);
+                BTUUtils.teleportOutOfVoid(thisEntity, level, pDamageSource, BlockPos.of(this.lastBlockPos));
 
                 level.broadcastEntityEvent(this, (byte) 35);
             }
@@ -110,9 +111,17 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
             BlockState blockBelowEntityPos = level.getBlockState(currentPos.below());
             boolean isValidBlock = blockBelowEntityPos.isRedstoneConductor(level, currentPos.below());
 
-            if (!Objects.equals(this.lastBlockPos, currentPos) && isValidBlock) {
-                this.lastBlockPos = currentPos;
+            if (!Objects.equals(this.lastBlockPos, currentPos.asLong()) && isValidBlock) {
+                this.lastBlockPos = currentPos.asLong();
             }
         }
+    }
+    @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
+    public void addCustomData(CompoundTag pCompound, CallbackInfo ci){
+        pCompound.putLong("LastBlockPos", this.lastBlockPos);
+    }
+    @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
+    public void readCustomData(CompoundTag pCompound, CallbackInfo ci){
+        this.lastBlockPos = pCompound.getLong("LastBlockPos");
     }
 }
