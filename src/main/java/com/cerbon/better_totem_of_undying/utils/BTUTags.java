@@ -6,5 +6,5 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 
 public class BTUTags {
-    public static final TagKey<Block> TOTEM_CANT_BREAK = BlockTags.create(new ResourceLocation(BTUConstants.MOD_ID, "totem_cant_break"));
+    public static final TagKey<Block> TOTEM_CANT_DESTROY = BlockTags.create(new ResourceLocation(BTUConstants.MOD_ID, "totem_cant_destroy"));
 }
