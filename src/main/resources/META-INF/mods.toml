@@ -14,6 +14,7 @@ authors="CerbonXD" #optional
 
 #mandatory
 description='''
+Use the link above to see the whole mod description.
 '''
 
 [[dependencies.better_totem_of_undying]] #optional
