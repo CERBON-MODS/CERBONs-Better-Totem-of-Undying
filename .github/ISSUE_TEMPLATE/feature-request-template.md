@@ -1,9 +1,9 @@
 ---
 name: FEATURE REQUEST Template
 about: Use this template if you have a feature you would like to see added to the
-  project
+  project.
 title: "[FEATURE REQUEST] Brief description"
-labels: ''
+labels: enhancement
 assignees: ''
 
 ---
