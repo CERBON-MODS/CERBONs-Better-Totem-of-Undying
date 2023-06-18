@@ -58,10 +58,10 @@ public abstract class LivingEntityMixin extends Entity {
 
             ItemStack itemstack = null;
             if (thisEntity instanceof ServerPlayer serverPlayer && isUseTotemFromInventoryEnabled){
-                for (ItemStack itemStack1 : serverPlayer.getInventory().items){
-                    if (itemStack1.is(Items.TOTEM_OF_UNDYING) && net.minecraftforge.common.ForgeHooks.onLivingUseTotem(thisEntity, pDamageSource, itemStack1, null)){
-                        itemstack = itemStack1.copy();
-                        itemStack1.shrink(1);
+                for (ItemStack itemstack1 : serverPlayer.getInventory().items){
+                    if (itemstack1.is(Items.TOTEM_OF_UNDYING) && net.minecraftforge.common.ForgeHooks.onLivingUseTotem(thisEntity, pDamageSource, itemstack1, null)){
+                        itemstack = itemstack1.copy();
+                        itemstack1.shrink(1);
                         break;
                     }
                 }
