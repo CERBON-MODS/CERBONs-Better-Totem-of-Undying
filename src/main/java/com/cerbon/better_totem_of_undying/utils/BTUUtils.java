@@ -15,7 +15,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -91,10 +90,10 @@ public class BTUUtils {
             BlockState blockAtEntityPos = level.getBlockState(entityPos);
             BlockState blockAboveEntityPos = level.getBlockState(entityPos.above());
 
-            if (blockAtEntityPos.getBlock() != Blocks.BEDROCK && blockAboveEntityPos.getBlock() != Blocks.BEDROCK) {
+            if (!blockAtEntityPos.is(BTUTags.TOTEM_CANT_BREAK) && !blockAboveEntityPos.is(BTUTags.TOTEM_CANT_BREAK)) {
                 int i = 2;
                 while (true){
-                    if (level.getBlockState(entityPos.above(i)).getBlock() instanceof FallingBlock){
+                    if (level.getBlockState(entityPos.above(i)).getBlock() instanceof FallingBlock && !level.getBlockState(entityPos.above(i)).is(BTUTags.TOTEM_CANT_BREAK)){
                         level.destroyBlock(entityPos.above(i), true);
                         i++;
                     }else{
@@ -191,6 +190,4 @@ public class BTUUtils {
         }
         return flag;
     }
-
-
 }
