@@ -26,9 +26,9 @@ public class BTUCommonConfigs {
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_INCREASE_FOOD_LEVEL;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DESTROY_BLOCKS_WHEN_SUFFOCATING;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DESTROY_POWDER_SNOW_WHEN_FULLY_FROZEN;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> KNOCK_BACK_MOBS_AWAY;
-    public static final ForgeConfigSpec.ConfigValue<Double> KNOCK_BACK_RADIUS;
-    public static final ForgeConfigSpec.ConfigValue<Double> KNOCK_BACK_STRENGTH;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> KNOCKBACK_MOBS_AWAY;
+    public static final ForgeConfigSpec.ConfigValue<Double> KNOCKBACK_RADIUS;
+    public static final ForgeConfigSpec.ConfigValue<Double> KNOCKBACK_STRENGTH;
     public static final ForgeConfigSpec.ConfigValue<Integer> MINIMUM_FOOD_LEVEL;
     public static final ForgeConfigSpec.ConfigValue<Integer> SET_FOOD_LEVEL;
     public static final ForgeConfigSpec.ConfigValue<Boolean> REMOVE_ALL_EFFECTS;
@@ -136,18 +136,18 @@ public class BTUCommonConfigs {
                 .define("Destroy Powder Snow When Fully Frozen", true);
         BUILDER.pop();
 
-        BUILDER.push("Knock Back Mobs Away");
-        KNOCK_BACK_MOBS_AWAY = BUILDER
-                .comment("If false Totem of Undying will not knock back mobs away. DEFAULT: TRUE")
-                .define("Knock Back Mobs Away", true);
+        BUILDER.push("Knockback Mobs Away");
+        KNOCKBACK_MOBS_AWAY = BUILDER
+                .comment("If false Totem of Undying will not knockback mobs away. DEFAULT: TRUE")
+                .define("Knockback Mobs Away", true);
 
-        KNOCK_BACK_RADIUS = BUILDER
-                .comment("Sets the radius where entities needs to be for the totem knock back them. DEFAULT: 3.0")
-                .define("Knock Back Radius", 3.0D);
+        KNOCKBACK_RADIUS = BUILDER
+                .comment("Sets the radius where entities needs to be for the totem knockback them. DEFAULT: 3.0")
+                .define("Knockback Radius", 3.0D);
 
-        KNOCK_BACK_STRENGTH = BUILDER
-                .comment("Sets the strength of the knock back. DEFAULT: 2.5")
-                .define("Knock Back Strength", 2.5D);
+        KNOCKBACK_STRENGTH = BUILDER
+                .comment("Sets the strength of the knockback. DEFAULT: 2.5")
+                .define("Knockback Strength", 2.5D);
         BUILDER.pop();
 
         BUILDER.push("Teleport Out of Void");

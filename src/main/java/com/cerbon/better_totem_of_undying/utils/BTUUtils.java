@@ -106,12 +106,12 @@ public class BTUUtils {
         }
     }
 
-    public static void knockBackMobsAway(LivingEntity livingEntity, Level level){
-        boolean isKnockBackMobsAwayEnabled = BTUCommonConfigs.KNOCK_BACK_MOBS_AWAY.get();
+    public static void knockbackMobsAway(LivingEntity livingEntity, Level level){
+        boolean isKnockBackMobsAwayEnabled = BTUCommonConfigs.KNOCKBACK_MOBS_AWAY.get();
 
         if (isKnockBackMobsAwayEnabled){
-            double radius = BTUCommonConfigs.KNOCK_BACK_RADIUS.get();
-            double strength = BTUCommonConfigs.KNOCK_BACK_STRENGTH.get();
+            double radius = BTUCommonConfigs.KNOCKBACK_RADIUS.get();
+            double strength = BTUCommonConfigs.KNOCKBACK_STRENGTH.get();
             AABB aabb = livingEntity.getBoundingBox().inflate(radius);
             List<LivingEntity> nearbyEntities = level.getEntitiesOfClass(LivingEntity.class, aabb);
 

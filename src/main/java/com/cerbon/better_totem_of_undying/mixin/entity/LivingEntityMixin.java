@@ -94,7 +94,7 @@ public abstract class LivingEntityMixin extends Entity {
                 BTUUtils.applyTotemEffects(thisEntity);
                 BTUUtils.increaseFoodLevel(thisEntity);
                 BTUUtils.destroyBlocksWhenSuffocatingOrFullyFrozen(thisEntity, level);
-                BTUUtils.knockBackMobsAway(thisEntity, level);
+                BTUUtils.knockbackMobsAway(thisEntity, level);
                 BTUUtils.teleportOutOfVoid(thisEntity, level, pDamageSource, BlockPos.of(this.lastBlockPos));
 
                 level.broadcastEntityEvent(this, (byte) 35);
