@@ -1,14 +1,14 @@
 modLoader="javafml" #mandatory
 loaderVersion="[45,)" #mandatory
 license="GNU General Public License v3.0"
-#issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/" #optional
+issueTrackerURL="https://github.com/CerbonXD/BetterTotemOfUndying/issues" #optional
 
 [[mods]] #mandatory
 modId="better_totem_of_undying" #mandatory
 version="${file.jarVersion}" #mandatory
 displayName="Better Totem Of Undying" #mandatory
-#displayURL="https://change.me.to.your.mods.homepage.example.invalid/" #optional
-logoFile="examplemod.png" #optional
+displayURL="https://www.curseforge.com/minecraft/mc-mods/better-totem-of-undying" #optional
+logoFile="logo.png" #optional
 #credits="Thanks for this example mod goes to Java" #optional
 authors="CerbonXD" #optional
 
