@@ -125,7 +125,7 @@ public class BTUUtils {
     }
 
     public static void teleportOutOfVoid(LivingEntity livingEntity, Level level, DamageSource damageSource, BlockPos lastBlockPos){
-        if (isOutOfWorld(livingEntity, damageSource)){
+        if (isInVoid(livingEntity, damageSource)){
             boolean isSlowFallingEnabled = BTUCommonConfigs.ENABLE_SLOW_FALLING.get();
             int slowFallingDuration = BTUCommonConfigs.SLOW_FALLING_DURATION.get();
 
@@ -158,7 +158,7 @@ public class BTUUtils {
         return teleportPos;
     }
 
-    public static boolean isOutOfWorld(LivingEntity livingEntity, @NotNull DamageSource damageSource){
+    public static boolean isInVoid(LivingEntity livingEntity, @NotNull DamageSource damageSource){
         return damageSource.is(DamageTypes.OUT_OF_WORLD) && livingEntity.getY() < livingEntity.level.getMinBuildHeight();
     }
 

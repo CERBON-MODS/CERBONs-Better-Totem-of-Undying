@@ -48,7 +48,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
         BlockPos entityPos = this.blockPosition();
         Level level = this.level;
 
-        if (BTUUtils.isDimensionBlacklisted(level) || BTUUtils.isStructureBlacklisted(entityPos, (ServerLevel) level) || BTUUtils.damageBypassInvulnerability(pDamageSource, thisEntity) || (!isTeleportOutOfVoidEnabled && BTUUtils.isOutOfWorld(thisEntity, pDamageSource)) || (thisEntity instanceof ServerPlayer serverPlayer && serverPlayer.getCooldowns().isOnCooldown(Items.TOTEM_OF_UNDYING))) {
+        if (BTUUtils.isDimensionBlacklisted(level) || BTUUtils.isStructureBlacklisted(entityPos, (ServerLevel) level) || BTUUtils.damageBypassInvulnerability(pDamageSource, thisEntity) || (!isTeleportOutOfVoidEnabled && BTUUtils.isInVoid(thisEntity, pDamageSource)) || (thisEntity instanceof ServerPlayer serverPlayer && serverPlayer.getCooldowns().isOnCooldown(Items.TOTEM_OF_UNDYING))) {
             return false;
         } else {
             boolean isUseTotemFromInventoryEnabled = BTUCommonConfigs.USE_TOTEM_FROM_INVENTORY.get();
