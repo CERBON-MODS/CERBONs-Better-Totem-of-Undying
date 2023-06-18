@@ -10,7 +10,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Attackable;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -27,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Objects;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin extends Entity implements Attackable, net.minecraftforge.common.extensions.IForgeLivingEntity  {
+public abstract class LivingEntityMixin extends Entity {
     public long lastBlockPos;
 
     public LivingEntityMixin(EntityType<?> pEntityType, Level pLevel) {
@@ -120,6 +119,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable, ne
     public void addCustomData(CompoundTag pCompound, CallbackInfo ci){
         pCompound.putLong("LastBlockPos", this.lastBlockPos);
     }
+
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
     public void readCustomData(CompoundTag pCompound, CallbackInfo ci){
         this.lastBlockPos = pCompound.getLong("LastBlockPos");
