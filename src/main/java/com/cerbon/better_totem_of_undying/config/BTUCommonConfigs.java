@@ -34,6 +34,8 @@ public class BTUCommonConfigs {
     public static final ForgeConfigSpec.ConfigValue<Boolean> REMOVE_ALL_EFFECTS;
     public static final ForgeConfigSpec.ConfigValue<Boolean> TELEPORT_OUT_OF_VOID;
     public static final ForgeConfigSpec.ConfigValue<Integer> TELEPORT_HEIGHT_OFFSET;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> ADD_COOLDOWN;
+    public static final ForgeConfigSpec.ConfigValue<Integer> COOLDOWN;
     public static final ForgeConfigSpec.ConfigValue<ArrayList<String>> BLACKLISTED_DIMENSIONS;
     public static final ForgeConfigSpec.ConfigValue<ArrayList<String>> BLACKLISTED_STRUCTURES;
 
@@ -156,6 +158,16 @@ public class BTUCommonConfigs {
         TELEPORT_HEIGHT_OFFSET = BUILDER
                 .comment("If totem can't find a available position to teleport you back it will teleport you to the world's max build height plus this offset. DEFAULT:64")
                 .defineInRange("Teleport Height Offset", 64, 0, 1024);
+        BUILDER.pop();
+
+        BUILDER.push("Add Cooldown");
+        ADD_COOLDOWN = BUILDER
+                .comment("If true Totem of Undying will receive a cooldown after being used and you will not be able to use it again during this period. DEFAULT: FALSE")
+                .define("Add Cooldown", false);
+
+        COOLDOWN = BUILDER
+                .comment("Sets the cooldown duration in ticks. DEFAULT: 200")
+                .define("Cooldown", 200);
 
         BUILDER.pop(2);
 
