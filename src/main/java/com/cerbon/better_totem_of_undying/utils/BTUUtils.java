@@ -126,16 +126,11 @@ public class BTUUtils {
 
     public static void teleportOutOfVoid(LivingEntity livingEntity, Level level, DamageSource damageSource, BlockPos lastBlockPos){
         if (isInVoid(livingEntity, damageSource)){
-            boolean isSlowFallingEnabled = BTUCommonConfigs.ENABLE_SLOW_FALLING.get();
-            int slowFallingDuration = BTUCommonConfigs.SLOW_FALLING_DURATION.get();
-
             BlockPos positionNearby = randomTeleportNearby(livingEntity, level, lastBlockPos);
+
             if (positionNearby == null){
                 livingEntity.teleportTo(lastBlockPos.getX(), level.getMaxBuildHeight() + BTUCommonConfigs.TELEPORT_HEIGHT_OFFSET.get(), lastBlockPos.getZ());
-
-                if (isSlowFallingEnabled){
-                    livingEntity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, slowFallingDuration, 0));
-                }
+                applySlowFallingEffect(livingEntity);
             }
         }
     }
@@ -156,6 +151,15 @@ public class BTUUtils {
             }
         }
         return teleportPos;
+    }
+
+    public static void applySlowFallingEffect(LivingEntity livingEntity){
+        boolean isSlowFallingEffectEnabled = BTUCommonConfigs.ENABLE_SLOW_FALLING.get();
+        int slowFallingEffectDuration = BTUCommonConfigs.SLOW_FALLING_DURATION.get();
+
+        if (isSlowFallingEffectEnabled){
+            livingEntity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, slowFallingEffectDuration, 0));
+        }
     }
 
     public static boolean isInVoid(LivingEntity livingEntity, @NotNull DamageSource damageSource){
