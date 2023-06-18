@@ -1,9 +1,8 @@
 {
   "pack": {
     "description": {
-      "text": "examplemod resources"
+      "text": "better totem of undying resources"
     },
-    "forge:server_data_pack_format": 12,
     "pack_format": 13
   }
 }
