@@ -92,7 +92,7 @@ public class BTUCommonConfigs {
 
         BUILDER.push("Effects");
         APPLY_EFFECTS_ONLY_WHEN_NEEDED = BUILDER
-                .comment("If false it will apply all the effects at once, example: if you are not in fire you will receive the fire resistance effect but if it's set to true you will only receive the effect if you are on fire. DEFAULT: TRUE")
+                .comment("If false it will apply all the effects at once, example: if you are not on fire you will receive the fire resistance effect but if it's set to true you will only receive the effect if you are on fire. DEFAULT: TRUE")
                 .define("Apply Effects Only When Needed", true);
 
         ENABLE_WATER_BREATHING = BUILDER
