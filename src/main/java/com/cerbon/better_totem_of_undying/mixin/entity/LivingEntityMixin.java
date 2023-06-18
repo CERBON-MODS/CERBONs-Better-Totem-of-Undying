@@ -19,6 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -42,6 +43,11 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Shadow public abstract ItemStack getItemInHand(InteractionHand pHand);
 
+    /**
+     * @author CerbonXD
+     * @reason Makes it compatible with void totem mod. Also adds minor functionalities that does not break the main functionality of the method.
+     */
+    @Overwrite
     private boolean checkTotemDeathProtection(DamageSource pDamageSource) {
         boolean isTeleportOutOfVoidEnabled = BTUCommonConfigs.TELEPORT_OUT_OF_VOID.get();
         LivingEntity thisEntity = (LivingEntity) (Object) this;
