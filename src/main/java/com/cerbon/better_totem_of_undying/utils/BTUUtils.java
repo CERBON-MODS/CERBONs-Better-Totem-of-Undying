@@ -89,10 +89,10 @@ public class BTUUtils {
             BlockState blockAtEntityPos = level.getBlockState(entityPos);
             BlockState blockAboveEntityPos = level.getBlockState(entityPos.above());
 
-            if (!blockAtEntityPos.is(BTUTags.TOTEM_CANT_DESTROY) && !blockAboveEntityPos.is(BTUTags.TOTEM_CANT_DESTROY)) {
+            if (!blockAtEntityPos.is(BTUConstants.TOTEM_CANT_DESTROY_TAG) && !blockAboveEntityPos.is(BTUConstants.TOTEM_CANT_DESTROY_TAG)) {
                 int i = 2;
                 while (true){
-                    if (level.getBlockState(entityPos.above(i)).getBlock() instanceof FallingBlock && !level.getBlockState(entityPos.above(i)).is(BTUTags.TOTEM_CANT_DESTROY)){
+                    if (level.getBlockState(entityPos.above(i)).getBlock() instanceof FallingBlock && !level.getBlockState(entityPos.above(i)).is(BTUConstants.TOTEM_CANT_DESTROY_TAG)){
                         level.destroyBlock(entityPos.above(i), true);
                         i++;
                     }else{
