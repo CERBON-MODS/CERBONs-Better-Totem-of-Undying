@@ -8,7 +8,7 @@ plugins {
 
 version = "${mc_version}-${mod_version}"
 group = "com.cerbon.${mod_id}"
-archivesBaseName = "${mod_name}-Forge"
+archivesBaseName = "${archive_base_name}-Forge"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
