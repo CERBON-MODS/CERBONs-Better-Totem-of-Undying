@@ -21,7 +21,6 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BTUUtils {
@@ -175,7 +174,7 @@ public class BTUUtils {
     }
 
     public static boolean isStructureBlacklisted(BlockPos pos, @NotNull ServerLevel level){
-        ArrayList<String> blackListedStructures = BTUCommonConfigs.BLACKLISTED_STRUCTURES.get();
+        List<? extends String> blackListedStructures = BTUCommonConfigs.BLACKLISTED_STRUCTURES.get();
         Registry<Structure> structureRegistry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
 
         boolean flag = false;

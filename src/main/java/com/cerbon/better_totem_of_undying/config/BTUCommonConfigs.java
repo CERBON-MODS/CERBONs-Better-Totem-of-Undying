@@ -2,7 +2,7 @@ package com.cerbon.better_totem_of_undying.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class BTUCommonConfigs {
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
@@ -22,7 +22,7 @@ public class BTUCommonConfigs {
     public static final ForgeConfigSpec.ConfigValue<Integer> WATER_BREATHING_DURATION;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_SLOW_FALLING;
     public static final ForgeConfigSpec.ConfigValue<Integer> SLOW_FALLING_DURATION;
-    public static final ForgeConfigSpec.ConfigValue<Float> SET_HEALTH;
+    public static final ForgeConfigSpec.ConfigValue<Integer> SET_HEALTH;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_INCREASE_FOOD_LEVEL;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DESTROY_BLOCKS_WHEN_SUFFOCATING;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DESTROY_POWDER_SNOW_WHEN_FULLY_FROZEN;
@@ -36,14 +36,14 @@ public class BTUCommonConfigs {
     public static final ForgeConfigSpec.ConfigValue<Integer> TELEPORT_HEIGHT_OFFSET;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ADD_COOLDOWN;
     public static final ForgeConfigSpec.ConfigValue<Integer> COOLDOWN;
-    public static final ForgeConfigSpec.ConfigValue<ArrayList<String>> BLACKLISTED_DIMENSIONS;
-    public static final ForgeConfigSpec.ConfigValue<ArrayList<String>> BLACKLISTED_STRUCTURES;
+    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> BLACKLISTED_DIMENSIONS;
+    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> BLACKLISTED_STRUCTURES;
 
     static {
         BUILDER.push("Default Totem Abilities from Minecraft");
         SET_HEALTH = BUILDER
-                .comment("This value sets the health Totem of Undying will give to the entity upon use. DEFAULT: 1.0")
-                .define("Set Health", 1.0F);
+                .comment("This value sets the health Totem of Undying will give to the entity upon use. DEFAULT: 1")
+                .defineInRange("Set Health", 1, 0, 20);
 
         REMOVE_ALL_EFFECTS = BUILDER
                 .comment("When Totem of Undying is used it removes all previous effects you had. If set to false, it will keep all the effects you had before using the totem. DEFAULT: TRUE")
@@ -174,12 +174,13 @@ public class BTUCommonConfigs {
         BUILDER.push("Blacklists");
         BLACKLISTED_DIMENSIONS = BUILDER
                 .comment("You can put here dimensions where you don't want the Totem of Undying to work. Example: \"minecraft:overworld\", \"mod_id:dimension_id\" DEFAULT: Nothing")
-                .define("Blacklisted Dimensions", new ArrayList<>());
+                .defineList("Blacklisted Dimensions", List.of(), entry -> entry instanceof String);
 
         BLACKLISTED_STRUCTURES = BUILDER
                 .comment("You can put here structures where you don't want the Totem of Undying to work. Example: \"minecraft:desert_pyramid\", \"mod_id:structure_id\" DEFAULT: Nothing")
-                .define("Blacklisted Structures", new ArrayList<>());
+                .defineList("Blacklisted Structures", List.of(), entry -> entry instanceof String);
 
+        BUILDER.pop();
         SPEC = BUILDER.build();
     }
 }
