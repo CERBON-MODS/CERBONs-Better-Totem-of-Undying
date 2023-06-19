@@ -38,7 +38,7 @@ If applicable, add screenshots to help explain your problem.
 <details>
 
 ```
-Please paste here the latest log (Open the folder where your Minecraft is installed and search for "logs" foder, open latest.log and paste it's content here). 
+Please paste here the latest log (Open the folder where your Minecraft is installed and search for "logs" folder, open latest.log and paste it's content here). 
 ```
 
 </details>
