@@ -2,6 +2,7 @@ package com.cerbon.better_totem_of_undying.mixin.entity;
 
 import com.cerbon.better_totem_of_undying.config.BTUCommonConfigs;
 import com.cerbon.better_totem_of_undying.utils.BTUUtils;
+import com.cerbon.better_totem_of_undying.utils.ILivingEntityMixin;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -28,7 +29,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Objects;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin extends Entity {
+public abstract class LivingEntityMixin extends Entity implements ILivingEntityMixin {
     public long lastBlockPos;
 
     public LivingEntityMixin(EntityType<?> pEntityType, Level pLevel) {
@@ -101,7 +102,7 @@ public abstract class LivingEntityMixin extends Entity {
                 BTUUtils.increaseFoodLevel(thisEntity);
                 BTUUtils.destroyBlocksWhenSuffocatingOrFullyFrozen(thisEntity, level);
                 BTUUtils.knockbackMobsAway(thisEntity, level);
-                BTUUtils.teleportOutOfVoid(thisEntity, level, pDamageSource, BlockPos.of(this.lastBlockPos));
+                BTUUtils.teleportOutOfVoid(thisEntity, level, pDamageSource);
 
                 level.broadcastEntityEvent(this, (byte) 35);
             }
@@ -132,5 +133,10 @@ public abstract class LivingEntityMixin extends Entity {
                 this.lastBlockPos = currentPos.asLong();
             }
         }
+    }
+
+    @Override
+    public long getLastBlockPos() {
+        return lastBlockPos;
     }
 }

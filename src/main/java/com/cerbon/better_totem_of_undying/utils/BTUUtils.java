@@ -122,10 +122,11 @@ public class BTUUtils {
         }
     }
 
-    public static void teleportOutOfVoid(LivingEntity livingEntity, Level level, DamageSource damageSource, BlockPos lastBlockPos){
+    public static void teleportOutOfVoid(LivingEntity livingEntity, Level level, DamageSource damageSource){
         if (isInVoid(livingEntity, damageSource)){
-            BlockPos positionNearby = randomTeleportNearby(livingEntity, level, lastBlockPos);
+            BlockPos lastBlockPos = BlockPos.of(((ILivingEntityMixin) livingEntity).getLastBlockPos());
 
+            BlockPos positionNearby = randomTeleportNearby(livingEntity, level, lastBlockPos);
             if (positionNearby == null){
                 livingEntity.teleportTo(lastBlockPos.getX(), level.getMaxBuildHeight() + BTUCommonConfigs.TELEPORT_HEIGHT_OFFSET.get(), lastBlockPos.getZ());
                 applySlowFallingEffect(livingEntity);
