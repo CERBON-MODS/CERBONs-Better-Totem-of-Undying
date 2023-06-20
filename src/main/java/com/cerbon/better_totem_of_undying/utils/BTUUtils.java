@@ -9,11 +9,14 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -21,13 +24,50 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.fml.ModList;
 import org.jetbrains.annotations.NotNull;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotResult;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class BTUUtils {
 
     public static boolean isModLoaded(String modId){
         return ModList.get().isLoaded(modId);
+    }
+
+    public static ItemStack getTotemItemStack(LivingEntity livingEntity){
+        List<ItemStack> possibleTotemStacks = filterPossibleTotemStacks(getTotemFromCharmSlot(livingEntity), getTotemFromInventory(livingEntity), getTotemFromHands(livingEntity));
+        return possibleTotemStacks.stream().findFirst().orElse(null);
+    }
+
+    public static List<ItemStack> filterPossibleTotemStacks(ItemStack... stacks){
+        return Arrays.stream(stacks).filter(Objects::nonNull).toList();
+    }
+
+    public static ItemStack getTotemFromCharmSlot(LivingEntity livingEntity){
+        if (isModLoaded(BTUConstants.CURIOS_MOD_ID) && BTUCommonConfigs.USE_TOTEM_FROM_CHARM_SLOT.get()){
+            return CuriosApi.getCuriosHelper().findFirstCurio(livingEntity, Items.TOTEM_OF_UNDYING).map(SlotResult::stack).orElse(null);
+        }
+        return null;
+    }
+
+    public static ItemStack getTotemFromInventory(LivingEntity livingEntity){
+        if (BTUCommonConfigs.USE_TOTEM_FROM_INVENTORY.get() && livingEntity instanceof ServerPlayer player){
+            for (ItemStack itemStack : player.getInventory().items){
+                if (itemStack.is(Items.TOTEM_OF_UNDYING)) return itemStack;
+            }
+        }
+        return null;
+    }
+
+    public static ItemStack getTotemFromHands(LivingEntity livingEntity){
+        for (InteractionHand interactionHand : InteractionHand.values()){
+            ItemStack itemStack = livingEntity.getItemInHand(interactionHand);
+            if (itemStack.is(Items.TOTEM_OF_UNDYING)) return itemStack;
+        }
+        return null;
     }
 
     public static void applyTotemEffects(LivingEntity livingEntity){
