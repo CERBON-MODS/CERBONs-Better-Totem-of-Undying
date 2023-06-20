@@ -8,6 +8,7 @@ public class BTUCommonConfigs {
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
     public static final ForgeConfigSpec SPEC;
 
+    public static final ForgeConfigSpec.ConfigValue<Boolean> USE_TOTEM_FROM_CHARM_SLOT;
     public static final ForgeConfigSpec.ConfigValue<Boolean> USE_TOTEM_FROM_INVENTORY;
     public static final ForgeConfigSpec.ConfigValue<Boolean> APPLY_EFFECTS_ONLY_WHEN_NEEDED;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_FIRE_RESISTANCE;
@@ -179,6 +180,12 @@ public class BTUCommonConfigs {
         BLACKLISTED_STRUCTURES = BUILDER
                 .comment("You can put here structures where you don't want the Totem of Undying to work. Example: \"minecraft:desert_pyramid\", \"mod_id:structure_id\" DEFAULT: Nothing")
                 .defineList("Blacklisted Structures", List.of(), entry -> entry instanceof String);
+        BUILDER.pop();
+
+        BUILDER.push("Curios");
+        USE_TOTEM_FROM_CHARM_SLOT = BUILDER
+                .comment("If false you will not be able to use Totem of Undying from charm slot. Curios mod must be installed. DEFAULT: TRUE")
+                .define("Use Totem From Charm Slot", true);
 
         BUILDER.pop();
         SPEC = BUILDER.build();

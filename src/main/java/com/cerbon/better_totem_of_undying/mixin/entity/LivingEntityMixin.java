@@ -1,6 +1,7 @@
 package com.cerbon.better_totem_of_undying.mixin.entity;
 
 import com.cerbon.better_totem_of_undying.config.BTUCommonConfigs;
+import com.cerbon.better_totem_of_undying.utils.BTUConstants;
 import com.cerbon.better_totem_of_undying.utils.BTUUtils;
 import com.cerbon.better_totem_of_undying.utils.ILivingEntityMixin;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -25,6 +26,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotResult;
 
 import java.util.Objects;
 
@@ -60,7 +63,16 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntityM
             float health = BTUCommonConfigs.SET_HEALTH.get();
 
             ItemStack itemstack = null;
-            if (thisEntity instanceof ServerPlayer serverPlayer && isUseTotemFromInventoryEnabled){
+            if (BTUUtils.isModLoaded(BTUConstants.CURIOS_MOD_ID) && BTUCommonConfigs.USE_TOTEM_FROM_CHARM_SLOT.get()){
+                ItemStack itemStack1 = CuriosApi.getCuriosHelper().findFirstCurio(thisEntity, Items.TOTEM_OF_UNDYING).map(SlotResult::stack).orElse(null);
+                if (itemStack1 != null){
+                    if (itemStack1.is(Items.TOTEM_OF_UNDYING)){
+                        itemstack = itemStack1.copy();
+                        itemStack1.shrink(1);
+                    }
+                }
+            }
+            if (thisEntity instanceof ServerPlayer serverPlayer && isUseTotemFromInventoryEnabled && itemstack == null){
                 for (ItemStack itemstack1 : serverPlayer.getInventory().items){
                     if (itemstack1.is(Items.TOTEM_OF_UNDYING) && net.minecraftforge.common.ForgeHooks.onLivingUseTotem(thisEntity, pDamageSource, itemstack1, null)){
                         itemstack = itemstack1.copy();
@@ -68,7 +80,7 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntityM
                         break;
                     }
                 }
-            }else {
+            }else if (itemstack == null){
                 for(InteractionHand interactionhand : InteractionHand.values()) {
                     ItemStack itemstack1 = this.getItemInHand(interactionhand);
                     if (itemstack1.is(Items.TOTEM_OF_UNDYING) && net.minecraftforge.common.ForgeHooks.onLivingUseTotem(thisEntity, pDamageSource, itemstack1, interactionhand)) {

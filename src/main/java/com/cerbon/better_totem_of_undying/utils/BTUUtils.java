@@ -19,11 +19,16 @@ import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.fml.ModList;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class BTUUtils {
+
+    public static boolean isModLoaded(String modId){
+        return ModList.get().isLoaded(modId);
+    }
 
     public static void applyTotemEffects(LivingEntity livingEntity){
         boolean isApplyEffectsOnlyWhenNeededEnabled = BTUCommonConfigs.APPLY_EFFECTS_ONLY_WHEN_NEEDED.get();
