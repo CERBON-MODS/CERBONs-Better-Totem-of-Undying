@@ -20,10 +20,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.phys.AABB;
 import net.minecraftforge.fml.ModList;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -64,7 +64,7 @@ public class BTUUtils {
                 livingEntity.setHealth(BTUCommonConfigs.SET_HEALTH.get());
 
                 applyTotemEffects(livingEntity);
-                increaseFoodLevel(livingEntity);
+                increaseFoodLevel(livingEntity, BTUCommonConfigs.SET_FOOD_LEVEL.get());
                 destroyBlocksWhenSuffocatingOrFullyFrozen(livingEntity, level);
                 knockbackMobsAway(livingEntity, level);
                 teleportOutOfVoid(livingEntity, level, damageSource);
@@ -151,93 +151,72 @@ public class BTUUtils {
     }
 
     public static void applyTotemEffects(LivingEntity livingEntity){
-        boolean isApplyEffectsOnlyWhenNeededEnabled = BTUCommonConfigs.APPLY_EFFECTS_ONLY_WHEN_NEEDED.get();
-
-        boolean isFireResistanceEffectEnabled = BTUCommonConfigs.ENABLE_FIRE_RESISTANCE.get();
         int fireResistanceEffectDuration = BTUCommonConfigs.FIRE_RESISTANCE_DURATION.get();
-
-        boolean isRegenerationEffectEnabled = BTUCommonConfigs.ENABLE_REGENERATION.get();
         int regenerationEffectDuration = BTUCommonConfigs.REGENERATION_DURATION.get();
         int regenerationEffectAmplifier = BTUCommonConfigs.REGENERATION_AMPLIFIER.get();
-
-        boolean isAbsorptionEffectEnabled = BTUCommonConfigs.ENABLE_ABSORPTION.get();
         int absorptionEffectDuration = BTUCommonConfigs.ABSORPTION_DURATION.get();
         int absorptionEffectAmplifier = BTUCommonConfigs.ABSORPTION_AMPLIFIER.get();
-
-        boolean isWaterBreathingEffectEnabled = BTUCommonConfigs.ENABLE_WATER_BREATHING.get();
         int waterBreathingEffectDuration = BTUCommonConfigs.WATER_BREATHING_DURATION.get();
 
-        if (isApplyEffectsOnlyWhenNeededEnabled) {
-            if (livingEntity.isOnFire() && isFireResistanceEffectEnabled) {
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, fireResistanceEffectDuration, 0));
-            }
-            if (livingEntity.isInWaterOrBubble() && isWaterBreathingEffectEnabled) {
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, waterBreathingEffectDuration, 0));
-            }
+        if (BTUCommonConfigs.APPLY_EFFECTS_ONLY_WHEN_NEEDED.get()) {
+            if (livingEntity.isOnFire() && BTUCommonConfigs.ENABLE_FIRE_RESISTANCE.get()) livingEntity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, fireResistanceEffectDuration, 0));
+            if (livingEntity.isInWaterOrBubble() && BTUCommonConfigs.ENABLE_WATER_BREATHING.get()) livingEntity.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, waterBreathingEffectDuration, 0));
         } else {
-            if (isFireResistanceEffectEnabled) {
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, fireResistanceEffectDuration, 0));
-            }
-            if (isWaterBreathingEffectEnabled) {
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, waterBreathingEffectDuration, 0));
-            }
+            if (BTUCommonConfigs.ENABLE_FIRE_RESISTANCE.get()) livingEntity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, fireResistanceEffectDuration, 0));
+            if (BTUCommonConfigs.ENABLE_WATER_BREATHING.get()) livingEntity.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, waterBreathingEffectDuration, 0));
         }
+        if (BTUCommonConfigs.ENABLE_REGENERATION.get()) livingEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, regenerationEffectDuration, regenerationEffectAmplifier));
+        if (BTUCommonConfigs.ENABLE_ABSORPTION.get()) livingEntity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, absorptionEffectDuration, absorptionEffectAmplifier));
 
-        if (isRegenerationEffectEnabled) {
-            livingEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, regenerationEffectDuration, regenerationEffectAmplifier));
-        }
-        if (isAbsorptionEffectEnabled) {
-            livingEntity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, absorptionEffectDuration, absorptionEffectAmplifier));
-        }
     }
 
-    public static void increaseFoodLevel(LivingEntity livingEntity){
-        boolean isIncreaseFoodLevelEnabled = BTUCommonConfigs.ENABLE_INCREASE_FOOD_LEVEL.get();
-
-        if (livingEntity instanceof ServerPlayer serverPlayer && isIncreaseFoodLevelEnabled) {
-            int currentFoodLevel = serverPlayer.getFoodData().getFoodLevel();
+    public static void increaseFoodLevel(LivingEntity livingEntity, int foodLevel){
+        if (BTUCommonConfigs.ENABLE_INCREASE_FOOD_LEVEL.get() && livingEntity instanceof ServerPlayer player) {
+            int currentFoodLevel = player.getFoodData().getFoodLevel();
             int minimumFoodLevel = BTUCommonConfigs.MINIMUM_FOOD_LEVEL.get();
-            int foodLevel = BTUCommonConfigs.SET_FOOD_LEVEL.get();
 
             if (currentFoodLevel <= minimumFoodLevel) {
-                serverPlayer.getFoodData().setFoodLevel(foodLevel);
+                player.getFoodData().setFoodLevel(foodLevel);
             }
         }
     }
 
     public static void destroyBlocksWhenSuffocatingOrFullyFrozen(@NotNull LivingEntity livingEntity, Level level){
-        boolean isDestroyBlocksWhenSuffocatingEnabled = BTUCommonConfigs.DESTROY_BLOCKS_WHEN_SUFFOCATING.get();
-        boolean isDestroyPowderSnowWhenFullyFrozenEnabled = BTUCommonConfigs.DESTROY_POWDER_SNOW_WHEN_FULLY_FROZEN.get();
+        if (isInWallOrFullyFrozen(livingEntity)) {
+            BlockPos blockPos = livingEntity.blockPosition();
+            BlockState blockAtEntityPos = level.getBlockState(blockPos);
+            BlockState blockAboveEntityPos = level.getBlockState(blockPos.above());
 
-        if ((livingEntity.isInWall() && isDestroyBlocksWhenSuffocatingEnabled) || (livingEntity.isFullyFrozen() && isDestroyPowderSnowWhenFullyFrozenEnabled)) {
-            BlockPos entityPos = livingEntity.blockPosition();
-            BlockState blockAtEntityPos = level.getBlockState(entityPos);
-            BlockState blockAboveEntityPos = level.getBlockState(entityPos.above());
+            if (canDestroy(blockAtEntityPos)) level.destroyBlock(blockPos, true);
+            if (canDestroy(blockAboveEntityPos)) level.destroyBlock(blockPos.above(), true);
 
-            if (!blockAtEntityPos.is(BTUConstants.TOTEM_CANT_DESTROY_TAG) && !blockAboveEntityPos.is(BTUConstants.TOTEM_CANT_DESTROY_TAG)) {
-                int i = 2;
-                while (true){
-                    if (level.getBlockState(entityPos.above(i)).getBlock() instanceof FallingBlock && !level.getBlockState(entityPos.above(i)).is(BTUConstants.TOTEM_CANT_DESTROY_TAG)){
-                        level.destroyBlock(entityPos.above(i), true);
-                        i++;
-                    }else{
-                        break;
-                    }
-                }
-                level.destroyBlock(entityPos, true);
-                level.destroyBlock(entityPos.above(), true);
+            int distance = 2;
+            while (true){
+                if (isInstanceOfFallingBlock(blockPos, level, distance) && canDestroy(level.getBlockState(blockPos.above(distance)))){
+                    level.destroyBlock(blockPos.above(distance), true);
+                    distance++;
+                }else break;
             }
         }
     }
 
-    public static void knockbackMobsAway(LivingEntity livingEntity, Level level){
-        boolean isKnockbackMobsAwayEnabled = BTUCommonConfigs.KNOCKBACK_MOBS_AWAY.get();
+    public static boolean isInWallOrFullyFrozen(LivingEntity livingEntity){
+        return (livingEntity.isInWall() && BTUCommonConfigs.DESTROY_BLOCKS_WHEN_SUFFOCATING.get()) ||
+                (livingEntity.isFullyFrozen() && BTUCommonConfigs.DESTROY_POWDER_SNOW_WHEN_FULLY_FROZEN.get());
+    }
 
-        if (isKnockbackMobsAwayEnabled){
-            double radius = BTUCommonConfigs.KNOCKBACK_RADIUS.get();
+    public static boolean canDestroy(BlockState block){
+        return !block.is(BTUConstants.TOTEM_CANT_DESTROY_TAG) && !block.is(Blocks.BEDROCK) && !block.is(Blocks.END_PORTAL_FRAME);
+    }
+
+    public static boolean isInstanceOfFallingBlock(BlockPos pos, Level level, int distance){
+        return level.getBlockState(pos.above(distance)).getBlock() instanceof FallingBlock;
+    }
+
+    public static void knockbackMobsAway(LivingEntity livingEntity, Level level){
+        if (BTUCommonConfigs.KNOCKBACK_MOBS_AWAY.get()){
+            List<LivingEntity> nearbyEntities = getNearbyEntities(livingEntity, level, BTUCommonConfigs.KNOCKBACK_RADIUS.get());
             double strength = BTUCommonConfigs.KNOCKBACK_STRENGTH.get();
-            AABB aabb = livingEntity.getBoundingBox().inflate(radius);
-            List<LivingEntity> nearbyEntities = level.getEntitiesOfClass(LivingEntity.class, aabb);
 
             for (LivingEntity entity : nearbyEntities){
                 if (!entity.is(livingEntity)){
@@ -245,6 +224,10 @@ public class BTUUtils {
                 }
             }
         }
+    }
+
+    public static List<LivingEntity> getNearbyEntities(LivingEntity livingEntity, Level level, double radius){
+        return level.getEntitiesOfClass(LivingEntity.class, livingEntity.getBoundingBox().inflate(radius));
     }
 
     public static void teleportOutOfVoid(LivingEntity livingEntity, Level level, DamageSource damageSource){
@@ -278,11 +261,9 @@ public class BTUUtils {
     }
 
     public static void applySlowFallingEffect(LivingEntity livingEntity){
-        boolean isSlowFallingEffectEnabled = BTUCommonConfigs.ENABLE_SLOW_FALLING.get();
-        int slowFallingEffectDuration = BTUCommonConfigs.SLOW_FALLING_DURATION.get();
+        int duration = BTUCommonConfigs.SLOW_FALLING_DURATION.get();
 
-        if (isSlowFallingEffectEnabled){
-            livingEntity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, slowFallingEffectDuration, 0));
-        }
+        if (BTUCommonConfigs.ENABLE_SLOW_FALLING.get())
+            livingEntity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, duration, 0));
     }
 }
