@@ -173,16 +173,6 @@ public class BTUCommonConfigs {
 
         BUILDER.pop(2);
 
-        BUILDER.push("Blacklists");
-        BLACKLISTED_DIMENSIONS = BUILDER
-                .comment("You can put here dimensions where you don't want the Totem of Undying to work. Example: \"minecraft:overworld\", \"mod_id:dimension_id\" DEFAULT: Nothing")
-                .defineList("Blacklisted Dimensions", List.of(), entry -> entry instanceof String);
-
-        BLACKLISTED_STRUCTURES = BUILDER
-                .comment("You can put here structures where you don't want the Totem of Undying to work. Example: \"minecraft:desert_pyramid\", \"mod_id:structure_id\" DEFAULT: Nothing")
-                .defineList("Blacklisted Structures", List.of(), entry -> entry instanceof String);
-        BUILDER.pop();
-
         BUILDER.push("Curios");
         USE_TOTEM_FROM_CHARM_SLOT = BUILDER
                 .comment("If false you will not be able to use Totem of Undying from charm slot. Curios mod must be installed. DEFAULT: TRUE")
@@ -191,6 +181,16 @@ public class BTUCommonConfigs {
         DISPLAY_TOTEM_ON_CHEST = BUILDER
                 .comment("If false Totem of Undying will not be displayed on the chest when worn in the curios charm slot. Curios mod must be installed. DEFAULT: TRUE")
                 .define("Display Totem on Chest", true);
+        BUILDER.pop();
+
+        BUILDER.push("Blacklists");
+        BLACKLISTED_DIMENSIONS = BUILDER
+                .comment("You can put here dimensions where you don't want the Totem of Undying to work. Example: \"minecraft:overworld\", \"mod_id:dimension_id\" DEFAULT: Nothing")
+                .defineList("Blacklisted Dimensions", List.of(), entry -> entry instanceof String);
+
+        BLACKLISTED_STRUCTURES = BUILDER
+                .comment("You can put here structures where you don't want the Totem of Undying to work. Example: \"minecraft:desert_pyramid\", \"mod_id:structure_id\" DEFAULT: Nothing")
+                .defineList("Blacklisted Structures", List.of(), entry -> entry instanceof String);
 
         BUILDER.pop();
         SPEC = BUILDER.build();
