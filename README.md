@@ -141,4 +141,4 @@ Please read the [FAQ](https://github.com/CerbonXD/BetterTotemOfUndying/blob/mast
 
 ## Affiliates
 
-![BisectHosting](https://www.bisecthosting.com/partners/custom-banners/1a9a55fc-f1c0-4b40-b07c-3774bc557f93.webp)
+[![BisectHosting](https://www.bisecthosting.com/partners/custom-banners/1a9a55fc-f1c0-4b40-b07c-3774bc557f93.webp)](https://bisecthosting.com/Cerbon)
