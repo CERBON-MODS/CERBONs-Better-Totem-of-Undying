@@ -75,6 +75,35 @@ public class BTUUtils {
         }
     }
 
+    public static boolean isDimensionBlacklisted(@NotNull Level level){
+        return BTUCommonConfigs.BLACKLISTED_DIMENSIONS.get().contains(level.dimension().location().toString());
+    }
+
+    public static boolean isStructureBlacklisted(BlockPos pos, @NotNull ServerLevel level){
+        List<? extends String> blackListedStructures = BTUCommonConfigs.BLACKLISTED_STRUCTURES.get();
+        Registry<Structure> structureRegistry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
+
+        boolean flag = false;
+        for (String structureName : blackListedStructures){
+            Structure structure = structureRegistry.get(new ResourceLocation(structureName));
+
+            if (structure != null){
+                if (level.structureManager().getStructureAt(pos, structure).isValid()){
+                    flag = true;
+                }
+            }
+        }
+        return flag;
+    }
+
+    public static boolean damageBypassInvulnerability(@NotNull DamageSource damageSource, LivingEntity livingEntity){
+        return damageSource.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !(livingEntity.getY() < livingEntity.level.getMinBuildHeight());
+    }
+
+    public static boolean isInVoid(LivingEntity livingEntity, @NotNull DamageSource damageSource){
+        return damageSource.is(DamageTypes.OUT_OF_WORLD) && livingEntity.getY() < livingEntity.level.getMinBuildHeight();
+    }
+
     public static ItemStack getTotemItemStack(LivingEntity livingEntity){
         List<ItemStack> possibleTotemStacks = filterPossibleTotemStacks(getTotemFromCharmSlot(livingEntity), getTotemFromInventory(livingEntity), getTotemFromHands(livingEntity));
         return possibleTotemStacks.stream().findFirst().orElse(null);
@@ -255,35 +284,5 @@ public class BTUUtils {
         if (isSlowFallingEffectEnabled){
             livingEntity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, slowFallingEffectDuration, 0));
         }
-    }
-
-    public static boolean isInVoid(LivingEntity livingEntity, @NotNull DamageSource damageSource){
-        return damageSource.is(DamageTypes.OUT_OF_WORLD) && livingEntity.getY() < livingEntity.level.getMinBuildHeight();
-    }
-
-    //The method also checks the entity height to be sure it's not in the void. That way it doesn't conflict with the ability that saves the entity from dying in the void.
-    public static boolean damageBypassInvulnerability(@NotNull DamageSource damageSource, LivingEntity livingEntity){
-        return damageSource.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !(livingEntity.getY() < livingEntity.level.getMinBuildHeight());
-    }
-
-    public static boolean isDimensionBlacklisted(@NotNull Level level){
-        return BTUCommonConfigs.BLACKLISTED_DIMENSIONS.get().contains(level.dimension().location().toString());
-    }
-
-    public static boolean isStructureBlacklisted(BlockPos pos, @NotNull ServerLevel level){
-        List<? extends String> blackListedStructures = BTUCommonConfigs.BLACKLISTED_STRUCTURES.get();
-        Registry<Structure> structureRegistry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
-
-        boolean flag = false;
-        for (String structureName : blackListedStructures){
-            Structure structure = structureRegistry.get(new ResourceLocation(structureName));
-
-            if (structure != null){
-                 if (level.structureManager().getStructureAt(pos, structure).isValid()){
-                     flag = true;
-                 }
-            }
-        }
-        return flag;
     }
 }
