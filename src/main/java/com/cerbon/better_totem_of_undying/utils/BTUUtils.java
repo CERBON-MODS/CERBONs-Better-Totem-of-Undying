@@ -167,7 +167,6 @@ public class BTUUtils {
         }
         if (BTUCommonConfigs.ENABLE_REGENERATION.get()) livingEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, regenerationEffectDuration, regenerationEffectAmplifier));
         if (BTUCommonConfigs.ENABLE_ABSORPTION.get()) livingEntity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, absorptionEffectDuration, absorptionEffectAmplifier));
-
     }
 
     public static void increaseFoodLevel(LivingEntity livingEntity, int foodLevel){
