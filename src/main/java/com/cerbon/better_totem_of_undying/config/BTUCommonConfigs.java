@@ -8,10 +8,8 @@ public class BTUCommonConfigs {
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
     public static final ForgeConfigSpec SPEC;
 
-    public static final ForgeConfigSpec.ConfigValue<Boolean> USE_TOTEM_FROM_CHARM_SLOT;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> DISPLAY_TOTEM_ON_CHEST;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> USE_TOTEM_FROM_INVENTORY;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> APPLY_EFFECTS_ONLY_WHEN_NEEDED;
+    public static final ForgeConfigSpec.ConfigValue<Integer> SET_HEALTH;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> REMOVE_ALL_EFFECTS;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_FIRE_RESISTANCE;
     public static final ForgeConfigSpec.ConfigValue<Integer> FIRE_RESISTANCE_DURATION;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_REGENERATION;
@@ -20,29 +18,31 @@ public class BTUCommonConfigs {
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_ABSORPTION;
     public static final ForgeConfigSpec.ConfigValue<Integer> ABSORPTION_DURATION;
     public static final ForgeConfigSpec.ConfigValue<Integer> ABSORPTION_AMPLIFIER;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> USE_TOTEM_FROM_INVENTORY;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> APPLY_EFFECTS_ONLY_WHEN_NEEDED;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_WATER_BREATHING;
     public static final ForgeConfigSpec.ConfigValue<Integer> WATER_BREATHING_DURATION;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_SLOW_FALLING;
     public static final ForgeConfigSpec.ConfigValue<Integer> SLOW_FALLING_DURATION;
-    public static final ForgeConfigSpec.ConfigValue<Integer> SET_HEALTH;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_INCREASE_FOOD_LEVEL;
+    public static final ForgeConfigSpec.ConfigValue<Integer> MINIMUM_FOOD_LEVEL;
+    public static final ForgeConfigSpec.ConfigValue<Integer> SET_FOOD_LEVEL;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DESTROY_BLOCKS_WHEN_SUFFOCATING;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DESTROY_POWDER_SNOW_WHEN_FULLY_FROZEN;
     public static final ForgeConfigSpec.ConfigValue<Boolean> KNOCKBACK_MOBS_AWAY;
     public static final ForgeConfigSpec.ConfigValue<Double> KNOCKBACK_RADIUS;
     public static final ForgeConfigSpec.ConfigValue<Double> KNOCKBACK_STRENGTH;
-    public static final ForgeConfigSpec.ConfigValue<Integer> MINIMUM_FOOD_LEVEL;
-    public static final ForgeConfigSpec.ConfigValue<Integer> SET_FOOD_LEVEL;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> REMOVE_ALL_EFFECTS;
     public static final ForgeConfigSpec.ConfigValue<Boolean> TELEPORT_OUT_OF_VOID;
     public static final ForgeConfigSpec.ConfigValue<Integer> TELEPORT_HEIGHT_OFFSET;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ADD_COOLDOWN;
     public static final ForgeConfigSpec.ConfigValue<Integer> COOLDOWN;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> USE_TOTEM_FROM_CHARM_SLOT;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> DISPLAY_TOTEM_ON_CHEST;
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> BLACKLISTED_DIMENSIONS;
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> BLACKLISTED_STRUCTURES;
 
     static {
-        BUILDER.push("Default Totem Abilities from Minecraft");
+        BUILDER.push("Minecraft Default Totem Features");
         SET_HEALTH = BUILDER
                 .comment("This value sets the health Totem of Undying will give to the entity upon use. DEFAULT: 1")
                 .defineInRange("Set Health", 1, 0, 20);
@@ -86,15 +86,14 @@ public class BTUCommonConfigs {
         BUILDER.pop(2);
 
 
-        BUILDER.push("New Totem Abilities");
-
+        BUILDER.push("New Totem Features");
         USE_TOTEM_FROM_INVENTORY = BUILDER
                 .comment("If true you will be able to use the Totem of Undying from your inventory. DEFAULT: FALSE")
                 .define("Use Totem From Inventory", false);
 
         BUILDER.push("Effects");
         APPLY_EFFECTS_ONLY_WHEN_NEEDED = BUILDER
-                .comment("If false it will apply all the effects at once, example: if you are not on fire you will receive the fire resistance effect but if it's set to true you will only receive the effect if you are on fire. DEFAULT: TRUE")
+                .comment("Apply fire resistance and water breathing effects only when needed, meaning you are going to receive the effects only if you are on fire or in water respectively. DEFAULT: TRUE")
                 .define("Apply Effects Only When Needed", true);
 
         ENABLE_WATER_BREATHING = BUILDER
@@ -114,7 +113,7 @@ public class BTUCommonConfigs {
                 .define("Slow Falling Duration", 600);
         BUILDER.pop();
 
-        BUILDER.push("Increase food level");
+        BUILDER.push("Increase Food Level");
         ENABLE_INCREASE_FOOD_LEVEL = BUILDER
                 .comment("If false Totem of Undying will not increase your food level. DEFAULT: TRUE")
                 .define("Increase Food Level", true);
@@ -175,21 +174,21 @@ public class BTUCommonConfigs {
 
         BUILDER.push("Curios");
         USE_TOTEM_FROM_CHARM_SLOT = BUILDER
-                .comment("If false you will not be able to use Totem of Undying from charm slot. Curios mod must be installed. DEFAULT: TRUE")
+                .comment("If false you will not be able to use Totem of Undying from charm slot (Curios mod must be installed). DEFAULT: TRUE")
                 .define("Use Totem From Charm Slot", true);
 
         DISPLAY_TOTEM_ON_CHEST = BUILDER
-                .comment("If false Totem of Undying will not be displayed on the chest when worn in the curios charm slot. Curios mod must be installed. DEFAULT: TRUE")
+                .comment("If false Totem of Undying will not be displayed on the chest when worn in the curios charm slot (Curios mod must be installed). DEFAULT: TRUE")
                 .define("Display Totem on Chest", true);
         BUILDER.pop();
 
         BUILDER.push("Blacklists");
         BLACKLISTED_DIMENSIONS = BUILDER
-                .comment("You can put here dimensions where you don't want the Totem of Undying to work. Example: \"minecraft:overworld\", \"mod_id:dimension_id\" DEFAULT: Nothing")
+                .comment("You can put here dimensions where you don't want Totem of Undying to work. Example: \"minecraft:overworld\", \"mod_id:dimension_id\" DEFAULT: Nothing")
                 .defineList("Blacklisted Dimensions", List.of(), entry -> entry instanceof String);
 
         BLACKLISTED_STRUCTURES = BUILDER
-                .comment("You can put here structures where you don't want the Totem of Undying to work. Example: \"minecraft:desert_pyramid\", \"mod_id:structure_id\" DEFAULT: Nothing")
+                .comment("You can put here structures where you don't want Totem of Undying to work. Example: \"minecraft:desert_pyramid\", \"mod_id:structure_id\" DEFAULT: Nothing")
                 .defineList("Blacklisted Structures", List.of(), entry -> entry instanceof String);
 
         BUILDER.pop();
