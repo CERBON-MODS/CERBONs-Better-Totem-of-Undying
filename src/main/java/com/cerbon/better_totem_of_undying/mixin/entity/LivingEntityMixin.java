@@ -1,25 +1,17 @@
 package com.cerbon.better_totem_of_undying.mixin.entity;
 
-import com.cerbon.better_totem_of_undying.config.BTUCommonConfigs;
 import com.cerbon.better_totem_of_undying.utils.BTUUtils;
 import com.cerbon.better_totem_of_undying.utils.ILivingEntityMixin;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.stats.Stats;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -35,54 +27,10 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntityM
         super(pEntityType, pLevel);
     }
 
-    @Shadow public abstract void setHealth(float pHealth);
-
-    @Shadow public abstract boolean removeAllEffects();
-
-    @Shadow public abstract boolean isInWall();
-
     @Inject(method = "checkTotemDeathProtection", at = @At("HEAD"), cancellable = true)
     private void checkTotemDeathProtection(DamageSource pDamageSource, CallbackInfoReturnable<Boolean> cir) {
-        boolean isTeleportOutOfVoidEnabled = BTUCommonConfigs.TELEPORT_OUT_OF_VOID.get();
-        LivingEntity thisEntity = (LivingEntity) (Object) this;
-        BlockPos entityPos = this.blockPosition();
-        Level level = this.level;
-
-        if (BTUUtils.isDimensionBlacklisted(level) || BTUUtils.isStructureBlacklisted(entityPos, (ServerLevel) level) || BTUUtils.damageBypassInvulnerability(pDamageSource, thisEntity) || (!isTeleportOutOfVoidEnabled && BTUUtils.isInVoid(thisEntity, pDamageSource)) || (thisEntity instanceof ServerPlayer serverPlayer && serverPlayer.getCooldowns().isOnCooldown(Items.TOTEM_OF_UNDYING))) {
-            cir.setReturnValue(false);
-        } else {
-            boolean isRemoveAllEffectsEnabled = BTUCommonConfigs.REMOVE_ALL_EFFECTS.get();
-            boolean isCooldownEnabled = BTUCommonConfigs.ADD_COOLDOWN.get();
-            float health = BTUCommonConfigs.SET_HEALTH.get();
-
-            ItemStack itemstack = BTUUtils.getTotemItemStack(thisEntity);
-            if (itemstack != null) {
-                itemstack.shrink(1);
-                if (thisEntity instanceof ServerPlayer serverPlayer) {
-                    serverPlayer.awardStat(Stats.ITEM_USED.get(Items.TOTEM_OF_UNDYING), 1);
-                    CriteriaTriggers.USED_TOTEM.trigger(serverPlayer, itemstack);
-
-                    if (isCooldownEnabled){
-                        serverPlayer.getCooldowns().addCooldown(Items.TOTEM_OF_UNDYING, BTUCommonConfigs.COOLDOWN.get());
-                    }
-                }
-
-                if (isRemoveAllEffectsEnabled) {
-                    this.removeAllEffects();
-                }
-
-                this.setHealth(health);
-                BTUUtils.applyTotemEffects(thisEntity);
-                BTUUtils.increaseFoodLevel(thisEntity);
-                BTUUtils.destroyBlocksWhenSuffocatingOrFullyFrozen(thisEntity, level);
-                BTUUtils.knockbackMobsAway(thisEntity, level);
-                BTUUtils.teleportOutOfVoid(thisEntity, level, pDamageSource);
-
-                level.broadcastEntityEvent(this, (byte) 35);
-            }
-
-            cir.setReturnValue(itemstack != null);
-        }
+        LivingEntity livingEntity = (LivingEntity) (Object) this;
+        cir.setReturnValue(BTUUtils.canSaveFromDeath(livingEntity, pDamageSource));
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))

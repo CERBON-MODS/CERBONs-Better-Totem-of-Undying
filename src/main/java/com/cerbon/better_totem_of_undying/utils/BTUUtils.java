@@ -1,12 +1,14 @@
 package com.cerbon.better_totem_of_undying.utils;
 
 import com.cerbon.better_totem_of_undying.config.BTUCommonConfigs;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -35,6 +37,42 @@ public class BTUUtils {
 
     public static boolean isModLoaded(String modId){
         return ModList.get().isLoaded(modId);
+    }
+
+    public static boolean canSaveFromDeath(LivingEntity livingEntity, DamageSource damageSource){
+        boolean isTotemOnCooldown = livingEntity instanceof ServerPlayer player && player.getCooldowns().isOnCooldown(Items.TOTEM_OF_UNDYING);
+        boolean isTeleportOutOfVoidEnabled = BTUCommonConfigs.TELEPORT_OUT_OF_VOID.get();
+        BlockPos entityPos = livingEntity.blockPosition();
+        Level level = livingEntity.level;
+
+        if (isDimensionBlacklisted(level) || isStructureBlacklisted(entityPos, (ServerLevel) level) || damageBypassInvulnerability(damageSource, livingEntity) || (!isTeleportOutOfVoidEnabled && isInVoid(livingEntity, damageSource)) || isTotemOnCooldown){
+            return false;
+        }else {
+            ItemStack itemStack = getTotemItemStack(livingEntity);
+
+            if(itemStack != null){
+                if(livingEntity instanceof ServerPlayer player){
+                    giveUseStatAndCriterion(itemStack, player);
+                    addCooldown(itemStack, player, BTUCommonConfigs.COOLDOWN.get());
+                }
+
+                itemStack.shrink(1);
+
+                if (BTUCommonConfigs.REMOVE_ALL_EFFECTS.get())
+                    livingEntity.removeAllEffects();
+
+                livingEntity.setHealth(BTUCommonConfigs.SET_HEALTH.get());
+
+                applyTotemEffects(livingEntity);
+                increaseFoodLevel(livingEntity);
+                destroyBlocksWhenSuffocatingOrFullyFrozen(livingEntity, level);
+                knockbackMobsAway(livingEntity, level);
+                teleportOutOfVoid(livingEntity, level, damageSource);
+
+                level.broadcastEntityEvent(livingEntity, (byte) 35);
+            }
+            return itemStack != null;
+        }
     }
 
     public static ItemStack getTotemItemStack(LivingEntity livingEntity){
@@ -68,6 +106,19 @@ public class BTUUtils {
             if (itemStack.is(Items.TOTEM_OF_UNDYING)) return itemStack;
         }
         return null;
+    }
+
+    public static void giveUseStatAndCriterion(ItemStack itemStack, ServerPlayer player){
+        if (!itemStack.isEmpty()){
+            player.awardStat(Stats.ITEM_USED.get(itemStack.getItem()));
+            CriteriaTriggers.USED_TOTEM.trigger(player, itemStack);
+        }
+    }
+
+    public static void addCooldown(ItemStack itemStack, ServerPlayer player, int cooldown){
+        if (BTUCommonConfigs.ADD_COOLDOWN.get()){
+            player.getCooldowns().addCooldown(itemStack.getItem(), cooldown);
+        }
     }
 
     public static void applyTotemEffects(LivingEntity livingEntity){
