@@ -2,7 +2,7 @@
 
 Better Totem of Undying is a highly configurable mod that improves Minecraft Totem of Undying adding new features to it. You can blacklist dimensions or even structures where you don't want totem to work. Also the mod has compatibility with Curios API.
 
-## New Features 
+### New Features 
 
 - Knockback mobs away.
 - Save entity from dying in the void.
@@ -16,7 +16,7 @@ Better Totem of Undying is a highly configurable mod that improves Minecraft Tot
 - Apply Water Breathing effect.
 - Apply fire resistance and water breathing effects only when needed, meaning you are going to receive the effects only if you are on fire or in water respectively.
 
-## Config File 
+### Config File 
 
 The config file is divided in 4 parts:
 
