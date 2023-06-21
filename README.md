@@ -25,7 +25,7 @@ The config file is divided in 4 parts:
 - **Curios:** Here is where you can configure things related to curios integration.
 - **Blacklists:** Here is where you can blacklist dimensions or structures.
 
-<details><summary>Config</summary>
+<details><summary>Click here (Config)</summary>
 <p>
 
 ```toml
