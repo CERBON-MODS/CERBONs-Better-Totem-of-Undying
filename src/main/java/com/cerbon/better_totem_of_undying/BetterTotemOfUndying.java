@@ -82,7 +82,7 @@ public class BetterTotemOfUndying {
     }
 
     private void clientSetupEvent(FMLClientSetupEvent event){
-        if (BTUUtils.isModLoaded(BTUConstants.CURIOS_MOD_ID)){
+        if (BTUUtils.isModLoaded(BTUConstants.CURIOS_MOD_ID) && BTUCommonConfigs.DISPLAY_TOTEM_ON_CHEST.get()){
             CuriosRendererRegistry.register(Items.TOTEM_OF_UNDYING, TotemCuriosRenderer::new);
         }
     }

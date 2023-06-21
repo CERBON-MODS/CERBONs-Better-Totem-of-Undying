@@ -9,6 +9,7 @@ public class BTUCommonConfigs {
     public static final ForgeConfigSpec SPEC;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> USE_TOTEM_FROM_CHARM_SLOT;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> DISPLAY_TOTEM_ON_CHEST;
     public static final ForgeConfigSpec.ConfigValue<Boolean> USE_TOTEM_FROM_INVENTORY;
     public static final ForgeConfigSpec.ConfigValue<Boolean> APPLY_EFFECTS_ONLY_WHEN_NEEDED;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_FIRE_RESISTANCE;
@@ -186,6 +187,10 @@ public class BTUCommonConfigs {
         USE_TOTEM_FROM_CHARM_SLOT = BUILDER
                 .comment("If false you will not be able to use Totem of Undying from charm slot. Curios mod must be installed. DEFAULT: TRUE")
                 .define("Use Totem From Charm Slot", true);
+
+        DISPLAY_TOTEM_ON_CHEST = BUILDER
+                .comment("If false Totem of Undying will not be displayed on the chest when worn in the curios charm slot. Curios mod must be installed. DEFAULT: TRUE")
+                .define("Display Totem on Chest", true);
 
         BUILDER.pop();
         SPEC = BUILDER.build();
