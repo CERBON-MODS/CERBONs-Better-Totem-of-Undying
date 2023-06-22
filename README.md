@@ -1,5 +1,10 @@
 # <img src="https://github.com/CerbonXD/BetterTotemOfUndying/blob/master/src/main/resources/logo.png" height="30"> Better Totem of Undying
 
+[![Status](https://img.shields.io/badge/Project%20current%20development%20status-Active-brightgreen?style=for-the-badge)]()
+[![Discord](https://img.shields.io/discord/834250417130831903?color=blue&label=Discord&logo=discord&style=for-the-badge)](https://discord.gg/2PvYZfjWDf)
+[![CurseForge](https://img.shields.io/static/v1?label=Curseforge&message=Forge&color=orange&labelColor=grey&style=for-the-badge&logo=curseforge&logoColor=orange)](https://www.curseforge.com/minecraft/mc-mods/better-totem-of-undying)
+[![Modrinth](https://img.shields.io/static/v1?label=Modrinth&message=Forge&color=dark_green&labelColor=grey&style=for-the-badge&logo=Modrinth&logoColor=dark_green)]()
+
 A highly configurable mod that improves Minecraft Totem of Undying by adding new features to it. You can blacklist dimensions or even structures where you don't want totem to work. The mod also has compatibility with Curios API.
 
 ### New Features 
@@ -141,12 +146,6 @@ You can download [Configured](https://www.curseforge.com/minecraft/mc-mods/confi
 
 </p>
 </details>
-
-
-## Download
-
-- Curseforge Link
-- Modrinth Link
 
 ## Support
 
