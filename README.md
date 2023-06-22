@@ -152,7 +152,11 @@ You can download [Configured](https://www.curseforge.com/minecraft/mc-mods/confi
 
 Please report all bugs, issues, and feature requests to the [issue tracker](https://github.com/CerbonXD/BetterTotemOfUndying/issues) or use my [discord server](https://discord.gg/2PvYZfjWDf) and report at the appropriate channel.
 
-Please read the [FAQ](https://github.com/CerbonXD/BetterTotemOfUndying/blob/master/FAQ.md) before reporting a bug, issue or feature request.
+Please read the [FAQ](https://github.com/CerbonXD/BetterTotemOfUndying/blob/master/FAQ.md) before reporting a bug, issue or feature request. 
+
+## Donations 
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E8MI65L)
 
 ## Affiliates
 
