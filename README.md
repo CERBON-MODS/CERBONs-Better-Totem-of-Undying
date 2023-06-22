@@ -1,6 +1,6 @@
 # <img src="https://github.com/CerbonXD/BetterTotemOfUndying/blob/master/src/main/resources/logo.png" height="30"> Better Totem of Undying
 
-A highly configurable mod that improves Minecraft Totem of Undying adding new features to it. You can blacklist dimensions or even structures where you don't want totem to work. Also the mod has compatibility with Curios API.
+A highly configurable mod that improves Minecraft Totem of Undying by adding new features to it. You can blacklist dimensions or even structures where you don't want totem to work. The mod also has compatibility with Curios API.
 
 ### New Features 
 
@@ -12,7 +12,7 @@ A highly configurable mod that improves Minecraft Totem of Undying adding new fe
 - If you are suffocating totem will break the blocks you are in (You can add blocks to the tag "totem_cant_break" if you want some block to not be break by the totem).
 - You can blacklist dimensions where you don't want totem to work.
 - You can blacklist structures where you don't want totem to work.
-- Increases your hunger bar by half if your food level is <= 6 (When you can't run).
+- Increases your food level to 8 if your food level is <= 6 (When you can't run). Note that the hunger bar ranges from 0 to 20.
 - Apply Water Breathing effect.
 - Apply fire resistance and water breathing effects only when needed, meaning you are going to receive the effects only if you are on fire or in water respectively.
 
@@ -24,6 +24,8 @@ The config file is divided in 4 parts:
 - **New Totem Features:** Here is where you can configure all new totem features added by the mod.
 - **Curios:** Here is where you can configure things related to curios integration.
 - **Blacklists:** Here is where you can blacklist dimensions or structures.
+
+You can download [Configured](https://www.curseforge.com/minecraft/mc-mods/configured) for easier config management in game.
 
 <details><summary>Click here (Config)</summary>
 <p>
@@ -124,13 +126,34 @@ The config file is divided in 4 parts:
 ```
 
 </p>
-</details
+</details>
+
+## Gifs
+
+<details><summary>Click here (GIFS)</summary>
+<p>
+
+![Totem Knockback](https://github.com/CerbonXD/BetterTotemOfUndying/assets/84386993/81add95c-88e0-4c45-bd9a-ca56c2970818)
+
+![Totem Teleport Out Of Void](https://github.com/CerbonXD/BetterTotemOfUndying/assets/84386993/cd8fc3d7-3e0b-4499-9c51-04d3aae38462)
+
+![Destroy Blocks When Suffocating](https://github.com/CerbonXD/BetterTotemOfUndying/assets/84386993/e8a60208-5dc8-418d-89ec-082d24d39a13)
+
+</p>
+</details>
 
 
+## Download
 
+- Curseforge Link
+- Modrinth Link
 
+## Support
 
+Please report all bugs, issues, and feature requests to the [issue tracker](https://github.com/CerbonXD/BetterTotemOfUndying/issues) or use my [discord server](https://discord.gg/2PvYZfjWDf) and report at the appropriate channel.
 
+Please read the [FAQ](https://github.com/CerbonXD/BetterTotemOfUndying/blob/master/FAQ.md) before reporting a bug, issue or feature request.
 
+## Affiliates
 
-
+[![BisectHosting](https://www.bisecthosting.com/partners/custom-banners/1a9a55fc-f1c0-4b40-b07c-3774bc557f93.webp)](https://bisecthosting.com/Cerbon)
