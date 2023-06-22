@@ -148,6 +148,13 @@ You can download [Configured](https://www.curseforge.com/minecraft/mc-mods/confi
 - Curseforge Link
 - Modrinth Link
 
+## Other mods 
+
+### Queen bee 
+
+- [Curseforge Link](https://www.curseforge.com/minecraft/mc-mods/queen-bee)
+- [Modrinth Link](https://modrinth.com/mod/qu)
+
 ## Support
 
 Please report all bugs, issues, and feature requests to the [issue tracker](https://github.com/CerbonXD/BetterTotemOfUndying/issues) or use my [discord server](https://discord.gg/2PvYZfjWDf) and report at the appropriate channel.
