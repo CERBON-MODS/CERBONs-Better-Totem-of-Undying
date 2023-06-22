@@ -128,6 +128,21 @@ You can download [Configured](https://www.curseforge.com/minecraft/mc-mods/confi
 </p>
 </details>
 
+## Gifs
+
+<details><summary>Click here (GIFS)</summary>
+<p>
+
+![Totem Knockback](https://github.com/CerbonXD/BetterTotemOfUndying/assets/84386993/81add95c-88e0-4c45-bd9a-ca56c2970818)
+
+![Totem Teleport Out Of Void](https://github.com/CerbonXD/BetterTotemOfUndying/assets/84386993/cd8fc3d7-3e0b-4499-9c51-04d3aae38462)
+
+![Destroy Blocks When Suffocating](https://github.com/CerbonXD/BetterTotemOfUndying/assets/84386993/e8a60208-5dc8-418d-89ec-082d24d39a13)
+
+</p>
+</details>
+
+
 ## Download
 
 - Curseforge Link
