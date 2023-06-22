@@ -20,7 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraftforge.fml.ModList;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -78,14 +78,14 @@ public class BTUUtils {
 
     public static boolean isStructureBlacklisted(BlockPos pos, @NotNull ServerLevel level){
         List<? extends String> blackListedStructures = BTUCommonConfigs.BLACKLISTED_STRUCTURES.get();
-        Registry<Structure> structureRegistry = level.registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY);
+        Registry<ConfiguredStructureFeature<?, ?>> structureRegistry = level.registryAccess().registryOrThrow(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY);
 
         boolean flag = false;
         for (String structureName : blackListedStructures){
-            Structure structure = structureRegistry.get(new ResourceLocation(structureName));
+            ConfiguredStructureFeature<?, ?> structure = structureRegistry.get(new ResourceLocation(structureName));
 
             if (structure != null){
-                if (level.structureManager().getStructureAt(pos, structure).isValid()){
+                if (level.structureFeatureManager().getStructureAt(pos, structure).isValid()){
                     flag = true;
                 }
             }
