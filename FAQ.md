@@ -18,7 +18,7 @@ A: Probably you have written the dimension/structure id wrong. Please check if y
 
 **Q: How do I add blocks to the "totem_cant_break" tag?**
 
-A: You need to [create a datapack](https://minecraft.fandom.com/wiki/Tutorials/Creating_a_data_pack) and use the following path: "data/better_totem_of_undying/tags/blocks" and create at this location the file "totem_cant_break.json". Now you can put here the blocks you want totem to not break.
+A: You need to [create a datapack](https://minecraft.fandom.com/wiki/Tutorials/Creating_a_data_pack) and use the following path: `data/better_totem_of_undying/tags/blocks` and create at this location the file `totem_cant_break.json`. Then add to the json file the blocks you want.
 
 **Q: Where can I download the mod?**
 
