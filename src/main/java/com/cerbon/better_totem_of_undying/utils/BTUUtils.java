@@ -4,16 +4,13 @@ import com.cerbon.better_totem_of_undying.config.BTUCommonConfigs;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -81,7 +78,7 @@ public class BTUUtils {
 
     public static boolean isStructureBlacklisted(BlockPos pos, @NotNull ServerLevel level){
         List<? extends String> blackListedStructures = BTUCommonConfigs.BLACKLISTED_STRUCTURES.get();
-        Registry<Structure> structureRegistry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
+        Registry<Structure> structureRegistry = level.registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY);
 
         boolean flag = false;
         for (String structureName : blackListedStructures){
@@ -97,11 +94,11 @@ public class BTUUtils {
     }
 
     public static boolean damageBypassInvulnerability(@NotNull DamageSource damageSource, LivingEntity livingEntity){
-        return damageSource.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !(livingEntity.getY() < livingEntity.level.getMinBuildHeight());
+        return damageSource.isBypassInvul() && !(livingEntity.getY() < livingEntity.level.getMinBuildHeight());
     }
 
     public static boolean isInVoid(LivingEntity livingEntity, @NotNull DamageSource damageSource){
-        return damageSource.is(DamageTypes.OUT_OF_WORLD) && livingEntity.getY() < livingEntity.level.getMinBuildHeight();
+        return damageSource.equals(DamageSource.OUT_OF_WORLD) && livingEntity.getY() < livingEntity.level.getMinBuildHeight();
     }
 
     public static ItemStack getTotemItemStack(LivingEntity livingEntity){
