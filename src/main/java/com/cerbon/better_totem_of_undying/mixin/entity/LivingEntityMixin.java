@@ -45,8 +45,8 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntityM
 
     @Inject(method = "baseTick", at = @At("TAIL"))
     public void saveEntityLastBlockPos(CallbackInfo ci) {
-        if (!this.level.isClientSide) {
-            Level level = this.level;
+        if (!this.level().isClientSide) {
+            Level level = this.level();
             BlockPos currentPos = this.blockPosition();
             BlockState blockBelowEntityPos = level.getBlockState(currentPos.below());
             boolean isValidBlock = blockBelowEntityPos.isRedstoneConductor(level, currentPos.below());

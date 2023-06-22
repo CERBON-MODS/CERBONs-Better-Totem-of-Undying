@@ -43,7 +43,7 @@ public class BTUUtils {
         boolean isTotemOnCooldown = livingEntity instanceof ServerPlayer player && player.getCooldowns().isOnCooldown(Items.TOTEM_OF_UNDYING);
         boolean isTeleportOutOfVoidEnabled = BTUCommonConfigs.TELEPORT_OUT_OF_VOID.get();
         BlockPos entityPos = livingEntity.blockPosition();
-        Level level = livingEntity.level;
+        Level level = livingEntity.level();
 
         if (isDimensionBlacklisted(level) || isStructureBlacklisted(entityPos, (ServerLevel) level) || damageBypassInvulnerability(damageSource, livingEntity) || (!isTeleportOutOfVoidEnabled && isInVoid(livingEntity, damageSource)) || isTotemOnCooldown){
             return false;
@@ -97,11 +97,11 @@ public class BTUUtils {
     }
 
     public static boolean damageBypassInvulnerability(@NotNull DamageSource damageSource, LivingEntity livingEntity){
-        return damageSource.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !(livingEntity.getY() < livingEntity.level.getMinBuildHeight());
+        return damageSource.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !(livingEntity.getY() < livingEntity.level().getMinBuildHeight());
     }
 
     public static boolean isInVoid(LivingEntity livingEntity, @NotNull DamageSource damageSource){
-        return damageSource.is(DamageTypes.OUT_OF_WORLD) && livingEntity.getY() < livingEntity.level.getMinBuildHeight();
+        return damageSource.is(DamageTypes.FELL_OUT_OF_WORLD) && livingEntity.getY() < livingEntity.level().getMinBuildHeight();
     }
 
     public static ItemStack getTotemItemStack(LivingEntity livingEntity){
