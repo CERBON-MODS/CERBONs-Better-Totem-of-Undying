@@ -103,7 +103,7 @@ mixin {
 }
 
 tasks.register('publishCurseForge', TaskPublishCurseForge) {
-    apiToken = findProperty('CURSEFORGE_TOKEN')
+    apiToken = System.getenv('CURSEFORGE_TOKEN')
 
     def mainFile = upload(878676, jar)
     mainFile.changelog = rootProject.file("CHANGELOG.md").getText('UTF-8')
