@@ -109,7 +109,7 @@ tasks.register('publishCurseForge', TaskPublishCurseForge) {
     mainFile.changelog = rootProject.file("CHANGELOG.md").getText('UTF-8')
     mainFile.changelogType = 'markdown'
     mainFile.releaseType = 'release'
-    mainFile.addGameVersion("${mc_version}", "1.20.1")
+    mainFile.addGameVersion("${mc_version}", "1.20")
     mainFile.addOptional("curios")
 }
 
