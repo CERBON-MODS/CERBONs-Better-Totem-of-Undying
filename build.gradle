@@ -121,8 +121,6 @@ modrinth {
     changelog = rootProject.file("CHANGELOG.md").getText('UTF-8')
     versionType = "release"
     uploadFile = jar
-    gameVersions = ["${mc_version}", "1.20.1"]
-    loaders = ["forge"]
     syncBodyFrom = rootProject.file("README.md").getText('UTF-8')
     dependencies {
         optional.project "curios"
