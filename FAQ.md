@@ -12,9 +12,9 @@ A: I have plans to port this mod to fabric. I still don't know when.
 
 A: No, I will not backport to versions below 1.18.2.
 
-**Q:I have blacklisted a dimension/structure and it's not working. Why?**
+**Q: I have blacklisted a dimension/structure and it's not working. Why?**
 
-A: Probably you have written the dimension/structure id wrong. Please check if you have written the mod id and the dimension/structure id correct.
+A: Probably you have written the dimension/structure ID incorrectly. Please double-check if you have entered the correct mod ID and dimension/structure ID. Another possibility is that you haven't saved the file.
 
 **Q: How do I add blocks to the "totem_cant_break" tag?**
 
