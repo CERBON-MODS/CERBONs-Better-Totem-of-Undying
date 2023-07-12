@@ -4,9 +4,9 @@
 
 A: Yes, you can.
 
-**Q: Will this mod be ported to Fabric?**
+**Q: Is there a Fabric version?**
 
-A: I have plans to port this mod to fabric. I still don't know when.
+A: Yes, there is a fabric version. You can get it at [Curseforge](https://www.curseforge.com/minecraft/mc-mods/better-totem-of-undying-fabric) or [Modrinth](https://modrinth.com/mod/better-totem-of-undying-fabric)
 
 **Q: Will this mod be backported to versions below 1.18.2?**
 
