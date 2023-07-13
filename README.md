@@ -14,8 +14,8 @@ A highly configurable mod that improves Minecraft Totem of Undying by adding new
 - Totem will destroy blocks if you are suffocating inside them. (If there is a block you don't want to be destroyed, you can add it to the "totem_cant_break" tag).
 - Totem will increase your hunger bar to 8 if it's <= 6 (When you can't run). Giving you enough energy to run from danger and/or find food.
 - Totem will also apply Water Breathing effect. However, both fire resistance and water breathing effects will only be applied when needed. This means you are going to receive the effects only if you are on fire or in water, respectively.
-- You can use totem from charm slot if Curios mod is installed.
-- You can use totem from your inventory (Disabled by default).
+- You can use the totem from charm slot if Curios mod is installed.
+- You can use the totem from your inventory (Disabled by default).
 - You can add a cooldown to the totem (Disabled by default).
 - You can blacklist dimensions and structures where you don't want totem to work.
 
