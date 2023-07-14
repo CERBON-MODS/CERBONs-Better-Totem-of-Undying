@@ -10,12 +10,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.client.ICurioRenderer;
 
 public class TotemCuriosRenderer implements ICurioRenderer {
     @Override
-    public <T extends LivingEntity, M extends EntityModel<T>> void render(ItemStack itemStack, SlotContext slotContext, PoseStack poseStack, RenderLayerParent<T, M> renderLayerParent, MultiBufferSource multiBufferSource, int i, float v, float v1, float v2, float v3, float v4, float v5) {
+    public <T extends LivingEntity, M extends EntityModel<T>> void render(ItemStack itemStack, @NotNull SlotContext slotContext, PoseStack poseStack, RenderLayerParent<T, M> renderLayerParent, MultiBufferSource multiBufferSource, int i, float v, float v1, float v2, float v3, float v4, float v5) {
         LivingEntity livingEntity = slotContext.entity();
         ICurioRenderer.translateIfSneaking(poseStack, livingEntity);
         ICurioRenderer.rotateIfSneaking(poseStack, livingEntity);

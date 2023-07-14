@@ -26,6 +26,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraftforge.fml.ModList;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
 
@@ -39,7 +40,7 @@ public class BTUUtils {
         return ModList.get().isLoaded(modId);
     }
 
-    public static boolean canSaveFromDeath(LivingEntity livingEntity, DamageSource damageSource){
+    public static boolean canSaveFromDeath(@NotNull LivingEntity livingEntity, DamageSource damageSource){
         boolean isTotemOnCooldown = livingEntity instanceof ServerPlayer player && player.getCooldowns().isOnCooldown(Items.TOTEM_OF_UNDYING);
         boolean isTeleportOutOfVoidEnabled = BTUCommonConfigs.TELEPORT_OUT_OF_VOID.get();
         BlockPos entityPos = livingEntity.blockPosition();
@@ -113,14 +114,14 @@ public class BTUUtils {
         return Arrays.stream(stacks).filter(Objects::nonNull).toList();
     }
 
-    public static ItemStack getTotemFromCharmSlot(LivingEntity livingEntity){
+    public static @Nullable ItemStack getTotemFromCharmSlot(LivingEntity livingEntity){
         if (isModLoaded(BTUConstants.CURIOS_MOD_ID) && BTUCommonConfigs.USE_TOTEM_FROM_CHARM_SLOT.get()){
             return CuriosApi.getCuriosHelper().findFirstCurio(livingEntity, Items.TOTEM_OF_UNDYING).map(SlotResult::stack).orElse(null);
         }
         return null;
     }
 
-    public static ItemStack getTotemFromInventory(LivingEntity livingEntity){
+    public static @Nullable ItemStack getTotemFromInventory(LivingEntity livingEntity){
         if (BTUCommonConfigs.USE_TOTEM_FROM_INVENTORY.get() && livingEntity instanceof ServerPlayer player){
             for (ItemStack itemStack : player.getInventory().items){
                 if (itemStack.is(Items.TOTEM_OF_UNDYING)) return itemStack;
@@ -129,7 +130,7 @@ public class BTUUtils {
         return null;
     }
 
-    public static ItemStack getTotemFromHands(LivingEntity livingEntity){
+    public static @Nullable ItemStack getTotemFromHands(LivingEntity livingEntity){
         for (InteractionHand interactionHand : InteractionHand.values()){
             ItemStack itemStack = livingEntity.getItemInHand(interactionHand);
             if (itemStack.is(Items.TOTEM_OF_UNDYING)) return itemStack;
@@ -137,7 +138,7 @@ public class BTUUtils {
         return null;
     }
 
-    public static void giveUseStatAndCriterion(ItemStack itemStack, ServerPlayer player){
+    public static void giveUseStatAndCriterion(@NotNull ItemStack itemStack, ServerPlayer player){
         if (!itemStack.isEmpty()){
             player.awardStat(Stats.ITEM_USED.get(itemStack.getItem()));
             CriteriaTriggers.USED_TOTEM.trigger(player, itemStack);
@@ -199,16 +200,16 @@ public class BTUUtils {
         }
     }
 
-    public static boolean isInWallOrFullyFrozen(LivingEntity livingEntity){
+    public static boolean isInWallOrFullyFrozen(@NotNull LivingEntity livingEntity){
         return (livingEntity.isInWall() && BTUCommonConfigs.DESTROY_BLOCKS_WHEN_SUFFOCATING.get()) ||
                 (livingEntity.isFullyFrozen() && BTUCommonConfigs.DESTROY_POWDER_SNOW_WHEN_FULLY_FROZEN.get());
     }
 
-    public static boolean canDestroy(BlockState block){
+    public static boolean canDestroy(@NotNull BlockState block){
         return !block.is(BTUConstants.TOTEM_CANT_DESTROY_TAG) && !block.is(Blocks.BEDROCK) && !block.is(Blocks.END_PORTAL_FRAME);
     }
 
-    public static boolean isInstanceOfFallingBlock(BlockPos pos, Level level, int distance){
+    public static boolean isInstanceOfFallingBlock(@NotNull BlockPos pos, @NotNull Level level, int distance){
         return level.getBlockState(pos.above(distance)).getBlock() instanceof FallingBlock;
     }
 
@@ -225,7 +226,7 @@ public class BTUUtils {
         }
     }
 
-    public static List<LivingEntity> getNearbyEntities(LivingEntity livingEntity, Level level, double radius){
+    public static @NotNull List<LivingEntity> getNearbyEntities(@NotNull LivingEntity livingEntity, @NotNull Level level, double radius){
         return level.getEntitiesOfClass(LivingEntity.class, livingEntity.getBoundingBox().inflate(radius));
     }
 
