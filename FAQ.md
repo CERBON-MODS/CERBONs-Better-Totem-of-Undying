@@ -4,9 +4,9 @@
 
 A: Yes, you can.
 
-**Q: Will this mod be ported to Fabric?**
+**Q: Is there a Fabric version?**
 
-A: I have plans to port this mod to fabric. I still don't know when.
+A: Yes, there is a fabric version. You can get it at [Curseforge](https://www.curseforge.com/minecraft/mc-mods/better-totem-of-undying-fabric) or [Modrinth](https://modrinth.com/mod/better-totem-of-undying-fabric)
 
 **Q: Will this mod be backported to versions below 1.18.2?**
 
@@ -15,6 +15,10 @@ A: No, I will not backport to versions below 1.18.2.
 **Q: I have blacklisted a dimension/structure and it's not working. Why?**
 
 A: Probably you have written the dimension/structure ID incorrectly. Please double-check if you have entered the correct mod ID and dimension/structure ID. Another possibility is that you haven't saved the file.
+
+**Q: Is it possible to blacklist damage types?**
+
+A: Yes, it is. You can do it by adding the damage types you want to the `bypasses_invulnerability` tag using a [datapack](https://minecraft.fandom.com/wiki/Tutorials/Creating_a_data_pack). It's located at `minecraft\tags\damage_type\bypasses_invulnerability.json`.
 
 **Q: How do I add blocks to the "totem_cant_break" tag?**
 

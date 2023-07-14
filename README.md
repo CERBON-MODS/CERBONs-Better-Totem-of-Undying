@@ -1,29 +1,41 @@
-# <img src="https://github.com/CerbonXD/BetterTotemOfUndying/blob/master/src/main/resources/logo.png" height="30"> Better Totem of Undying
+# Better Totem of Undying [FORGE]
 
 [![Status](https://img.shields.io/badge/development%20status-Active-brightgreen?style=for-the-badge)]()
 [![Discord](https://img.shields.io/discord/834250417130831903?color=blue&label=Discord&logo=discord&style=for-the-badge)](https://discord.gg/2PvYZfjWDf)
-[![CurseForge](https://img.shields.io/static/v1?label=Curseforge&message=Forge&color=orange&labelColor=grey&style=for-the-badge&logo=curseforge&logoColor=orange)](https://www.curseforge.com/minecraft/mc-mods/better-totem-of-undying)
-[![Modrinth](https://img.shields.io/static/v1?label=Modrinth&message=Forge&color=dark_green&labelColor=grey&style=for-the-badge&logo=Modrinth&logoColor=dark_green)](https://modrinth.com/mod/better-totem-of-undying)
+[![CurseForge](https://img.shields.io/static/v1?label=Curseforge&message=Forge&color=orange&labelColor=grey&style=for-the-badge&logo=curseforge&logoColor=orange)](https://www.curseforge.com/minecraft/mc-mods/better-totem-of-undying-forge)
+[![Modrinth](https://img.shields.io/static/v1?label=Modrinth&message=Forge&color=dark_green&labelColor=grey&style=for-the-badge&logo=Modrinth&logoColor=dark_green)](https://modrinth.com/mod/better-totem-of-undying-forge)
 
 A highly configurable mod that improves Minecraft Totem of Undying by adding new features to it. You can blacklist dimensions or even structures where you don't want totem to work. The mod also has compatibility with Curios API.
 
-### New Features 
+## Features 
 
-- Knockback mobs away.
-- Save entity from dying in the void.
-- Has option to use totem from inventory (Disabled by default).
-- If Curios mod is installed you can use totem from charm slot.
-- Has option to add cooldown to the totem (Disabled by default).
-- If you are suffocating totem will break the blocks you are in (You can add blocks to the tag "totem_cant_break" if you want some block to not be break by the totem).
-- You can blacklist dimensions where you don't want totem to work.
-- You can blacklist structures where you don't want totem to work.
-- Increases your food level to 8 if your food level is <= 6 (When you can't run). Note that the hunger bar ranges from 0 to 20.
-- Apply Water Breathing effect.
-- Apply fire resistance and water breathing effects only when needed, meaning you are going to receive the effects only if you are on fire or in water respectively.
+- Totem will knockback mobs when they are too close.
+- Totem will save you when falling into the void, teleporting you safely to the surface.
+- Totem will destroy blocks if you are suffocating inside them. (If there is a block you don't want to be destroyed, you can add it to the "totem_cant_break" tag).
+- Totem will increase your hunger bar to 8 if it's <= 6 (When you can't run). Giving you enough energy to run from danger and/or find food.
+- Totem will also apply Water Breathing effect. However, both fire resistance and water breathing effects will only be applied when needed. This means you are going to receive the effects only if you are on fire or in water, respectively.
+- You can use the totem from charm slot if Curios mod is installed.
+- You can use the totem from your inventory (Disabled by default).
+- You can add a cooldown to the totem (Disabled by default).
+- You can blacklist dimensions and structures where you don't want totem to work.
 
-### Config File 
+## Gifs
 
-The config file is divided in 4 parts:
+<details><summary>Click here (GIFS)</summary>
+<p>
+
+![Totem Knockback](https://github.com/CerbonXD/BetterTotemOfUndying/blob/master/.github/Totem%20Knockback.gif)
+
+![Totem Teleport Out Of Void](https://github.com/CerbonXD/BetterTotemOfUndying/blob/master/.github/Totem%20Teleport%20Out%20Of%20Void.gif)
+
+![Destroy Blocks When Suffocating](https://github.com/CerbonXD/BetterTotemOfUndying/blob/master/.github/Destroy%20Blocks%20When%20Suffocating.gif)
+
+</p>
+</details>
+
+## Config File 
+
+The config file is partitioned in four sections:
 
 - **Minecraft Default Totem Features:** Here is where you can configure things Minecraft does by default with totem, such as giving you regeneration and absorption effects.
 - **New Totem Features:** Here is where you can configure all new totem features added by the mod.
@@ -129,20 +141,6 @@ You can download [Configured](https://www.curseforge.com/minecraft/mc-mods/confi
 	#You can put here structures where you don't want Totem of Undying to work. Example: "minecraft:desert_pyramid", "mod_id:structure_id" DEFAULT: Nothing
 	"Blacklisted Structures" = []
 ```
-
-</p>
-</details>
-
-## Gifs
-
-<details><summary>Click here (GIFS)</summary>
-<p>
-
-![Totem Knockback](https://github.com/CerbonXD/BetterTotemOfUndying/assets/84386993/81add95c-88e0-4c45-bd9a-ca56c2970818)
-
-![Totem Teleport Out Of Void](https://github.com/CerbonXD/BetterTotemOfUndying/assets/84386993/cd8fc3d7-3e0b-4499-9c51-04d3aae38462)
-
-![Destroy Blocks When Suffocating](https://github.com/CerbonXD/BetterTotemOfUndying/assets/84386993/e8a60208-5dc8-418d-89ec-082d24d39a13)
 
 </p>
 </details>
