@@ -20,49 +20,48 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Objects;
 
-@SuppressWarnings(value = "AddedMixinMembersNamePattern")
 @Mixin(value = LivingEntity.class, priority = 1100)
 public abstract class LivingEntityMixin extends Entity implements ILivingEntityMixin {
 
-    @Unique private long lastBlockPos;
+    @Unique private long better_totem_of_undying_lastBlockPos;
 
-    public LivingEntityMixin(EntityType<?> pEntityType, Level pLevel) {
+    private LivingEntityMixin(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 
     @Inject(method = "checkTotemDeathProtection", at = @At("HEAD"), cancellable = true)
-    private void checkTotemDeathProtection(DamageSource pDamageSource, @NotNull CallbackInfoReturnable<Boolean> cir) {
+    private void better_totem_of_undying_checkTotemDeathProtection(DamageSource pDamageSource, @NotNull CallbackInfoReturnable<Boolean> cir) {
         LivingEntity livingEntity = (LivingEntity) (Object) this;
         cir.setReturnValue(BTUUtils.canSaveFromDeath(livingEntity, pDamageSource));
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
-    public void addCustomData(@NotNull CompoundTag pCompound, CallbackInfo ci){
-        pCompound.putLong("LastBlockPos", this.lastBlockPos);
+    public void better_totem_of_undying_addCustomData(@NotNull CompoundTag pCompound, CallbackInfo ci){
+        pCompound.putLong("BTULastBlockPos", this.better_totem_of_undying_getLastBlockPos());
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
-    public void readCustomData(@NotNull CompoundTag pCompound, CallbackInfo ci){
-        this.lastBlockPos = pCompound.getLong("LastBlockPos");
+    public void better_totem_of_undying_readCustomData(@NotNull CompoundTag pCompound, CallbackInfo ci){
+        this.better_totem_of_undying_lastBlockPos = pCompound.getLong("BTULastBlockPos");
     }
 
     @Inject(method = "baseTick", at = @At("TAIL"))
-    public void saveEntityLastBlockPos(CallbackInfo ci) {
+    public void better_totem_of_undying_saveEntityLastBlockPos(CallbackInfo ci) {
         if (!this.level().isClientSide) {
             Level level = this.level();
             BlockPos currentPos = this.blockPosition();
             BlockState blockBelowEntityPos = level.getBlockState(currentPos.below());
             boolean isValidBlock = blockBelowEntityPos.isRedstoneConductor(level, currentPos.below());
 
-            if (!Objects.equals(this.lastBlockPos, currentPos.asLong()) && isValidBlock) {
-                this.lastBlockPos = currentPos.asLong();
+            if (!Objects.equals(this.better_totem_of_undying_lastBlockPos, currentPos.asLong()) && isValidBlock) {
+                this.better_totem_of_undying_lastBlockPos = currentPos.asLong();
             }
         }
     }
 
     @Unique
     @Override
-    public long getLastBlockPos() {
-        return lastBlockPos;
+    public long better_totem_of_undying_getLastBlockPos() {
+        return better_totem_of_undying_lastBlockPos;
     }
 }
