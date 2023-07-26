@@ -10,16 +10,16 @@ plugins {
     id 'net.darkhax.curseforgegradle' version '1.1.15'
 }
 
-version = "${mc_version}-${mod_version}"
-group = "com.cerbon.${mod_id}"
-archivesBaseName = "${archive_base_name}-Forge"
+version = mod_version
+group = mod_group_id
+archivesBaseName = "${mod_name}-Forge-${minecraft_version}"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 minecraft {
 
-    mappings channel: 'parchment', version: "${parchment_version}"
+    mappings channel: mapping_channel, version: mapping_version
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg') // Currently, this location cannot be changed from the default.
 
@@ -28,10 +28,10 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', 'better_totem_of_undying'
+            property 'forge.enabledGameTestNamespaces', mod_id
 
             mods {
-                better_totem_of_undying {
+                mod_id {
                     source sourceSets.main
                 }
             }
@@ -41,10 +41,10 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', 'better_totem_of_undying'
+            property 'forge.enabledGameTestNamespaces', mod_id
 
             mods {
-                better_totem_of_undying {
+                mod_id {
                     source sourceSets.main
                 }
             }
@@ -54,9 +54,9 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', 'better_totem_of_undying'
+            property 'forge.enabledGameTestNamespaces', mod_id
             mods {
-                better_totem_of_undying {
+                mod_id {
                     source sourceSets.main
                 }
             }
@@ -66,10 +66,10 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            args '--mod', 'better_totem_of_undying', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                better_totem_of_undying {
+                mod_id {
                     source sourceSets.main
                 }
             }
@@ -89,7 +89,7 @@ repositories {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
@@ -106,36 +106,35 @@ tasks.register('publishCurseForge', TaskPublishCurseForge) {
     apiToken = System.getenv('CURSEFORGE_TOKEN')
 
     def mainFile = upload(878676, jar)
-    mainFile.changelog = rootProject.file("CHANGELOG.md").getText('UTF-8')
+    mainFile.changelog = rootProject.file(changelog).getText('UTF-8')
     mainFile.changelogType = 'markdown'
-    mainFile.releaseType = 'release'
-    mainFile.addGameVersion("${mc_version}", "1.20")
-    mainFile.addOptional("curios")
+    mainFile.releaseType = release_type
+    mainFile.addGameVersion("1.20", "${minecraft_version}")
+    mainFile.addOptional(curios_mod)
 }
 
 modrinth {
     token = System.getenv("MODRINTH_TOKEN")
-    versionName = "Better Totem Of Undying ${project.version}"
+    versionName = "Better Totem of Undying ${minecraft_version}-${project.version}"
     versionNumber = "${project.version}"
     projectId = "qRwFcI3W"
-    changelog = rootProject.file("CHANGELOG.md").getText('UTF-8')
-    versionType = "release"
+    changelog = rootProject.file(project.changelog).getText('UTF-8')
+    versionType = release_type
     uploadFile = jar
-    syncBodyFrom = rootProject.file("README.md").getText('UTF-8')
     dependencies {
-        optional.project "curios"
+        optional.project curios_mod
     }
 }
 
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "better_totem_of_undying",
-                "Specification-Vendor"    : "better_totem_of_undyingsareus",
-                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Specification-Title"     : mod_name,
+                "Specification-Vendor"    : mod_authors,
+                "Specification-Version"   : project.jar.archiveVersion,
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "better_totem_of_undyingsareus",
+                "Implementation-Vendor"   : mod_authors,
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
