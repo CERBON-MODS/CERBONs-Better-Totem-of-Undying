@@ -36,17 +36,17 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntityM
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
-    public void better_totem_of_undying_addCustomData(@NotNull CompoundTag pCompound, CallbackInfo ci){
+    private void better_totem_of_undying_addCustomData(@NotNull CompoundTag pCompound, CallbackInfo ci){
         pCompound.putLong("BTULastBlockPos", this.better_totem_of_undying_getLastBlockPos());
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
-    public void better_totem_of_undying_readCustomData(@NotNull CompoundTag pCompound, CallbackInfo ci){
+    private void better_totem_of_undying_readCustomData(@NotNull CompoundTag pCompound, CallbackInfo ci){
         this.better_totem_of_undying_lastBlockPos = pCompound.getLong("BTULastBlockPos");
     }
 
     @Inject(method = "baseTick", at = @At("TAIL"))
-    public void better_totem_of_undying_saveEntityLastBlockPos(CallbackInfo ci) {
+    private void better_totem_of_undying_saveEntityLastBlockPos(CallbackInfo ci) {
         if (!this.level().isClientSide) {
             Level level = this.level();
             BlockPos currentPos = this.blockPosition();
