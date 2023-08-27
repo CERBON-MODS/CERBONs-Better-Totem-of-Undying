@@ -1,10 +1,12 @@
 package com.cerbon.better_totem_of_undying.utils;
 
+import com.cerbon.better_totem_of_undying.BetterTotemOfUndying;
 import com.cerbon.better_totem_of_undying.config.BTUCommonConfigs;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -13,7 +15,9 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,6 +29,7 @@ import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -64,7 +69,7 @@ public class BTUUtils {
 
                 livingEntity.setHealth(BTUCommonConfigs.SET_HEALTH.get());
 
-                applyTotemEffects(livingEntity);
+                applyTotemEffects(livingEntity, damageSource);
                 increaseFoodLevel(livingEntity, BTUCommonConfigs.SET_FOOD_LEVEL.get());
                 destroyBlocksWhenSuffocatingOrFullyFrozen(livingEntity, level);
                 knockbackMobsAway(livingEntity, level);
@@ -151,7 +156,7 @@ public class BTUUtils {
         }
     }
 
-    public static void applyTotemEffects(LivingEntity livingEntity){
+    public static void applyTotemEffects(LivingEntity livingEntity, DamageSource damageSource){
         int fireResistanceEffectDuration = BTUCommonConfigs.FIRE_RESISTANCE_DURATION.get();
         int regenerationEffectDuration = BTUCommonConfigs.REGENERATION_DURATION.get();
         int regenerationEffectAmplifier = BTUCommonConfigs.REGENERATION_AMPLIFIER.get();
@@ -168,6 +173,34 @@ public class BTUUtils {
         }
         if (BTUCommonConfigs.ENABLE_REGENERATION.get()) livingEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, regenerationEffectDuration, regenerationEffectAmplifier));
         if (BTUCommonConfigs.ENABLE_ABSORPTION.get()) livingEntity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, absorptionEffectDuration, absorptionEffectAmplifier));
+
+        BTUCommonConfigs.CUSTOM_EFFECTS.get().forEach(customEffectProperties -> {
+            try {
+                String damageTypeKey = (String) customEffectProperties.get(0);
+                String mobEffectKey = (String) customEffectProperties.get(1);
+                int effectDuration = (int) customEffectProperties.get(2);
+                int effectAmplifier = (int) customEffectProperties.get(3);
+
+                ResourceKey<DamageType> damageType = getDamageTypeByKey(damageTypeKey, (ServerLevel) livingEntity.level());
+                MobEffect mobEffect = getMobEffectByKey(mobEffectKey);
+
+                if (damageSource.is(damageType) || damageTypeKey.equals("any"))
+                    livingEntity.addEffect(new MobEffectInstance(mobEffect, effectDuration, effectAmplifier));
+
+            }catch (Exception e){
+                BetterTotemOfUndying.LOGGER.error("Better Totem of Undying error: Couldn't apply custom effect {}.", customEffectProperties.get(1), e);
+            }
+        });
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    public static ResourceKey<DamageType> getDamageTypeByKey(String key, ServerLevel level){
+        Registry<DamageType> damageTypeRegistry = level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE);
+        return damageTypeRegistry.getResourceKey(damageTypeRegistry.get(new ResourceLocation(key))).orElse(null);
+    }
+
+    public static MobEffect getMobEffectByKey(String key){
+        return ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(key));
     }
 
     public static void increaseFoodLevel(LivingEntity livingEntity, int foodLevel){
