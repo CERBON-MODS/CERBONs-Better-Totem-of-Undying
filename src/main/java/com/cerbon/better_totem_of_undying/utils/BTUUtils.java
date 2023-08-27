@@ -187,9 +187,11 @@ public class BTUUtils {
 
                     if (damageSource.is(damageType) || damageTypeKey.equals("any"))
                         livingEntity.addEffect(new MobEffectInstance(mobEffect, effectDuration, effectAmplifier));
+                    else
+                        BetterTotemOfUndying.LOGGER.error("Better Totem of Undying error: Damage type \"{}\" does not exist. Couldn't apply custom effect.", customEffectProperties.get(0), new NullPointerException());
 
                 }catch (Exception e){
-                    BetterTotemOfUndying.LOGGER.error("Better Totem of Undying error: Couldn't apply custom effect. Wrong one: {}", customEffectProperties, e);
+                    BetterTotemOfUndying.LOGGER.error("Better Totem of Undying error: Couldn't apply custom effect. Wrong/Missing parameter: {}", customEffectProperties, e);
                 }
             }
         });
