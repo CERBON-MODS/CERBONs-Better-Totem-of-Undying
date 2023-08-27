@@ -188,7 +188,7 @@ public class BTUUtils {
                     livingEntity.addEffect(new MobEffectInstance(mobEffect, effectDuration, effectAmplifier));
 
             }catch (Exception e){
-                BetterTotemOfUndying.LOGGER.error("Better Totem of Undying error: Couldn't apply custom effect {}.", customEffectProperties.get(1), e);
+                BetterTotemOfUndying.LOGGER.error("Better Totem of Undying error: Couldn't apply custom effect {}. Wrong one: {}", customEffectProperties.get(1), customEffectProperties, e);
             }
         });
     }
