@@ -175,20 +175,22 @@ public class BTUUtils {
         if (BTUCommonConfigs.ENABLE_ABSORPTION.get()) livingEntity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, absorptionEffectDuration, absorptionEffectAmplifier));
 
         BTUCommonConfigs.CUSTOM_EFFECTS.get().forEach(customEffectProperties -> {
-            try {
-                String damageTypeKey = (String) customEffectProperties.get(0);
-                String mobEffectKey = (String) customEffectProperties.get(1);
-                int effectDuration = (int) customEffectProperties.get(2);
-                int effectAmplifier = (int) customEffectProperties.get(3);
+            if (!customEffectProperties.isEmpty()){
+                try {
+                    String damageTypeKey = (String) customEffectProperties.get(0);
+                    String mobEffectKey = (String) customEffectProperties.get(1);
+                    int effectDuration = (int) customEffectProperties.get(2);
+                    int effectAmplifier = (int) customEffectProperties.get(3);
 
-                ResourceKey<DamageType> damageType = getDamageTypeByKey(damageTypeKey, (ServerLevel) livingEntity.level());
-                MobEffect mobEffect = getMobEffectByKey(mobEffectKey);
+                    ResourceKey<DamageType> damageType = getDamageTypeByKey(damageTypeKey, (ServerLevel) livingEntity.level());
+                    MobEffect mobEffect = getMobEffectByKey(mobEffectKey);
 
-                if (damageSource.is(damageType) || damageTypeKey.equals("any"))
-                    livingEntity.addEffect(new MobEffectInstance(mobEffect, effectDuration, effectAmplifier));
+                    if (damageSource.is(damageType) || damageTypeKey.equals("any"))
+                        livingEntity.addEffect(new MobEffectInstance(mobEffect, effectDuration, effectAmplifier));
 
-            }catch (Exception e){
-                BetterTotemOfUndying.LOGGER.error("Better Totem of Undying error: Couldn't apply custom effect {}. Wrong one: {}", customEffectProperties.get(1), customEffectProperties, e);
+                }catch (Exception e){
+                    BetterTotemOfUndying.LOGGER.error("Better Totem of Undying error: Couldn't apply custom effect. Wrong one: {}", customEffectProperties, e);
+                }
             }
         });
     }
