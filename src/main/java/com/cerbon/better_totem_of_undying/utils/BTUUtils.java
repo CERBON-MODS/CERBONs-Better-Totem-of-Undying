@@ -185,10 +185,8 @@ public class BTUUtils {
                     ResourceKey<DamageType> damageType = getDamageTypeByKey(damageTypeKey, (ServerLevel) livingEntity.level());
                     MobEffect mobEffect = getMobEffectByKey(mobEffectKey);
 
-                    if (damageSource.is(damageType) || damageTypeKey.equals("any"))
+                    if (damageType != null && damageSource.is(damageType) || damageTypeKey.equals("any"))
                         livingEntity.addEffect(new MobEffectInstance(mobEffect, effectDuration, effectAmplifier));
-                    else
-                        BetterTotemOfUndying.LOGGER.error("Better Totem of Undying error: Damage type \"{}\" does not exist. Couldn't apply custom effect.", customEffectProperties.get(0), new NullPointerException());
 
                 }catch (Exception e){
                     BetterTotemOfUndying.LOGGER.error("Better Totem of Undying error: Couldn't apply custom effect. Wrong/Missing parameter: {}", customEffectProperties, e);
@@ -197,10 +195,12 @@ public class BTUUtils {
         });
     }
 
-    @SuppressWarnings("DataFlowIssue")
     public static ResourceKey<DamageType> getDamageTypeByKey(String key, ServerLevel level){
-        Registry<DamageType> damageTypeRegistry = level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE);
-        return damageTypeRegistry.getResourceKey(damageTypeRegistry.get(new ResourceLocation(key))).orElse(null);
+        if (!key.equals("any")){
+            Registry<DamageType> damageTypeRegistry = level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE);
+            return damageTypeRegistry.getResourceKey(Objects.requireNonNull(damageTypeRegistry.get(new ResourceLocation(key)))).orElse(null);
+        }
+        return null;
     }
 
     public static MobEffect getMobEffectByKey(String key){
