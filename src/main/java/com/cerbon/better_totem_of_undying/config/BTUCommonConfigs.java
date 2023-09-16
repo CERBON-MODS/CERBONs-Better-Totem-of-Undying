@@ -115,7 +115,7 @@ public class BTUCommonConfigs {
 
         BUILDER.push("Custom Effects");
         CUSTOM_EFFECTS = BUILDER
-                .comment("Use this list to add custom effects and specify when they should be triggered. Within this list, you should provide another list using curly braces, with the first parameter being the damage type, the second parameter being the effect that will be granted, the third parameter the duration of the effect in ticks, and the fourth parameter the effect amplifier. If you want the effect to always be granted, use the damage type as \"any\". Example: [[\"outOfWorld\", \"minecraft:blindness\", 800, 0]]. In this example, if the player dies in the void, the totem will grant the level 1 blindness effect with a duration of 40 seconds. DEFAULT: Nothing")
+                .comment("Use this list to add custom effects and specify when they should be triggered. Within this list, you should provide another list using curly braces, with the first parameter being the damage type, the second parameter being the effect that will be granted, the third parameter the duration of the effect in ticks, and the fourth parameter the effect amplifier. If you want the effect to always be granted, use the damage type as \"any\". Example: [[\"outOfWorld\", \"minecraft:blindness\", 800, 0]]. In this example, if the player dies in the void, the totem will grant the level 1 blindness effect with a duration of 40 seconds. If you don't know which damage types can be used, see the wiki on GitHub. DEFAULT: Nothing")
                 .defineList("Custom Effects", List.of(List.of()), entry -> entry instanceof List<?>);
         BUILDER.pop(2);
 
