@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -21,7 +22,8 @@ import java.util.Objects;
 
 @Mixin(value = LivingEntity.class, priority = 1100)
 public abstract class LivingEntityMixin extends Entity implements ILivingEntityMixin {
-    public long better_totem_of_undying_lastBlockPos;
+
+    @Unique public long better_totem_of_undying_lastBlockPos;
 
     public LivingEntityMixin(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
