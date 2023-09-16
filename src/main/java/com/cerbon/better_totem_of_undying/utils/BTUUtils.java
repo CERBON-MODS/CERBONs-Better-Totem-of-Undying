@@ -228,7 +228,7 @@ public class BTUUtils {
 
     public static void teleportOutOfVoid(LivingEntity livingEntity, Level level, DamageSource damageSource){
         if (isInVoid(livingEntity, damageSource)){
-            BlockPos lastBlockPos = BlockPos.of(((ILivingEntityMixin) livingEntity).getLastBlockPos());
+            BlockPos lastBlockPos = BlockPos.of(((ILivingEntityMixin) livingEntity).better_totem_of_undying_getLastBlockPos());
 
             BlockPos positionNearby = randomTeleportNearby(livingEntity, level, lastBlockPos);
             if (positionNearby == null){
