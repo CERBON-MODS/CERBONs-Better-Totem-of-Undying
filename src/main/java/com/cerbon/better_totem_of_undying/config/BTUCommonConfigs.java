@@ -46,7 +46,7 @@ public class BTUCommonConfigs {
         BUILDER.push("Minecraft Default Totem Features");
         SET_HEALTH = BUILDER
                 .comment("This value sets the health Totem of Undying will give to the entity upon use. DEFAULT: 1")
-                .defineInRange("Set Health", 1, 0, 20);
+                .defineInRange("Set Health", 1, 1, 20);
 
         REMOVE_ALL_EFFECTS = BUILDER
                 .comment("When Totem of Undying is used it removes all previous effects you had. If set to false, it will keep all the effects you had before using the totem. DEFAULT: TRUE")
