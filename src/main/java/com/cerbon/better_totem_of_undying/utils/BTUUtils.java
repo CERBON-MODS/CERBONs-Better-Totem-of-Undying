@@ -180,7 +180,7 @@ public class BTUUtils {
 
                     MobEffect mobEffect = getMobEffectByKey(mobEffectKey);
 
-                    if (damageSource.getMsgId().equals(damageTypeKey) || damageTypeKey.equals("any"))
+                    if (damageSource.getMsgId().equalsIgnoreCase(damageTypeKey) || damageTypeKey.equals("any"))
                         livingEntity.addEffect(new MobEffectInstance(mobEffect, effectDuration, effectAmplifier));
 
                 }catch (Exception e){
