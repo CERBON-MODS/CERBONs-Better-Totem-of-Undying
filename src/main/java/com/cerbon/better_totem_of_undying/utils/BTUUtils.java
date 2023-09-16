@@ -1,5 +1,6 @@
 package com.cerbon.better_totem_of_undying.utils;
 
+import com.cerbon.better_totem_of_undying.BetterTotemOfUndying;
 import com.cerbon.better_totem_of_undying.config.BTUCommonConfigs;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -11,6 +12,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,6 +24,7 @@ import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
@@ -60,7 +63,7 @@ public class BTUUtils {
 
                 livingEntity.setHealth(BTUCommonConfigs.SET_HEALTH.get());
 
-                applyTotemEffects(livingEntity);
+                applyTotemEffects(livingEntity, damageSource);
                 increaseFoodLevel(livingEntity, BTUCommonConfigs.SET_FOOD_LEVEL.get());
                 destroyBlocksWhenSuffocatingOrFullyFrozen(livingEntity, level);
                 knockbackMobsAway(livingEntity, level);
@@ -147,7 +150,7 @@ public class BTUUtils {
         }
     }
 
-    public static void applyTotemEffects(LivingEntity livingEntity){
+    public static void applyTotemEffects(LivingEntity livingEntity, DamageSource damageSource){
         int fireResistanceEffectDuration = BTUCommonConfigs.FIRE_RESISTANCE_DURATION.get();
         int regenerationEffectDuration = BTUCommonConfigs.REGENERATION_DURATION.get();
         int regenerationEffectAmplifier = BTUCommonConfigs.REGENERATION_AMPLIFIER.get();
@@ -164,6 +167,29 @@ public class BTUUtils {
         }
         if (BTUCommonConfigs.ENABLE_REGENERATION.get()) livingEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, regenerationEffectDuration, regenerationEffectAmplifier));
         if (BTUCommonConfigs.ENABLE_ABSORPTION.get()) livingEntity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, absorptionEffectDuration, absorptionEffectAmplifier));
+
+        BTUCommonConfigs.CUSTOM_EFFECTS.get().forEach(customEffectProperties -> {
+            if (!customEffectProperties.isEmpty()){
+                try {
+                    String damageTypeKey = (String) customEffectProperties.get(0);
+                    String mobEffectKey = (String) customEffectProperties.get(1);
+                    int effectDuration = (int) customEffectProperties.get(2);
+                    int effectAmplifier = (int) customEffectProperties.get(3);
+
+                    MobEffect mobEffect = getMobEffectByKey(mobEffectKey);
+
+                    if (damageSource.getMsgId().equalsIgnoreCase(damageTypeKey) || damageTypeKey.equals("any"))
+                        livingEntity.addEffect(new MobEffectInstance(mobEffect, effectDuration, effectAmplifier));
+
+                }catch (Exception e){
+                    BetterTotemOfUndying.LOGGER.error("Better Totem of Undying error: Couldn't apply custom effect. Wrong/Missing parameter: {}", customEffectProperties, e);
+                }
+            }
+        });
+    }
+
+    public static MobEffect getMobEffectByKey(String key){
+        return ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(key));
     }
 
     public static void increaseFoodLevel(LivingEntity livingEntity, int foodLevel){
