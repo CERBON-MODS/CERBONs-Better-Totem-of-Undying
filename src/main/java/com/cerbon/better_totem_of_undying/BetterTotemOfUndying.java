@@ -35,7 +35,7 @@ import top.theillusivec4.curios.api.type.capability.ICurio;
 
 @Mod(BTUConstants.MOD_ID)
 public class BetterTotemOfUndying {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
     public BetterTotemOfUndying() {
         if (BTUUtils.isModLoaded(BTUConstants.CURIOS_MOD_ID)){
             InterModComms.sendTo(BTUConstants.CURIOS_MOD_ID, SlotTypeMessage.REGISTER_TYPE, ()-> SlotTypePreset.CHARM.getMessageBuilder().build());
