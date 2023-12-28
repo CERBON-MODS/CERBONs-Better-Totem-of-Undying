@@ -15,13 +15,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = LivingEntity.class, priority = 1100)
 public abstract class LivingEntityMixin extends Entity {
 
-    private LivingEntityMixin(EntityType<?> pEntityType, Level pLevel) {
-        super(pEntityType, pLevel);
+    private LivingEntityMixin(EntityType<?> entityType, Level level) {
+        super(entityType, level);
     }
 
     @Inject(method = "checkTotemDeathProtection", at = @At("HEAD"), cancellable = true)
-    private void better_totem_of_undying_checkTotemDeathProtection(DamageSource pDamageSource, @NotNull CallbackInfoReturnable<Boolean> cir) {
+    private void better_totem_of_undying_checkTotemDeathProtection(DamageSource damageSource, @NotNull CallbackInfoReturnable<Boolean> cir) {
         LivingEntity livingEntity = (LivingEntity) (Object) this;
-        cir.setReturnValue(BTUUtils.canSaveFromDeath(livingEntity, pDamageSource));
+        cir.setReturnValue(BTUUtils.canSaveFromDeath(livingEntity, damageSource));
     }
 }
