@@ -3,7 +3,7 @@ package com.cerbon.better_totem_of_undying;
 import com.cerbon.better_totem_of_undying.client.TotemCuriosRenderer;
 import com.cerbon.better_totem_of_undying.config.BTUCommonConfigs;
 import com.cerbon.better_totem_of_undying.utils.BTUConstants;
-import com.cerbon.better_totem_of_undying.utils.BTUUtils;
+import com.cerbon.cerbons_api.api.static_utilities.MiscUtils;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -38,7 +38,7 @@ public class BetterTotemOfUndying {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public BetterTotemOfUndying() {
-        if (BTUUtils.isModLoaded(BTUConstants.CURIOS_MOD_ID)){
+        if (MiscUtils.isModLoaded(BTUConstants.CURIOS_MOD_ID)){
             InterModComms.sendTo(BTUConstants.CURIOS_MOD_ID, SlotTypeMessage.REGISTER_TYPE, ()-> SlotTypePreset.CHARM.getMessageBuilder().build());
             BetterTotemOfUndying.LOGGER.debug("Enqueued IMC to {}", BTUConstants.CURIOS_MOD_ID);
         }
@@ -56,7 +56,7 @@ public class BetterTotemOfUndying {
     }
 
     private void attachCaps(AttachCapabilitiesEvent<ItemStack> event){
-        if (BTUUtils.isModLoaded(BTUConstants.CURIOS_MOD_ID)){
+        if (MiscUtils.isModLoaded(BTUConstants.CURIOS_MOD_ID)){
             ItemStack itemStack = event.getObject();
             Item item = itemStack.getItem();
 
@@ -83,7 +83,7 @@ public class BetterTotemOfUndying {
     }
 
     private void clientSetupEvent(FMLClientSetupEvent event){
-        if (BTUUtils.isModLoaded(BTUConstants.CURIOS_MOD_ID) && BTUCommonConfigs.DISPLAY_TOTEM_ON_CHEST.get()){
+        if (MiscUtils.isModLoaded(BTUConstants.CURIOS_MOD_ID) && BTUCommonConfigs.DISPLAY_TOTEM_ON_CHEST.get()){
             CuriosRendererRegistry.register(Items.TOTEM_OF_UNDYING, TotemCuriosRenderer::new);
         }
     }

@@ -2,6 +2,9 @@ package com.cerbon.better_totem_of_undying.utils;
 
 import com.cerbon.better_totem_of_undying.BetterTotemOfUndying;
 import com.cerbon.better_totem_of_undying.config.BTUCommonConfigs;
+import com.cerbon.cerbons_api.api.static_utilities.CapabilityUtils;
+import com.cerbon.cerbons_api.api.static_utilities.MiscUtils;
+import com.cerbon.cerbons_api.api.static_utilities.RegistryUtils;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -28,8 +31,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -38,12 +39,9 @@ import top.theillusivec4.curios.api.SlotResult;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class BTUUtils {
-
-    public static boolean isModLoaded(String modId){
-        return ModList.get().isLoaded(modId);
-    }
 
     public static boolean canSaveFromDeath(@NotNull LivingEntity livingEntity, DamageSource damageSource){
         boolean isTotemOnCooldown = livingEntity instanceof ServerPlayer player && player.getCooldowns().isOnCooldown(Items.TOTEM_OF_UNDYING);
@@ -87,13 +85,12 @@ public class BTUUtils {
 
     public static boolean isStructureBlacklisted(BlockPos pos, @NotNull ServerLevel level){
         List<? extends String> blackListedStructures = BTUCommonConfigs.BLACKLISTED_STRUCTURES.get();
-        Registry<Structure> structureRegistry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
 
         boolean flag = false;
-        for (String structureName : blackListedStructures){
-            Structure structure = structureRegistry.get(new ResourceLocation(structureName));
+        for (String structureKey : blackListedStructures){
+            Structure structure = RegistryUtils.getStructureByKey(structureKey, level);
 
-            if (structure != null){
+            if (structure != null) {
                 if (level.structureManager().getStructureAt(pos, structure).isValid()){
                     flag = true;
                 }
@@ -120,7 +117,7 @@ public class BTUUtils {
     }
 
     public static @Nullable ItemStack getTotemFromCharmSlot(LivingEntity livingEntity){
-        if (isModLoaded(BTUConstants.CURIOS_MOD_ID) && BTUCommonConfigs.USE_TOTEM_FROM_CHARM_SLOT.get()){
+        if (MiscUtils.isModLoaded(BTUConstants.CURIOS_MOD_ID) && BTUCommonConfigs.USE_TOTEM_FROM_CHARM_SLOT.get()){
             return CuriosApi.getCuriosHelper().findFirstCurio(livingEntity, Items.TOTEM_OF_UNDYING).map(SlotResult::stack).orElse(null);
         }
         return null;
@@ -183,7 +180,7 @@ public class BTUUtils {
                     int effectAmplifier = (int) customEffectProperties.get(3);
 
                     ResourceKey<DamageType> damageType = getDamageTypeByKey(damageTypeKey, (ServerLevel) livingEntity.level());
-                    MobEffect mobEffect = getMobEffectByKey(mobEffectKey);
+                    MobEffect mobEffect = RegistryUtils.getMobEffectByKey(mobEffectKey);
 
                     if (damageType != null && damageSource.is(damageType) || damageTypeKey.equals("any"))
                         livingEntity.addEffect(new MobEffectInstance(mobEffect, effectDuration, effectAmplifier));
@@ -201,10 +198,6 @@ public class BTUUtils {
             return damageTypeRegistry.getResourceKey(Objects.requireNonNull(damageTypeRegistry.get(new ResourceLocation(key)))).orElse(null);
         }
         return null;
-    }
-
-    public static MobEffect getMobEffectByKey(String key){
-        return ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(key));
     }
 
     public static void increaseFoodLevel(LivingEntity livingEntity, int foodLevel){
@@ -268,11 +261,15 @@ public class BTUUtils {
     }
 
     public static void teleportOutOfVoid(LivingEntity livingEntity, Level level, DamageSource damageSource){
-        if (isInVoid(livingEntity, damageSource)){
-            BlockPos lastBlockPos = BlockPos.of(((ILivingEntityMixin) livingEntity).better_totem_of_undying_getLastBlockPos());
+        if (isInVoid(livingEntity, damageSource)) {
+            List<BlockPos> lastBlocksPos = CapabilityUtils.getLastBlockPositions(livingEntity);
+            BlockPos lastBlockPos = CapabilityUtils.getLastBlockPos(livingEntity);
 
-            BlockPos positionNearby = randomTeleportNearby(livingEntity, level, lastBlockPos);
-            if (positionNearby == null){
+            Optional<BlockPos> positionNearby = lastBlocksPos.stream()
+                    .map(blockPos -> randomTeleportNearby(livingEntity, level, blockPos))
+                    .filter(Objects::nonNull).findFirst();
+
+            if (positionNearby.isEmpty()) {
                 livingEntity.teleportTo(lastBlockPos.getX(), level.getMaxBuildHeight() + BTUCommonConfigs.TELEPORT_HEIGHT_OFFSET.get(), lastBlockPos.getZ());
                 applySlowFallingEffect(livingEntity);
             }
