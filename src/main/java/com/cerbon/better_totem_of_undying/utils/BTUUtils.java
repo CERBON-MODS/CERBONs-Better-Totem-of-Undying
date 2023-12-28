@@ -257,10 +257,10 @@ public class BTUUtils {
                     .map(blockPos -> randomTeleportNearby(livingEntity, level, blockPos))
                     .filter(Objects::nonNull).findFirst();
 
-            if (positionNearby.isEmpty()) {
+            if (positionNearby.isEmpty())
                 livingEntity.teleportTo(lastBlockPos.getX(), level.getMaxBuildHeight() + BTUCommonConfigs.TELEPORT_HEIGHT_OFFSET.get(), lastBlockPos.getZ());
-                applySlowFallingEffect(livingEntity);
-            }
+
+            setFallDamageImmune(livingEntity);
         }
     }
 
@@ -275,17 +275,27 @@ public class BTUUtils {
             BlockPos pos = new BlockPos((int) x, (int) y, (int) z);
             if (livingEntity.randomTeleport(x, y, z, true)) {
                 teleportPos = pos;
-                livingEntity.resetFallDistance();
                 break;
             }
         }
         return teleportPos;
     }
 
-    public static void applySlowFallingEffect(LivingEntity livingEntity) {
-        int duration = BTUCommonConfigs.SLOW_FALLING_DURATION.get();
+    public static void setFallDamageImmune(LivingEntity livingEntity) {
+        ((ILivingEntityMixin) livingEntity).btu_setFallDamageImmune(true);
+    }
 
-        if (BTUCommonConfigs.ENABLE_SLOW_FALLING.get())
-            livingEntity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, duration, 0));
+    public static void resetFallDamageImmune(LivingEntity livingEntity) {
+        if (((ILivingEntityMixin) livingEntity).btu_isFallDamageImmune()) {
+            boolean canPlayerFly = false;
+            boolean isInWater = livingEntity.isInWater();
+            boolean isInCobweb = livingEntity.level().getBlockState(livingEntity.blockPosition()).getBlock().equals(Blocks.COBWEB);
+
+            if (livingEntity instanceof ServerPlayer player && (player.getAbilities().flying || player.getAbilities().mayfly))
+                canPlayerFly = true;
+
+            if (canPlayerFly || isInWater || isInCobweb)
+                ((ILivingEntityMixin) livingEntity).btu_setFallDamageImmune(false);
+        }
     }
 }

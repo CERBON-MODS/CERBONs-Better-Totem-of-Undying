@@ -22,8 +22,6 @@ public class BTUCommonConfigs {
     public static final ForgeConfigSpec.ConfigValue<Boolean> APPLY_EFFECTS_ONLY_WHEN_NEEDED;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_WATER_BREATHING;
     public static final ForgeConfigSpec.ConfigValue<Integer> WATER_BREATHING_DURATION;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_SLOW_FALLING;
-    public static final ForgeConfigSpec.ConfigValue<Integer> SLOW_FALLING_DURATION;
     public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_INCREASE_FOOD_LEVEL;
     public static final ForgeConfigSpec.ConfigValue<Integer> MINIMUM_FOOD_LEVEL;
     public static final ForgeConfigSpec.ConfigValue<Integer> SET_FOOD_LEVEL;
@@ -104,14 +102,6 @@ public class BTUCommonConfigs {
         WATER_BREATHING_DURATION= BUILDER
                 .comment("Sets the duration of the water breathing effect in ticks. DEFAULT: 800")
                 .define("Water Breathing Duration", 800);
-
-        ENABLE_SLOW_FALLING = BUILDER
-                .comment("If false Totem of Undying will not give you slow falling effect. DEFAULT: TRUE")
-                .define("Enable Slow Falling", true);
-
-        SLOW_FALLING_DURATION = BUILDER
-                .comment("Sets the duration of the slow falling effect in ticks. DEFAULT: 600")
-                .define("Slow Falling Duration", 600);
 
         BUILDER.push("Custom Effects");
         CUSTOM_EFFECTS = BUILDER
