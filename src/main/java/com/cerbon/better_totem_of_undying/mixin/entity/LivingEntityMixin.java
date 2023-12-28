@@ -27,7 +27,7 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntityM
     }
 
     @Inject(method = "checkTotemDeathProtection", at = @At("HEAD"), cancellable = true)
-    private void better_totem_of_undying_checkTotemDeathProtection(DamageSource damageSource, @NotNull CallbackInfoReturnable<Boolean> cir) {
+    private void btu_checkTotemDeathProtection(DamageSource damageSource, @NotNull CallbackInfoReturnable<Boolean> cir) {
         LivingEntity livingEntity = (LivingEntity) (Object) this;
         cir.setReturnValue(BTUUtils.canSaveFromDeath(livingEntity, damageSource));
     }
