@@ -2,7 +2,6 @@ package com.cerbon.better_totem_of_undying.utils;
 
 import com.cerbon.better_totem_of_undying.BetterTotemOfUndying;
 import com.cerbon.better_totem_of_undying.config.BTUCommonConfigs;
-import com.cerbon.cerbons_api.api.static_utilities.CapabilityUtils;
 import com.cerbon.cerbons_api.api.static_utilities.MiscUtils;
 import com.cerbon.cerbons_api.api.static_utilities.RegistryUtils;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -39,7 +38,6 @@ import top.theillusivec4.curios.api.SlotResult;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 public class BTUUtils {
 
@@ -250,14 +248,10 @@ public class BTUUtils {
 
     public static void teleportOutOfVoid(LivingEntity livingEntity, Level level, DamageSource damageSource) {
         if (isInVoid(livingEntity, damageSource)) {
-            List<BlockPos> lastBlocksPos = CapabilityUtils.getLastBlockPositions(livingEntity);
-            BlockPos lastBlockPos = CapabilityUtils.getLastBlockPos(livingEntity);
+            BlockPos lastBlockPos = ((ILivingEntityMixin) livingEntity).btu_getLastBlockPos();
 
-            Optional<BlockPos> positionNearby = lastBlocksPos.stream()
-                    .map(blockPos -> randomTeleportNearby(livingEntity, level, blockPos))
-                    .filter(Objects::nonNull).findFirst();
-
-            if (positionNearby.isEmpty())
+            BlockPos positionNearby = randomTeleportNearby(livingEntity, level, lastBlockPos);
+            if (positionNearby == null)
                 livingEntity.teleportTo(lastBlockPos.getX(), level.getMaxBuildHeight() + BTUCommonConfigs.TELEPORT_HEIGHT_OFFSET.get(), lastBlockPos.getZ());
 
             setFallDamageImmune(livingEntity);

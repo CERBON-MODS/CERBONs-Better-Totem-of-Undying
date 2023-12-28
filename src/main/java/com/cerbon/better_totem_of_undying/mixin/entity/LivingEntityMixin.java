@@ -2,6 +2,7 @@ package com.cerbon.better_totem_of_undying.mixin.entity;
 
 import com.cerbon.better_totem_of_undying.utils.BTUUtils;
 import com.cerbon.better_totem_of_undying.utils.ILivingEntityMixin;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -19,6 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = LivingEntity.class, priority = 1100)
 public abstract class LivingEntityMixin extends Entity implements ILivingEntityMixin {
     @Unique private boolean btu_isFallDamageImmune;
+    @Unique private long btu_lastBlockPos;
 
     private LivingEntityMixin(EntityType<?> entityType, Level level) {
         super(entityType, level);
@@ -44,16 +46,26 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntityM
     private void btu_tick(CallbackInfo ci) {
         LivingEntity livingEntity = (LivingEntity) (Object) this;
         BTUUtils.resetFallDamageImmune(livingEntity);
+
+        BlockPos previousPosition = btu_getLastBlockPos();
+        BlockPos newPosition = livingEntity.blockPosition();
+        Level level = livingEntity.level();
+        boolean isValidBlock = level.getBlockState(newPosition.below()).isSolid();
+
+        if (previousPosition != newPosition && isValidBlock)
+            this.btu_lastBlockPos = newPosition.asLong();
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("HEAD"))
     private void btu_addAdditionalSaveData(CompoundTag tag, CallbackInfo ci) {
         tag.putBoolean("BTUIsFallDamageImmune", this.btu_isFallDamageImmune);
+        tag.putLong("BTULastBlockPos", this.btu_lastBlockPos);
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("HEAD"))
     private void btu_readAdditionalSaveData(CompoundTag tag, CallbackInfo ci) {
         this.btu_isFallDamageImmune = tag.getBoolean("BTUIsFallDamageImmune");
+        this.btu_lastBlockPos = tag.getLong("BTULastBlockPos");
     }
 
     @Override
@@ -64,5 +76,10 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntityM
     @Override
     public boolean btu_isFallDamageImmune() {
         return this.btu_isFallDamageImmune;
+    }
+
+    @Override
+    public BlockPos btu_getLastBlockPos() {
+        return BlockPos.of(this.btu_lastBlockPos);
     }
 }
