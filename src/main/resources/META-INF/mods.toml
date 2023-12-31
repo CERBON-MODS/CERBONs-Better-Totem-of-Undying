@@ -1,6 +1,6 @@
 modLoader="javafml" #mandatory
 loaderVersion="[46,)" #mandatory
-license="GNU General Public License v3.0"
+license="LGPL-3.0"
 issueTrackerURL="https://github.com/CerbonXD/BetterTotemOfUndying/issues" #optional
 
 [[mods]] #mandatory
