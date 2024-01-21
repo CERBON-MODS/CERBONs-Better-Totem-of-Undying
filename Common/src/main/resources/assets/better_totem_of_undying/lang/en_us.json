@@ -47,9 +47,9 @@
   "text.autoconfig.better_totem_of_undying.option.newTotemFeatures.teleportOutOfVoid.teleportHeightOffset": "Teleport Height Offset",
 
 
-  "text.autoconfig.better_totem_of_undying.category.Curios": "Curios/Trinkets",
-  "text.autoconfig.better_totem_of_undying.option.curios.canUseTotemFromCharmSlot": "Can Use Totem From Curios Slot",
-  "text.autoconfig.better_totem_of_undying.option.curios.displayTotemOnChest": "Display Totem On Chest",
+  "text.autoconfig.better_totem_of_undying.category.Charm": "Charm Slot",
+  "text.autoconfig.better_totem_of_undying.option.charm.canUseTotemFromCharmSlot": "Can Use Totem From Charm Slot",
+  "text.autoconfig.better_totem_of_undying.option.charm.displayTotemOnChest": "Display Totem on Chest",
 
 
   "text.autoconfig.better_totem_of_undying.category.Blacklists": "Blacklists",

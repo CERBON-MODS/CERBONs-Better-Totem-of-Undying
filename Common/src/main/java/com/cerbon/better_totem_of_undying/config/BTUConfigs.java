@@ -1,7 +1,7 @@
 package com.cerbon.better_totem_of_undying.config;
 
 import com.cerbon.better_totem_of_undying.config.custom.Blacklists;
-import com.cerbon.better_totem_of_undying.config.custom.Curios;
+import com.cerbon.better_totem_of_undying.config.custom.Charm;
 import com.cerbon.better_totem_of_undying.config.custom.DefaultTotemFeatures;
 import com.cerbon.better_totem_of_undying.config.custom.NewTotemFeatures;
 import com.cerbon.better_totem_of_undying.util.BTUConstants;
@@ -20,9 +20,9 @@ public class BTUConfigs implements ConfigData {
     @ConfigEntry.Gui.TransitiveObject
     public NewTotemFeatures newTotemFeatures = new NewTotemFeatures();
 
-    @ConfigEntry.Category("Curios")
+    @ConfigEntry.Category("Charm")
     @ConfigEntry.Gui.TransitiveObject
-    public Curios curios = new Curios();
+    public Charm charm = new Charm();
 
     @ConfigEntry.Category("Blacklists")
     @ConfigEntry.Gui.TransitiveObject
