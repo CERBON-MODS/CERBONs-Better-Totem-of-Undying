@@ -36,6 +36,9 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
+    modCompileOnly "top.theillusivec4.curios:curios-forge:${curios_version}+${minecraft_version}:api"
+    modRuntimeOnly "top.theillusivec4.curios:curios-forge:${curios_version}+${minecraft_version}"
+
     // Useful Mods
     modCompileOnlyApi "mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"
     modRuntimeOnly "mezz.jei:jei-${minecraft_version}-forge:${jei_version}"
@@ -65,7 +68,8 @@ processResources {
             curseforge_url                   : curseforge_url,
             logo_file                        : logo_file,
             cerbons_api_version_range_forge  : cerbons_api_version_range_forge,
-            cloth_config_version_range_forge : cloth_config_version_range_forge
+            cloth_config_version_range_forge : cloth_config_version_range_forge,
+            curios_version_range             : curios_version_range
     ]
     inputs.properties replaceProperties
 

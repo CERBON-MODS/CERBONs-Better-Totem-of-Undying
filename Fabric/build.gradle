@@ -30,6 +30,8 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
+    modImplementation "dev.emi:trinkets:${trinkets_version}"
+
     // Useful Mods
     modCompileOnlyApi "mezz.jei:jei-${minecraft_version}-fabric-api:${jei_version}"
     modRuntimeOnly "mezz.jei:jei-${minecraft_version}-fabric:${jei_version}"
@@ -68,7 +70,8 @@ processResources {
             curseforge_url                    : curseforge_url,
             logo_file                         : logo_file,
             cerbons_api_version_range_fabric  : cerbons_api_version_range_fabric,
-            cloth_config_version_range_fabric : cloth_config_version_range_fabric
+            cloth_config_version_range_fabric : cloth_config_version_range_fabric,
+            trinkets_version_range            : trinkets_version_range
     ]
     inputs.properties replaceProperties
 

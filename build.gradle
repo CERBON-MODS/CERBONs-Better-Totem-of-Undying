@@ -63,12 +63,16 @@ allprojects {
             url "https://maven.terraformersmc.com/"
         }
         maven {
-            name "Ladysnake Mods" // Cardinal Components
+            name "Ladysnake Mods" // Cardinal Components, Trinkets
             url "https://maven.ladysnake.org/releases"
         }
         maven {
             name "Cloth Config"
             url "https://maven.shedaniel.me/"
+        }
+        maven {
+            name "Illusive Soulworks maven" // Curios
+            url "https://maven.theillusivec4.top/"
         }
         flatDir {
             dir "libs"
