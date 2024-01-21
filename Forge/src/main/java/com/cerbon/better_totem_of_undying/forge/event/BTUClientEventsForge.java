@@ -14,7 +14,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class BTUClientEventsForge {
 
     @SubscribeEvent
-    protected static void onClientSetup(FMLClientSetupEvent event){
+    protected static void onClientSetup(FMLClientSetupEvent event) {
         ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> AutoConfig.getConfigScreen(BTUConfigs.class, parent).get()));
     }
 }
