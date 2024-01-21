@@ -4,6 +4,7 @@
   "package": "com.cerbon.better_totem_of_undying.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "entity.LivingEntityMixin"
   ],
   "client": [
     "test.TestMixin"
