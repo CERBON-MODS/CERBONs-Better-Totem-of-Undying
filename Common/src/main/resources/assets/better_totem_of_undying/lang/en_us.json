@@ -48,7 +48,7 @@
 
 
   "text.autoconfig.better_totem_of_undying.category.Curios": "Curios/Trinkets",
-  "text.autoconfig.better_totem_of_undying.option.curios.canUseTotemFromCuriosSlot": "Can Use Totem From Curios Slot",
+  "text.autoconfig.better_totem_of_undying.option.curios.canUseTotemFromCharmSlot": "Can Use Totem From Curios Slot",
   "text.autoconfig.better_totem_of_undying.option.curios.displayTotemOnChest": "Display Totem On Chest",
 
 
