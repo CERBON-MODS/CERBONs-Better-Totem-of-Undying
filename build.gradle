@@ -1,162 +1,87 @@
-import net.darkhax.curseforgegradle.TaskPublishCurseForge
-
 plugins {
-    id 'eclipse'
-    id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '5.1.+'
-    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
-    id 'org.spongepowered.mixin' version '0.7.+'
-    id "com.modrinth.minotaur" version "2.+"
-    id 'net.darkhax.curseforgegradle' version '1.1.15'
+    id "architectury-plugin" version "3.4-SNAPSHOT"
+    id "dev.architectury.loom" version "1.1-SNAPSHOT" apply false
 }
 
-version = mod_version
-group = mod_group_id
-archivesBaseName = "${mod_name}-Forge-${minecraft_version}"
+architectury {
+    minecraft = minecraft_version
+}
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+subprojects {
+    apply plugin: "dev.architectury.loom"
 
-println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
-minecraft {
-
-    mappings channel: mapping_channel, version: mapping_version
-
-    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg') // Currently, this location cannot be changed from the default.
-
-    runs {
-        client {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', mod_id
-
-            mods {
-                mod_id {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        server {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', mod_id
-
-            mods {
-                mod_id {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        gameTestServer {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', mod_id
-            mods {
-                mod_id {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        data {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-
-            mods {
-                mod_id {
-                    source sourceSets.main
-                }
-            }
-        }
+    loom {
+        silentMojangMappingsLicense()
     }
-}
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
-
-repositories {
-    maven {
-        url "https://cursemaven.com"
-        content {
-            includeGroup "curse.maven"
-        }
-    }
-}
-
-dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-
-    implementation fg.deobf("curse.maven:cerbons-api-forge-955605:${cerbons_api_version}")
-    implementation fg.deobf("curse.maven:voidtotem-449655:${voidtotem_version}")
-    implementation fg.deobf("curse.maven:curios-309927:${curios_version}")
-}
-
-mixin {
-    add sourceSets.main, "mixins.${mod_id}.refmap.json"
-    config "mixins.${mod_id}.json"
-}
-
-tasks.register('publishCurseForge', TaskPublishCurseForge) {
-    apiToken = System.getenv('CURSEFORGE_TOKEN')
-
-    def mainFile = upload(878676, jar)
-    mainFile.changelog = rootProject.file(changelog).getText('UTF-8')
-    mainFile.changelogType = 'markdown'
-    mainFile.releaseType = release_type
-    mainFile.addGameVersion("1.20", "${minecraft_version}", "1.20.2", "1.20.4")
-    mainFile.addRequirement(cerbons_api_mod)
-    mainFile.addOptional(curios_mod)
-}
-
-modrinth {
-    token = System.getenv("MODRINTH_TOKEN")
-    versionName = "Better Totem of Undying ${minecraft_version}-${project.version}"
-    versionNumber = "${project.version}"
-    projectId = "qRwFcI3W"
-    changelog = rootProject.file(project.changelog).getText('UTF-8')
-    versionType = release_type
-    uploadFile = jar
     dependencies {
-        optional.project curios_mod
-    }
-}
+        minecraft "com.mojang:minecraft:${minecraft_version}"
 
-jar {
-    manifest {
-        attributes([
-                "Specification-Title"     : mod_name,
-                "Specification-Vendor"    : mod_authors,
-                "Specification-Version"   : project.jar.archiveVersion,
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : mod_authors,
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
-}
+        modCompileOnlyApi "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
 
-jar.finalizedBy('reobfJar')
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact jar
+        mappings loom.layered() {
+            officialMojangMappings()
+            parchment("org.parchmentmc.data:parchment-${mapping_version}@zip")
         }
     }
+}
+
+allprojects {
+    apply plugin: "java"
+    apply plugin: "architectury-plugin"
+    apply plugin: "maven-publish"
+
+    version = mod_version
+    group = maven_group
+
     repositories {
         maven {
-            url "file://${project.projectDir}/mcmodsrepo"
+            name "ParchmentMC"
+            url "https://maven.parchmentmc.org"
         }
+        maven {
+            name "CurseMaven"
+            url "https://cursemaven.com"
+            content {
+                includeGroup "curse.maven"
+            }
+        }
+        maven {
+            name "Progwml6's maven" // JEI
+            url "https://dvs1.progwml6.com/files/maven/"
+        }
+        maven {
+            name "Jared's maven" // JEI
+            url "https://maven.blamejared.com/"
+        }
+        maven {
+            name "ModMaven" // JEI
+            url "https://modmaven.dev"
+        }
+        maven {
+            name "ModMenu"
+            url "https://maven.terraformersmc.com/"
+        }
+        maven {
+            name "Ladysnake Mods" // Cardinal Components
+            url "https://maven.ladysnake.org/releases"
+        }
+        flatDir {
+            dir "libs"
+        }
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding "UTF-8"
+        options.release.set(17)
+    }
+
+    java {
+        withSourcesJar()
     }
 }
 
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
+tasks.register("publishAllCurseforgeAndModrinth", Task) {
+    dependsOn ":forge:publishCurseForgeAndModrinth"
+    dependsOn ":fabric:publishCurseForgeAndModrinth"
 }

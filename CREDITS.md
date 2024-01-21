@@ -1,4 +1,28 @@
-## Credits
+# Credits
 
-- Some parts of the code were taken and/or inspired on [Affehund's VoidTotem Mod](https://github.com/Affehund/VoidTotem) code.
-- Mod idea was taken from Minecraft Suggestions subreddit in [this post](https://www.reddit.com/r/minecraftsuggestions/comments/fyf5w4/totem_of_undying_improvements/).
+This project uses code from other open source projects. We are grateful to these developers for their contributions to open source.
+
+## List of used and adapted projects
+
+### Project Name 1
+
+- **Author:** Author Name
+- **License:** Project License
+- **Link:** Project Link
+- **Used Parts:** Brief description of what parts of the project/code were used or adapted.
+
+### Project Name 2
+
+- **Author:** Author Name
+- **License:** Project License
+- **Link:** Project Link
+- **Used Parts:** Brief description of what parts of the project/code were used or adapted.
+
+## List of contributors
+
+We also want to acknowledge the contributions of individuals who have contributed to this project:
+
+- **Contributor Name 1:** Brief description of the contributions.
+- **Contributor Name 2:** Brief description of the contributions.
+
+Thank you for making this project better!
