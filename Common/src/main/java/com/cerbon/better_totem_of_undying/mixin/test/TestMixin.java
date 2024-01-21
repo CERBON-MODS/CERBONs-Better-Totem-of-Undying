@@ -1,6 +1,6 @@
 package com.cerbon.better_totem_of_undying.mixin.test;
 
-import com.cerbon.better_totem_of_undying.util.BMDConstants;
+import com.cerbon.better_totem_of_undying.util.BTUConstants;
 import com.cerbon.cerbons_api.api.static_utilities.MiscUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.main.GameConfig;
@@ -15,6 +15,6 @@ public abstract class TestMixin {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void sendMessageIfWorking(GameConfig gameConfig, CallbackInfo ci) {
-        BMDConstants.LOGGER.info("Common mixins are working for {} on {}!",  BMDConstants.MOD_NAME, MiscUtils.getPlatformName());
+        BTUConstants.LOGGER.info("Common mixins are working for {} on {}!",  BTUConstants.MOD_NAME, MiscUtils.getPlatformName());
     }
 }

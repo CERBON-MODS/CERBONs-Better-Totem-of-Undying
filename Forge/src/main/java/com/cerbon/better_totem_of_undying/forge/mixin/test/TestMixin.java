@@ -1,6 +1,6 @@
 package com.cerbon.better_totem_of_undying.forge.mixin.test;
 
-import com.cerbon.better_totem_of_undying.util.BMDConstants;
+import com.cerbon.better_totem_of_undying.util.BTUConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.main.GameConfig;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,6 +14,6 @@ public abstract class TestMixin {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void sendMessageIfWorking(GameConfig gameConfig, CallbackInfo ci) {
-        BMDConstants.LOGGER.info("Forge only mixins are working for {}!",  BMDConstants.MOD_NAME);
+        BTUConstants.LOGGER.info("Forge only mixins are working for {}!",  BTUConstants.MOD_NAME);
     }
 }
