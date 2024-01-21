@@ -22,6 +22,9 @@
     ],
     "client": [
       "com.cerbon.better_totem_of_undying.fabric.BetterTotemOfUndyingFabric"
+    ],
+    "modmenu": [
+      "com.cerbon.better_totem_of_undying.fabric.client.BTUConfigMenu"
     ]
   },
   "mixins": [
