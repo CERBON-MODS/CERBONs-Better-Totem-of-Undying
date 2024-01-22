@@ -48,6 +48,7 @@ dependencies {
     // All Projects Dependencies
     modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${cardinal_components_version}" // Even though Cardinal Components is shipped with Cerbons API it needs to exist here too or Fabric will complain.
     modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-world:${cardinal_components_version}"
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${cardinal_components_version}"
 
     include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:${mixin_extras_version}")))
 
