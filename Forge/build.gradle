@@ -68,8 +68,7 @@ processResources {
             curseforge_url                   : curseforge_url,
             logo_file                        : logo_file,
             cerbons_api_version_range_forge  : cerbons_api_version_range_forge,
-            cloth_config_version_range_forge : cloth_config_version_range_forge,
-            curios_version_range             : curios_version_range
+            cloth_config_version_range_forge : cloth_config_version_range_forge
     ]
     inputs.properties replaceProperties
 

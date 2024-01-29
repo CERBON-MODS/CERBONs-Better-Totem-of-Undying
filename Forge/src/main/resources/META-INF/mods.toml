@@ -40,10 +40,3 @@ issueTrackerURL="${issues_url}"
    versionRange="${cloth_config_version_range_forge}"
    ordering="NONE"
    side="BOTH"
-
-[[dependencies.${mod_id}]]
-   modId="curios"
-   mandatory=true
-   versionRange="${curios_version_range}"
-   ordering="NONE"
-   side="BOTH"

@@ -35,7 +35,6 @@
     "fabricloader": "${fabric_loader_version_range}",
     "minecraft": "${minecraft_version_range}",
     "cerbons_api": "${cerbons_api_version_range_fabric}",
-    "cloth-config": "${cloth_config_version_range_fabric}",
-    "trinkets": "${trinkets_version_range}"
+    "cloth-config": "${cloth_config_version_range_fabric}"
   }
 }
