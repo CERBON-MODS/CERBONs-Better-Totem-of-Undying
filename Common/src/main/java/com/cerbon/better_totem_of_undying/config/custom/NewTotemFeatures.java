@@ -29,7 +29,7 @@ public class NewTotemFeatures {
 
     @ConfigEntry.Gui.Excluded
     @Comment("Use this list to add custom effects and specify their triggers. Within this list, provide another list enclosed in curly braces. The first parameter should be the damage type, the second parameter the effect to be granted, the third parameter the duration of the effect in ticks, and the fourth parameter the effect amplifier. If you want the effect to be granted regardless of the damage type, use ‘any’. For example: [[\"minecraft:out_of_world\", \"minecraft:blindness\", \"800\", \"0\"]]. In this example, if the player dies in the void, the totem will grant a level 1 blindness effect with a duration of 40 seconds.")
-    public List<List<String>> customEffects = List.of();
+    public List<List<String>> customEffects = List.of(List.of());
 
     public static class WaterBreathing {
         public boolean enabled = true;
