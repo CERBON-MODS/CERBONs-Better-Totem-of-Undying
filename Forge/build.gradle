@@ -40,8 +40,8 @@ dependencies {
     modRuntimeOnly "top.theillusivec4.curios:curios-forge:${curios_version}+${minecraft_version}"
 
     // Useful Mods
-    // modCompileOnlyApi "mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"
-    // modRuntimeOnly "mezz.jei:jei-${minecraft_version}-forge:${jei_version}"
+    modCompileOnlyApi "mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"
+    modRuntimeOnly ("mezz.jei:jei-${minecraft_version}-forge:${jei_version}") {transitive false}
 
     modImplementation "curse.maven:jade-324717:${jade_version_forge}"
 
