@@ -1,5 +1,6 @@
 package com.cerbon.better_totem_of_undying.forge.event;
 
+import com.cerbon.better_totem_of_undying.BetterTotemOfUndying;
 import com.cerbon.better_totem_of_undying.config.BTUConfigs;
 import com.cerbon.better_totem_of_undying.forge.client.RenderVoidTotemOnChest;
 import com.cerbon.better_totem_of_undying.util.BTUConstants;
@@ -19,7 +20,7 @@ public class BTUClientEventsForge {
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
-        if (MiscUtils.isModLoaded(BTUConstants.CURIOS_MOD_ID) && BTUConstants.btuConfigs.charm.displayTotemOnChest)
+        if (MiscUtils.isModLoaded(BTUConstants.CURIOS_MOD_ID) && BetterTotemOfUndying.config.charm.displayTotemOnChest)
             CuriosRendererRegistry.register(Items.TOTEM_OF_UNDYING, RenderVoidTotemOnChest::new);
 
         ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> AutoConfig.getConfigScreen(BTUConfigs.class, parent).get()));

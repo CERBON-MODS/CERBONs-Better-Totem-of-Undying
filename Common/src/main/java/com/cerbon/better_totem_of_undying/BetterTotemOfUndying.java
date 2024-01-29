@@ -5,8 +5,10 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 
 public class BetterTotemOfUndying {
+	public static BTUConfigs config;
 
 	public static void init() {
 		AutoConfig.register(BTUConfigs.class, JanksonConfigSerializer::new);
+		config = AutoConfig.getConfigHolder(BTUConfigs.class).get();
 	}
 }

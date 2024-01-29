@@ -1,8 +1,6 @@
 package com.cerbon.better_totem_of_undying.util;
 
-import com.cerbon.better_totem_of_undying.config.BTUConfigs;
 import com.mojang.logging.LogUtils;
-import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -13,7 +11,6 @@ public class BTUConstants {
     public static final String MOD_ID = "better_totem_of_undying";
     public static final String MOD_NAME = "Better Totem of Undying";
 
-    public static final BTUConfigs btuConfigs = AutoConfig.getConfigHolder(BTUConfigs.class).get();
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public static final TagKey<Block> TOTEM_CANT_DESTROY_TAG = TagKey.create(Registries.BLOCK, new ResourceLocation(BTUConstants.MOD_ID, "totem_cant_destroy"));

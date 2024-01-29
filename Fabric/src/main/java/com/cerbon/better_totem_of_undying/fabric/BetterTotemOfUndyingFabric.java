@@ -24,7 +24,7 @@ public class BetterTotemOfUndyingFabric implements ModInitializer, ClientModInit
 
     @Override
     public void onInitializeClient() {
-        if (MiscUtils.isModLoaded(BTUConstants.TRINKETS_MOD_ID) && BTUConstants.btuConfigs.charm.displayTotemOnChest)
+        if (MiscUtils.isModLoaded(BTUConstants.TRINKETS_MOD_ID) && BetterTotemOfUndying.config.charm.displayTotemOnChest)
             renderVoidTotemOnChest();
     }
 

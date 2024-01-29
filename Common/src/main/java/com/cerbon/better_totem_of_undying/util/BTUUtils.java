@@ -1,5 +1,6 @@
 package com.cerbon.better_totem_of_undying.util;
 
+import com.cerbon.better_totem_of_undying.BetterTotemOfUndying;
 import com.cerbon.better_totem_of_undying.config.BTUConfigs;
 import com.cerbon.better_totem_of_undying.config.custom.DefaultTotemFeatures;
 import com.cerbon.better_totem_of_undying.config.custom.NewTotemFeatures;
@@ -40,7 +41,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class BTUUtils {
-    private static final BTUConfigs btuConfigs = BTUConstants.btuConfigs;
+    private static final BTUConfigs btuConfigs = BetterTotemOfUndying.config;
 
     public static boolean canSaveFromDeath(@NotNull LivingEntity livingEntity, DamageSource damageSource) {
         ItemStack itemStack = getTotemItemStack(livingEntity);

@@ -1,5 +1,6 @@
 package com.cerbon.better_totem_of_undying.forge.platform;
 
+import com.cerbon.better_totem_of_undying.BetterTotemOfUndying;
 import com.cerbon.better_totem_of_undying.platform.services.ICharmHelper;
 import com.cerbon.better_totem_of_undying.util.BTUConstants;
 import com.cerbon.cerbons_api.api.static_utilities.MiscUtils;
@@ -14,7 +15,7 @@ public class ForgeCharmHelper implements ICharmHelper {
 
     @Override
     public @Nullable ItemStack getTotemFromCharmSlot(LivingEntity livingEntity) {
-        if (MiscUtils.isModLoaded(BTUConstants.CURIOS_MOD_ID) && BTUConstants.btuConfigs.charm.canUseTotemFromCharmSlot)
+        if (MiscUtils.isModLoaded(BTUConstants.CURIOS_MOD_ID) && BetterTotemOfUndying.config.charm.canUseTotemFromCharmSlot)
             return CuriosApi.getCuriosHelper().findFirstCurio(livingEntity, Items.TOTEM_OF_UNDYING).map(SlotResult::stack).orElse(null);
 
         return null;
