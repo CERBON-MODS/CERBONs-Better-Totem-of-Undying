@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Can add custom effects from UI
+- The UI of blacklists is improved.
 - Config file is now Json5
 
 ### Fixed
