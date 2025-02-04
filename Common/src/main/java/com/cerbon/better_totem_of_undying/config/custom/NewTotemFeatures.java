@@ -68,7 +68,7 @@ public class NewTotemFeatures {
         @Comment("Effect amplifier (0 = level 1, 1 = level 2, etc.).")
         public int amplifier = 0;
 
-        @Comment("The damage type that triggers this effect. Use 'any' to always trigger.")
-        public String damageType = "any";  // e.g., "minecraft:out_of_world" or "any"
+        @Comment("The damage type that triggers this effect. Use 'any' to always trigger, e.g. 'minecraft:out_of_world' or 'any'")
+        public String damageType = "any";  //
     }
 }
