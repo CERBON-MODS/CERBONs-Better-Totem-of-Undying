@@ -75,15 +75,19 @@ public class BTUUtils {
     }
 
     public static boolean isDimensionBlacklisted(@NotNull Level level) {
-        return btuConfigs.blacklists.blacklistedDimensions.contains(level.dimension().location().toString());
+        for (var blackListedDimension : btuConfigs.blacklists.blacklistedDimensions)
+            if (level.dimension().location().toString().equals(blackListedDimension.name))
+                return true;
+
+        return false;
     }
 
     public static boolean isStructureBlacklisted(BlockPos pos, @NotNull ServerLevel level) {
-        List<? extends String> blackListedStructures = btuConfigs.blacklists.blacklistedStructures;
+        var blackListedStructures = btuConfigs.blacklists.blacklistedStructures;
 
         boolean flag = false;
-        for (String structureKey : blackListedStructures){
-            Structure structure = RegistryUtils.getStructureByKey(structureKey, level);
+        for (var blackListedStructure : blackListedStructures){
+            Structure structure = RegistryUtils.getStructureByKey(blackListedStructure.name, level);
 
             if (structure != null)
                 if (level.structureManager().getStructureAt(pos, structure).isValid())

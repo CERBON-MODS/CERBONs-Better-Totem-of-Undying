@@ -61,7 +61,12 @@
 
   "text.autoconfig.better_totem_of_undying.category.Blacklists": "Blacklists",
   "text.autoconfig.better_totem_of_undying.option.blacklists.blacklistedDimensions": "Blacklisted Dimensions",
+  "text.autoconfig.better_totem_of_undying.option.Dimension": "Dimension",
+  "text.autoconfig.better_totem_of_undying.option.Dimension.name": "Name",
+
   "text.autoconfig.better_totem_of_undying.option.blacklists.blacklistedStructures": "Blacklisted Structures",
+  "text.autoconfig.better_totem_of_undying.option.Structure": "Structure",
+  "text.autoconfig.better_totem_of_undying.option.Structure.name": "Name",
 
   "trinkets.slot.charm.charm": "Charm"
 }
