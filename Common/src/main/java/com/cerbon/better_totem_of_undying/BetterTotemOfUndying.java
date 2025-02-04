@@ -2,13 +2,14 @@ package com.cerbon.better_totem_of_undying;
 
 import com.cerbon.better_totem_of_undying.config.BTUConfigs;
 import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 
 public class BetterTotemOfUndying {
 	public static BTUConfigs config;
 
 	public static void init() {
-		AutoConfig.register(BTUConfigs.class, Toml4jConfigSerializer::new);
+		AutoConfig.register(BTUConfigs.class, JanksonConfigSerializer::new);
 		config = AutoConfig.getConfigHolder(BTUConfigs.class).get();
 	}
 }

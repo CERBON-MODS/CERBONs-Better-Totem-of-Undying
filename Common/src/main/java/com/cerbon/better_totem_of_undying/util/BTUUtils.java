@@ -163,23 +163,16 @@ public class BTUUtils {
         if (defaultTotemFeatures.regeneration.enabled) livingEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, regenerationEffectDuration, regenerationEffectAmplifier));
         if (defaultTotemFeatures.absorption.enabled) livingEntity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, absorptionEffectDuration, absorptionEffectAmplifier));
 
-        newTotemFeatures.customEffects.forEach(customEffectProperties -> {
-            if (!customEffectProperties.isEmpty()) {
-                try {
-                    String damageTypeKey = customEffectProperties.get(0);
-                    String mobEffectKey = customEffectProperties.get(1);
-                    int effectDuration = Integer.parseInt(customEffectProperties.get(2));
-                    int effectAmplifier = Integer.parseInt(customEffectProperties.get(3));
+        newTotemFeatures.customEffects.forEach(customEffect -> {
+            try {
+                ResourceKey<DamageType> damageType = getDamageTypeByKey(customEffect.damageType, (ServerLevel) livingEntity.level());
+                MobEffect mobEffect = RegistryUtils.getMobEffectByKey(customEffect.effect);
 
-                    ResourceKey<DamageType> damageType = getDamageTypeByKey(damageTypeKey, (ServerLevel) livingEntity.level());
-                    MobEffect mobEffect = RegistryUtils.getMobEffectByKey(mobEffectKey);
+                if ("any".equals(customEffect.damageType) || (damageType != null && damageSource.is(damageType)))
+                    livingEntity.addEffect(new MobEffectInstance(mobEffect, customEffect.duration, customEffect.amplifier));
 
-                    if (damageType != null && damageSource.is(damageType) || damageTypeKey.equals("any"))
-                        livingEntity.addEffect(new MobEffectInstance(mobEffect, effectDuration, effectAmplifier));
-
-                } catch (Exception e) {
-                    BTUConstants.LOGGER.error("Better Totem of Undying error: Couldn't apply custom effect. Wrong/Missing parameter: {}", customEffectProperties, e);
-                }
+            } catch (Exception e) {
+                BTUConstants.LOGGER.error("Better Totem of Undying error: Couldn't apply custom effect: {}", customEffect, e);
             }
         });
     }

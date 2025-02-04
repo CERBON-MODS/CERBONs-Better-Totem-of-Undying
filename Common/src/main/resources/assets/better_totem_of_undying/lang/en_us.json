@@ -46,6 +46,13 @@
   "text.autoconfig.better_totem_of_undying.option.newTotemFeatures.teleportOutOfVoid.enabled": "Enabled",
   "text.autoconfig.better_totem_of_undying.option.newTotemFeatures.teleportOutOfVoid.teleportHeightOffset": "Teleport Height Offset",
 
+  "text.autoconfig.better_totem_of_undying.option.newTotemFeatures.customEffects": "Custom Effects",
+  "text.autoconfig.better_totem_of_undying.option.CustomTotemEffect": "Effect",
+  "text.autoconfig.better_totem_of_undying.option.CustomTotemEffect.effect": "Name",
+  "text.autoconfig.better_totem_of_undying.option.CustomTotemEffect.duration": "Duration",
+  "text.autoconfig.better_totem_of_undying.option.CustomTotemEffect.amplifier": "Amplifier",
+  "text.autoconfig.better_totem_of_undying.option.CustomTotemEffect.damageType": "Trigger",
+
 
   "text.autoconfig.better_totem_of_undying.category.Charm": "Charm Slot",
   "text.autoconfig.better_totem_of_undying.option.charm.canUseTotemFromCharmSlot": "Can Use Totem From Charm Slot",

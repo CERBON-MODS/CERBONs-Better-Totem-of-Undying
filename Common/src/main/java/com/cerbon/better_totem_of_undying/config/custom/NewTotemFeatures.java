@@ -12,6 +12,8 @@ public class NewTotemFeatures {
     @Comment("Apply fire resistance and water breathing effects only when necessary. This means that you will receive these effects only if you are on fire or underwater, respectively.")
     public boolean applyEffectsOnlyWhenNecessary = true;
 
+    public List<CustomTotemEffect> customEffects = List.of();
+
     @ConfigEntry.Gui.CollapsibleObject
     public WaterBreathing waterBreathing = new WaterBreathing();
 
@@ -27,10 +29,6 @@ public class NewTotemFeatures {
     @ConfigEntry.Gui.CollapsibleObject
     public TeleportOutOfVoid teleportOutOfVoid = new TeleportOutOfVoid();
 
-    @ConfigEntry.Gui.Excluded
-    @Comment("Use this list to add custom effects and specify their triggers. Within this list, provide another list enclosed in curly braces. The first parameter should be the damage type, the second parameter the effect to be granted, the third parameter the duration of the effect in ticks, and the fourth parameter the effect amplifier. If you want the effect to be granted regardless of the damage type, use ‘any’. For example: [[\"minecraft:out_of_world\", \"minecraft:blindness\", \"800\", \"0\"]]. In this example, if the player dies in the void, the totem will grant a level 1 blindness effect with a duration of 40 seconds.")
-    public List<List<String>> customEffects = List.of(List.of());
-
     public static class WaterBreathing {
         public boolean enabled = true;
         public int duration = 800;
@@ -39,7 +37,6 @@ public class NewTotemFeatures {
     public static class DestroyBlocks {
         public boolean whenSuffocating = true;
         public boolean whenFullyFrozen = true;
-
     }
 
     public static class KnockbackMobs {
@@ -58,5 +55,20 @@ public class NewTotemFeatures {
 
         @ConfigEntry.BoundedDiscrete(min = 0, max = 1024)
         public int teleportHeightOffset = 64;
+    }
+
+    public static class CustomTotemEffect {
+
+        @Comment("The mob effect to grant, e.g. 'minecraft:blindness'.")
+        public String effect = "";
+
+        @Comment("Duration of the effect in ticks (20 ticks = 1 second).")
+        public int duration = 0;
+
+        @Comment("Effect amplifier (0 = level 1, 1 = level 2, etc.).")
+        public int amplifier = 0;
+
+        @Comment("The damage type that triggers this effect. Use 'any' to always trigger.")
+        public String damageType = "any";  // e.g., "minecraft:out_of_world" or "any"
     }
 }
