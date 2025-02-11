@@ -53,6 +53,9 @@
   "text.autoconfig.better_totem_of_undying.option.CustomTotemEffect.amplifier": "Amplifier",
   "text.autoconfig.better_totem_of_undying.option.CustomTotemEffect.damageType": "Trigger",
 
+  "text.autoconfig.better_totem_of_undying.option.newTotemFeatures.totemResistanceType": "Totem Resistance Type",
+  "text.autoconfig.better_totem_of_undying.option.newTotemFeatures.totemResistanceType.infinity": "Infinity",
+
 
   "text.autoconfig.better_totem_of_undying.category.Charm": "Charm Slot",
   "text.autoconfig.better_totem_of_undying.option.charm.canUseTotemFromCharmSlot": "Can Use Totem From Charm Slot",
