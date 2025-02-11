@@ -88,17 +88,13 @@ public class BTUUtils {
     }
 
     public static boolean isStructureBlacklisted(BlockPos pos, @NotNull ServerLevel level) {
-        var blackListedStructures = btuConfigs.blacklists.blacklistedStructures;
-
-        boolean flag = false;
-        for (var blackListedStructure : blackListedStructures){
+        for (var blackListedStructure : btuConfigs.blacklists.blacklistedStructures) {
             Structure structure = RegistryUtils.getStructureByKey(blackListedStructure.name, level);
 
-            if (structure != null)
-                if (level.structureManager().getStructureAt(pos, structure).isValid())
-                    flag = true;
+            if (structure != null && level.structureManager().getStructureAt(pos, structure).isValid())
+                return true;
         }
-        return flag;
+        return false;
     }
 
     public static boolean damageBypassInvulnerability(@NotNull DamageSource damageSource, LivingEntity livingEntity) {
