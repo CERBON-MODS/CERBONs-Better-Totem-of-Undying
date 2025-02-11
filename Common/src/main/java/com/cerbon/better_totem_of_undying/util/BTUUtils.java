@@ -28,6 +28,8 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FallingBlock;
@@ -59,7 +61,10 @@ public class BTUUtils {
             addCooldown(itemStack, player, btuConfigs.newTotemFeatures.cooldown.cooldown);
         }
 
-        itemStack.shrink(1);
+        if (btuConfigs.newTotemFeatures.totemResistanceType.infinity && EnchantmentHelper.getEnchantments(itemStack).containsKey(Enchantments.INFINITY_ARROWS)) {
+            // NO-OP
+        }
+        else itemStack.shrink(1);
 
         if (btuConfigs.defaultTotemFeatures.clearEffectsUponUse) livingEntity.removeAllEffects();
         livingEntity.setHealth(btuConfigs.defaultTotemFeatures.healthUponUse);

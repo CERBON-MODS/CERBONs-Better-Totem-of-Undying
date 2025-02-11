@@ -29,6 +29,9 @@ public class NewTotemFeatures {
     @ConfigEntry.Gui.CollapsibleObject
     public TeleportOutOfVoid teleportOutOfVoid = new TeleportOutOfVoid();
 
+    @ConfigEntry.Gui.CollapsibleObject
+    public TotemResistanceType totemResistanceType = new TotemResistanceType();
+
     public static class WaterBreathing {
         public boolean enabled = true;
         public int duration = 800;
@@ -70,5 +73,12 @@ public class NewTotemFeatures {
 
         @Comment("The damage type that triggers this effect. Use 'any' to always trigger, e.g. 'minecraft:out_of_world' or 'any'")
         public String damageType = "any";  //
+    }
+
+    public static class TotemResistanceType {
+        @Comment("If true, totems with the Infinity enchantment will have unlimited uses (they won't be consumed)")
+        public boolean infinity = false;
+        @Comment("If true, the Unbreaking enchantment on a totem will increase its number of uses before it breaks.")
+        public boolean unbreaking = false;
     }
 }
