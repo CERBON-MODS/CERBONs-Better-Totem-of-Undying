@@ -78,7 +78,5 @@ public class NewTotemFeatures {
     public static class TotemResistanceType {
         @Comment("If true, totems with the Infinity enchantment will have unlimited uses (they won't be consumed)")
         public boolean infinity = false;
-        @Comment("If true, the Unbreaking enchantment on a totem will increase its number of uses before it breaks.")
-        public boolean unbreaking = false;
     }
 }
