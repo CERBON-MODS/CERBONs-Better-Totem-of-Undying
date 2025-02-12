@@ -61,10 +61,8 @@ public class BTUUtils {
             addCooldown(itemStack, player, btuConfigs.newTotemFeatures.cooldown.cooldown);
         }
 
-        if (btuConfigs.newTotemFeatures.totemResistanceType.infinity && EnchantmentHelper.getEnchantments(itemStack).containsKey(Enchantments.INFINITY_ARROWS)) {
-            // NO-OP
-        }
-        else itemStack.shrink(1);
+        if (!btuConfigs.newTotemFeatures.totemResistanceType.infinity || !EnchantmentHelper.getEnchantments(itemStack).containsKey(Enchantments.INFINITY_ARROWS))
+            itemStack.shrink(1);
 
         if (btuConfigs.defaultTotemFeatures.clearEffectsUponUse) livingEntity.removeAllEffects();
         livingEntity.setHealth(btuConfigs.defaultTotemFeatures.healthUponUse);
@@ -113,7 +111,6 @@ public class BTUUtils {
     public static List<ItemStack> filterPossibleTotemStacks(ItemStack... stacks) {
         return Arrays.stream(stacks).filter(Objects::nonNull).toList();
     }
-
 
     public static @Nullable ItemStack getTotemFromCharmSlot(LivingEntity livingEntity) {
         return BTUServices.PLATFORM_CHARM_HELPER.getTotemFromCharmSlot(livingEntity);
