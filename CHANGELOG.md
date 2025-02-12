@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix mod crashing because of custom effects
+- Fix crash in Fabric servers
 
 ## [2.0.1] - 2024-01-29
 
