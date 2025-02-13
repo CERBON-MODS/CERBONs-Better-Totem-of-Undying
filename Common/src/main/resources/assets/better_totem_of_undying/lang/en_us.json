@@ -60,6 +60,9 @@
   "text.autoconfig.better_totem_of_undying.category.Charm": "Charm Slot",
   "text.autoconfig.better_totem_of_undying.option.charm.canUseTotemFromCharmSlot": "Can Use Totem From Charm Slot",
   "text.autoconfig.better_totem_of_undying.option.charm.displayTotemOnChest": "Display Totem on Chest",
+  "text.autoconfig.better_totem_of_undying.option.charm.xOffset": "XOffset",
+  "text.autoconfig.better_totem_of_undying.option.charm.yOffset": "YOffset",
+  "text.autoconfig.better_totem_of_undying.option.charm.zOffset": "ZOffset",
 
 
   "text.autoconfig.better_totem_of_undying.category.Blacklists": "Blacklists",

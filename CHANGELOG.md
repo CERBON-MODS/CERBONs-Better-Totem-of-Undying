@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add config option to make totem infinity if enchanted with Infinity effect
+- Add config option to change the render offset of the Totem when used in the charm slot
 
 ### Changed
 
