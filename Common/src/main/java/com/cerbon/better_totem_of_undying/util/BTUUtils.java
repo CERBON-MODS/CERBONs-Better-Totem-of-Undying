@@ -12,6 +12,7 @@ import kotlin.jvm.functions.Function1;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -270,7 +271,7 @@ public class BTUUtils {
     }
 
     public static boolean canDestroy(@NotNull BlockState block) {
-        return !block.is(BTUConstants.TOTEM_CANT_DESTROY_TAG) && !block.is(Blocks.BEDROCK) && !block.is(Blocks.END_PORTAL_FRAME);
+        return btuConfigs.newTotemFeatures.destroyBlocks.totemCantDestroy.stream().noneMatch(block1 -> block1.block.equals(BuiltInRegistries.BLOCK.getKey(block.getBlock()).toString())) && !block.is(Blocks.BEDROCK) && !block.is(Blocks.END_PORTAL_FRAME);
     }
 
     public static boolean isInstanceOfFallingBlock(@NotNull BlockPos pos, @NotNull Level level, int distance) {

@@ -3,6 +3,7 @@ package com.cerbon.better_totem_of_undying.config.custom;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NewTotemFeatures {
@@ -40,6 +41,13 @@ public class NewTotemFeatures {
     public static class DestroyBlocks {
         public boolean whenSuffocating = true;
         public boolean whenFullyFrozen = true;
+
+        public List<Block> totemCantDestroy = new ArrayList<>();
+    }
+
+    public static class Block {
+        @Comment("The block that the Totem can't destroy, e.g. 'minecraft:stone'.")
+        public String block = "";
     }
 
     public static class KnockbackMobs {

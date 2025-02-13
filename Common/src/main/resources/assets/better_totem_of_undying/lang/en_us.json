@@ -32,6 +32,9 @@
   "text.autoconfig.better_totem_of_undying.option.newTotemFeatures.destroyBlocks": "Destroy Blocks",
   "text.autoconfig.better_totem_of_undying.option.newTotemFeatures.destroyBlocks.whenSuffocating": "When Suffocating",
   "text.autoconfig.better_totem_of_undying.option.newTotemFeatures.destroyBlocks.whenFullyFrozen": "When Fully Frozen",
+  "text.autoconfig.better_totem_of_undying.option.newTotemFeatures.destroyBlocks.totemCantDestroy": "Totem Can't Destroy",
+  "text.autoconfig.better_totem_of_undying.option.Block": "Block",
+  "text.autoconfig.better_totem_of_undying.option.Block.block": "Name",
 
   "text.autoconfig.better_totem_of_undying.option.newTotemFeatures.knockbackMobs": "Knockback Mobs",
   "text.autoconfig.better_totem_of_undying.option.newTotemFeatures.knockbackMobs.enabled": "Enabled",
