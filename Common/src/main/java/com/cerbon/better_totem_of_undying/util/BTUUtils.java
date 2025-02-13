@@ -6,7 +6,9 @@ import com.cerbon.better_totem_of_undying.config.custom.DefaultTotemFeatures;
 import com.cerbon.better_totem_of_undying.config.custom.NewTotemFeatures;
 import com.cerbon.better_totem_of_undying.platform.BTUServices;
 import com.cerbon.better_totem_of_undying.util.mixin.ILivingEntityMixin;
+import com.cerbon.cerbons_api.api.static_utilities.MiscUtils;
 import com.cerbon.cerbons_api.api.static_utilities.RegistryUtils;
+import kotlin.jvm.functions.Function1;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -26,6 +28,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -38,6 +41,8 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -104,8 +109,61 @@ public class BTUUtils {
     }
 
     public static ItemStack getTotemItemStack(LivingEntity livingEntity) {
-        List<ItemStack> possibleTotemStacks = filterPossibleTotemStacks(getTotemFromCharmSlot(livingEntity), getTotemFromInventory(livingEntity), getTotemFromHands(livingEntity));
+        List<ItemStack> possibleTotemStacks = filterPossibleTotemStacks(getTotemFromCharmSlot(livingEntity), getTotemFromUtilityBar(livingEntity), getTotemFromInventory(livingEntity), getTotemFromHands(livingEntity));
         return possibleTotemStacks.stream().findFirst().orElse(null);
+    }
+
+    public static @Nullable ItemStack getTotemFromUtilityBar(LivingEntity livingEntity) {
+        if (MiscUtils.isModLoaded("inventorio") && isTotemFromUtilityBeltEnabled() && livingEntity instanceof Player player) {
+            try {
+                Class<?> mixinHelpersClass = Class.forName("de.rubixdev.inventorio.util.MixinHelpers");
+                Method withAddonMethod = mixinHelpersClass.getMethod("withInventoryAddonReturning", Player.class, Function1.class);
+
+                Function1<Object, Object> consumer = addon -> {
+                    try {
+                        Field utilityBeltField = addon.getClass().getField("utilityBelt");
+                        Object utilityBeltObj = utilityBeltField.get(addon);
+
+                        if (utilityBeltObj instanceof Iterable<?>) {
+                            for (Object stack : (Iterable<?>) utilityBeltObj) {
+                                if (stack instanceof ItemStack itemStack && itemStack.is(Items.TOTEM_OF_UNDYING))
+                                    return itemStack;
+                            }
+                        }
+                    } catch (Exception e) {
+                        BTUConstants.LOGGER.error("Error while getting totem from utility belt", e);
+                    }
+                    return null;
+                };
+
+                Object result = withAddonMethod.invoke(null, player, consumer);
+
+                if (result instanceof ItemStack)
+                    return (ItemStack) result;
+
+            } catch (Exception e) {
+                BTUConstants.LOGGER.error("Error while getting totem from utility belt", e);
+            }
+        }
+        return null;
+    }
+
+    public static boolean isTotemFromUtilityBeltEnabled() {
+        try {
+            Class<?> globalSettingsClass = Class.forName("de.rubixdev.inventorio.config.GlobalSettings");
+            Field totemField = globalSettingsClass.getField("totemFromUtilityBelt");
+            Object totemConfigEntry = totemField.get(null);
+
+            Method getBoolValueMethod = totemConfigEntry.getClass().getMethod("getBoolValue");
+            Object result = getBoolValueMethod.invoke(totemConfigEntry);
+
+            if (result instanceof Boolean) {
+                return (Boolean) result;
+            }
+        } catch (Exception e) {
+            BTUConstants.LOGGER.error("Error while getting totem from utility belt config", e);
+        }
+        return false;
     }
 
     public static List<ItemStack> filterPossibleTotemStacks(ItemStack... stacks) {
