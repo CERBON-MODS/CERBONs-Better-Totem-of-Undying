@@ -114,7 +114,7 @@ public class BTUUtils {
     }
 
     public static @Nullable ItemStack getTotemFromUtilityBar(LivingEntity livingEntity) {
-        if (MiscUtils.isModLoaded("inventorio") && isTotemFromUtilityBeltEnabled() && livingEntity instanceof Player player) {
+        if (MiscUtils.isModLoaded(BTUConstants.INVENTORIO_MOD_ID) && isTotemFromUtilityBeltEnabled() && livingEntity instanceof Player player) {
             try {
                 Class<?> mixinHelpersClass = Class.forName("de.rubixdev.inventorio.util.MixinHelpers");
                 Method withAddonMethod = mixinHelpersClass.getMethod("withInventoryAddonReturning", Player.class, Function1.class);

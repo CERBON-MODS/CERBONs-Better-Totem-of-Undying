@@ -17,4 +17,5 @@ public class BTUConstants {
 
     public static final String CURIOS_MOD_ID = "curios";
     public static final String TRINKETS_MOD_ID = "trinkets";
+    public static final String INVENTORIO_MOD_ID = "inventorio";
 }
