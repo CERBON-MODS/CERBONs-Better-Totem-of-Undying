@@ -14,7 +14,7 @@ import net.minecraft.world.item.Items;
 
 public class CharmIntegration {
 
-    public static void renderVoidTotemOnChest() {
+    public static void renderTotemOnChest() {
         TrinketRendererRegistry.registerRenderer(Items.TOTEM_OF_UNDYING, (stack, slotReference, contextModel, matrices, vertexConsumers, light, entity, limbAngle, limbDistance, tickDelta, animationProgress, headYaw, headPitch) -> {
 
             if (entity instanceof AbstractClientPlayer player) {
