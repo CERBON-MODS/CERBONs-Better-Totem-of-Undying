@@ -13,7 +13,7 @@ public class NewTotemFeatures {
     @Comment("Apply fire resistance and water breathing effects only when necessary. This means that you will receive these effects only if you are on fire or underwater, respectively.")
     public boolean applyEffectsOnlyWhenNecessary = true;
 
-    public List<CustomTotemEffect> customEffects = List.of();
+    public List<CustomTotemEffect> customEffects = new ArrayList<>();
 
     @ConfigEntry.Gui.CollapsibleObject
     public WaterBreathing waterBreathing = new WaterBreathing();
